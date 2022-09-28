@@ -187,7 +187,11 @@ export default {
 .el-col-12{
   height: 100%;
 }
-
+.footer{
+  display: flex;
+  justify-content:space-between;
+  color: #2F88FF;
+}
 
 .el-tabs__item{
   font-size: 1.125rem;
