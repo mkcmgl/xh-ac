@@ -13,7 +13,7 @@
        
         <el-form ref="loginForm" :model="loginForm" :rules="loginRules" class="login-form">
           <h3 class="login-title">用户登录</h3>
-          <el-tabs v-model="activeName" @tab-click="handleClick" stretch="true" style="width: 23.75rem;">
+          <el-tabs v-model="activeName" @tab-click="handleClick" stretch="true" style="width:31.25rem;">
             <el-tab-pane label="密码登录" name="first"></el-tab-pane>
             <el-tab-pane label="验证码登录" name="second"></el-tab-pane>
 
@@ -25,7 +25,7 @@
               type="text"
               auto-complete="off"
               placeholder="请输入账号/手机号/邮箱"
-              style="width: 23.75rem;"
+              style="width:31.25rem;"
             >
               <svg-icon slot="prefix" icon-class="user" class="el-input__icon input-icon" />
             </el-input>
@@ -37,7 +37,7 @@
               auto-complete="off"
               placeholder="请输入登录密码"
               @keyup.enter.native="handleLogin"
-              style="width: 23.75rem;"
+              style="width:31.25rem;"
             >
               <svg-icon slot="prefix" icon-class="password" class="el-input__icon input-icon" />
             </el-input>
@@ -57,7 +57,7 @@
             </div>
           </el-form-item>
           <!-- <el-checkbox v-model="loginForm.rememberMe" style="margin:0px 0px 25px 0px;">记住密码</el-checkbox> -->
-          <el-form-item style="width:100%;">
+          <el-form-item   style="width:31.25rem;">
             <el-button
               :loading="loading"
               size="medium"
@@ -183,7 +183,7 @@ export default {
 
 
 
-<style rel="stylesheet/scss" lang="scss">
+<style rel="stylesheet/scss" lang="scss" scoped>
 .el-col-12{
   height: 100%;
 }
@@ -223,9 +223,10 @@ color: #ffffff;
   display: flex;
   justify-content: center;
   align-items: center;
+  margin: auto;
   height: 100%;
+  width: 31.25rem;
 
- 
 }
 .left{
   height: 100%;
@@ -244,7 +245,7 @@ color: #ffffff;
 .login-form {
   border-radius: 6px;
   background: #ffffff;
-  width: 400px;
+
   padding: 25px 25px 5px 25px;
   .el-input {
     height: 38px;
