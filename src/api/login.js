@@ -57,9 +57,20 @@ export function getCodeImg() {
         timeout: 20000
     })
 }
-export function getCodeSms(email, type) {
+export function getCodeSms(phone, type) {
     return request({
         url: '/send/sendSms',
+        headers: {
+            isToken: false
+        },
+        method: 'post',
+        timeout: 20000,
+        data: { phone, type }
+    })
+}
+export function getCodeEmail(email, type) {
+    return request({
+        url: '/send/sendEmail',
         headers: {
             isToken: false
         },

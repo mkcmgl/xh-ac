@@ -218,11 +218,11 @@ export default {
       });
     },
     sendSms(){
-  
+      
       getCodeSms(this.phone,'login').then(res=>{
         console.log(res)
         if(res.code==200){
-          this.isDisabled==false;
+          this.isDisabled=false;
           console.log('asdads')
         }
       })

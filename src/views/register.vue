@@ -87,7 +87,8 @@
               style="width: 63%"
             >
             </el-input>
-            <el-button class="button" @click="sendEmailCode">发送短信验证码</el-button>
+            <el-button class="button" @click="sendCode('phone')" v-show="!isDisabled">发送短信验证码</el-button>
+            <el-button class="button" disabled v-show="isDisabled" >{{text}}</el-button>
           </el-form-item>
         </div>
         <div v-if="activeNume == 2">
@@ -155,7 +156,8 @@
               style="width: 63%"
             >
             </el-input>
-            <el-button class="button">发送邮箱验证码</el-button>
+            <el-button class="button" @click="sendCode('email')" v-show="!isDisabled">发送邮箱验证码</el-button>
+            <el-button class="button" disabled v-show="isDisabled" >{{text}}</el-button>
           </el-form-item>
         </div>
         <div v-if="activeNume == 3">
@@ -234,7 +236,9 @@
 </template>
 
 <script>
-import { getCodeImg, register } from "@/api/login";
+import { getCodeImg, register,getCodeSms ,getCodeEmail} from "@/api/login";
+
+
 
 export default {
   name: "Register",
@@ -296,6 +300,10 @@ export default {
       activeNume: "1",
       activeName: "first",
       codeUrl: "",
+      count:'',
+      time:'',
+      text:'',
+      isDisabled:false,
       registerForm: {
         username: "",
         password: "",
@@ -353,7 +361,44 @@ export default {
         this.activeNume = 1;
       }
     },
+    sendCode(type){
+      const vm=this
+      console.log(type)
+      if(type=='phone'){
+        getCodeSms(vm.phone,'register').then(res=>{
+        console.log(res)
+        if(res.code==200){
+          vm.isDisabled=false;
+          console.log('asdads')
+        }
+      })
+      }else if(type=='email'){
+        getCodeEmail(vm.email,'register').then(res=>{
+        console.log(res)
+        if(res.code==200){
+          vm.isDisabled=false;
+          console.log('asdads')
+        }
+      })
+      }
+   
+      const TIME_COUNT=60;
+      vm.count=TIME_COUNT;
+      vm.isDisabled=true;
+      vm.text=vm.count+'s后重新获取 ';
+      vm.time=setInterval(() => {
+        if(vm.count>0 && vm.count<=TIME_COUNT){
+          vm.count--
+          vm.text=vm.count+'s后重新获取 ';
+        }else{
+          vm.isDisabled=false;
+          clearInterval(vm.time)
+          vm.time=null
+        }
+      }, 1000);
 
+
+    },
     handleRegister() {
       this.$refs.registerForm.validate((valid) => {
         if (valid) {
