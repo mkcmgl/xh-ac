@@ -13,21 +13,21 @@
        
         <el-form ref="loginForm" :model="loginForm" :rules="loginRules" class="login-form">
           <h3 class="login-title">用户登录</h3>
-          <el-tabs v-model="activeName" @tab-click="handleClick" stretch="true" style="width:31.25rem;">
-            <el-tab-pane label="密码登录" name="first"></el-tab-pane>
-            <el-tab-pane label="验证码登录" name="second"></el-tab-pane>
+          <el-tabs v-model="activeName" @tab-click="handleClick" :stretch="true" class="tabs" >
+            <el-tab-pane label="密码登录" name="first" ></el-tab-pane>
+            <el-tab-pane label="验证码登录" name="second" ></el-tab-pane>
 
           </el-tabs>
-
-          <el-form-item prop="username">
+          <div v-if="activeFirst" >
+            
+          <el-form-item prop="username" class="input-form">
             <el-input
               v-model="loginForm.username"
               type="text"
               auto-complete="off"
               placeholder="请输入账号/手机号/邮箱"
-              style="width:31.25rem;"
             >
-              <svg-icon slot="prefix" icon-class="user" class="el-input__icon input-icon" />
+         
             </el-input>
           </el-form-item>
           <el-form-item prop="password">
@@ -37,9 +37,9 @@
               auto-complete="off"
               placeholder="请输入登录密码"
               @keyup.enter.native="handleLogin"
-              style="width:31.25rem;"
+             
             >
-              <svg-icon slot="prefix" icon-class="password" class="el-input__icon input-icon" />
+            
             </el-input>
           </el-form-item>
           <el-form-item prop="code" v-if="captchaEnabled">
@@ -50,14 +50,55 @@
               style="width: 63%"
               @keyup.enter.native="handleLogin"
             >
-              <svg-icon slot="prefix" icon-class="validCode" class="el-input__icon input-icon" />
+             
             </el-input>
             <div class="login-code">
               <img :src="codeUrl" @click="getCode" class="login-code-img"/>
             </div>
           </el-form-item>
+          </div>
+          <div v-else>
+            <el-form-item prop="phone">
+              <el-input
+                v-model="loginForm.phone"
+                type="text"
+                auto-complete="off"
+                placeholder="请输入手机号"
+                style="width:31.25rem;"
+              >
+               
+              </el-input>
+            </el-form-item>
+
+            <el-form-item prop="code" v-if="captchaEnabled">
+              <el-input
+                v-model="loginForm.code"
+                auto-complete="off"
+                placeholder="请输入验证码"
+                style="width: 63%"
+                @keyup.enter.native="handleLogin"
+              >
+              
+              </el-input>
+              <div class="login-code">
+                <img :src="codeUrl" @click="getCode" class="login-code-img"/>
+              </div>
+            </el-form-item>
+            <el-form-item prop="smsCde" v-if="captchaEnabled">
+              <el-input
+                v-model="loginForm.smsCde"
+                auto-complete="off"
+                placeholder="请输入短信验证码"
+                style="width: 63%"
+                @keyup.enter.native="handleLogin"
+              >
+              </el-input>
+              <el-button class="phoneCode" @click="sendSms" v-show="!isDisabled">获取短信验证码</el-button>
+              <el-button class="phoneCode"  v-show="isDisabled" :disabled="true">{{text}}</el-button>
+            </el-form-item>
+          </div>
           <!-- <el-checkbox v-model="loginForm.rememberMe" style="margin:0px 0px 25px 0px;">记住密码</el-checkbox> -->
-          <el-form-item   style="width:31.25rem;">
+          <el-form-item   style="width:31.25rem;font-size: 1.125rem; ">
             <el-button
               :loading="loading"
               size="medium"
@@ -71,7 +112,8 @@
           </el-form-item>
           <div class="footer">
             <a href="">BID登录</a>
-            <a href="">没有账号?去注册</a>
+            <router-link to="/register">没有账号?去注册</router-link>
+      
           </div>
         </el-form>
         <!--  底部  -->
@@ -84,31 +126,65 @@
 </template>
 
 <script>
-import { getCodeImg } from "@/api/login";
+import { getCodeImg ,getCodeSms} from "@/api/login";
 import Cookies from "js-cookie";
 import { encrypt, decrypt } from '@/utils/jsencrypt'
+
+
 
 export default {
   name: "Login",
   data() {
+
+      var validatePhone = (rule, value, callback) => {
+        console.log(rule,value,callback)
+        if (value === '') {
+          callback(new Error('请输入手机号'));
+        }else if( !/^(?:(?:\+|00)86)?1(?:(?:3[\d])|(?:4[5-79])|(?:5[0-35-9])|(?:6[5-7])|(?:7[0-8])|(?:8[\d])|(?:9[189]))\d{8}$/.test(value) ){
+          callback(new Error('请输入正确的手机号'));
+        } 
+        else {
+
+          callback();
+        }
+      };
+      var validateUserName = (rule, value, callback) => {
+        console.log(rule,'value----------',value,'value--------',callback)
+        if (value === '') {
+          callback(new Error('请输入您的账号'));
+        } else if ( ! /^[a-zA-Z0-9_-]{5,20}$/.test(value))  {
+          callback(new Error('用户账号长度必须介于 5 和 20 之间'));
+        } else {
+          callback();
+        }
+      };
     return {
+      isDisabled:false,
+      activeFirst:true,
       activeName:'first',
+      text:'',
+      time:'',
       codeUrl: "",
+      count:'',
       loginForm: {
-        username: "admin",
-        password: "admin123",
+        username: "",
+        password: "",
         rememberMe: false,
+        phone:'',
         code: "",
+        smsCde:'',
         uuid: ""
       },
       loginRules: {
+        phone:[{validator:validatePhone, trigger: "blur" }],
         username: [
-          { required: true, trigger: "blur", message: "请输入您的账号" }
+          { validator:validateUserName, trigger: "blur"}
         ],
         password: [
           { required: true, trigger: "blur", message: "请输入您的密码" }
         ],
-        code: [{ required: true, trigger: "change", message: "请输入验证码" }]
+        code: [{ required: true, trigger: "blur", message: "请输入验证码" }],
+        smsCde: [{ required: true, trigger: "blur", message: "请输入短信验证码" }],
       },
       loading: false,
       // 验证码开关
@@ -127,12 +203,13 @@ export default {
     }
   },
   created() {
-    // this.getCode();
+    this.getCode();
     // this.getCookie();
   },
   methods: {
     getCode() {
       getCodeImg().then(res => {
+    
         this.captchaEnabled = res.captchaEnabled === undefined ? true : res.captchaEnabled;
         if (this.captchaEnabled) {
           this.codeUrl = "data:image/gif;base64," + res.img;
@@ -140,6 +217,33 @@ export default {
         }
       });
     },
+    sendSms(){
+  
+      getCodeSms(this.phone,'login').then(res=>{
+        console.log(res)
+        if(res.code==200){
+          this.isDisabled==false;
+          console.log('asdads')
+        }
+      })
+      const vm=this
+      const TIME_COUNT=60;
+      vm.count=TIME_COUNT;
+      vm.isDisabled=true
+      vm.text=vm.count+'s后重新获取'
+      vm.time=setInterval(() => {
+        if(vm.count>0 && vm.count<=TIME_COUNT){
+          vm.count--
+          vm.text=vm.count+'s后重新获取'
+        }else{
+          vm.isDisabled=false
+          clearTimeout(vm.time)
+          vm.time=null
+        }
+      }, 1000);
+
+    },
+
     getCookie() {
       const username = Cookies.get("username");
       const password = Cookies.get("password");
@@ -175,7 +279,19 @@ export default {
       });
     },
     handleClick(tab, event) {
-        console.log(tab, event);
+        console.log(tab.name, event);
+    
+        this.$refs['loginForm'].resetFields();
+
+        if(tab.name=='second'){
+          this.activeFirst=false;
+        }
+        if(tab.name=='first'){
+          this.activeFirst=true
+        }
+        
+    
+        
     }
   }
 };
@@ -184,6 +300,44 @@ export default {
 
 
 <style rel="stylesheet/scss" lang="scss" scoped>
+  .login-code img{
+    width: 100%;
+    height: 3.375rem;
+  }
+  ::v-deep .el-form-item__error{
+    padding-top: .9375rem;
+  }
+.tabs{
+  width:31.25rem;
+  ::v-deep .el-tabs__nav.is-stretch > *{
+    font-size: 1.125rem;
+  }
+}
+.el-button--medium{
+  height: 2.5rem;
+  font-size: 1.125rem;
+}
+.inpur-form{
+width:31.25rem;
+
+}
+.el-form-item{
+  margin-bottom: 2.2rem;
+}
+.el-input--medium{
+  ::v-deep .el-input__inner{
+    height: 3.5rem;
+  }
+}
+  
+  .phoneCode{
+    width: 10rem;
+    margin-left: 1.25rem;
+    font-size: 0.9375rem;
+    height: 3rem;
+    border: .0625rem solid #2F88FF;
+    color: #2F88FF;
+  }
 .el-col-12{
   height: 100%;
 }
@@ -193,9 +347,7 @@ export default {
   color: #2F88FF;
 }
 
-.el-tabs__item{
-  font-size: 1.125rem;
-}
+
 .login-title{
   font-size: 34px;
   color: #333333 ;
@@ -249,13 +401,15 @@ color: #ffffff;
   padding: 25px 25px 5px 25px;
   .el-input {
     height: 38px;
+    font-size: 1.125rem;
     input {
       height: 38px;
+     
     }
   }
   .input-icon {
     height: 39px;
-    width: 14px;
+    width: 18px;
     margin-left: 2px;
   }
 }
