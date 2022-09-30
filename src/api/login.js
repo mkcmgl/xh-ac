@@ -57,7 +57,7 @@ export function getCodeImg() {
         timeout: 20000
     })
 }
-export function getCodeSms(phone, type) {
+export function getCodeSms(code, phone, type, uuid) {
     return request({
         url: '/send/sendSms',
         headers: {
@@ -65,10 +65,10 @@ export function getCodeSms(phone, type) {
         },
         method: 'post',
         timeout: 20000,
-        data: { phone, type }
+        data: { code, phone, type, uuid }
     })
 }
-export function getCodeEmail(email, type) {
+export function getCodeEmail(code, email, type, uuid) {
     return request({
         url: '/send/sendEmail',
         headers: {
@@ -76,6 +76,6 @@ export function getCodeEmail(email, type) {
         },
         method: 'post',
         timeout: 20000,
-        data: { email, type }
+        data: { code, email, type, uuid }
     })
 }

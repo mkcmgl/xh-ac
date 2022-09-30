@@ -36,6 +36,7 @@
             <el-input
               v-model="registerForm.password"
               type="password"
+              show-password
               auto-complete="off"
               placeholder="请输入登录密码，6-20字符，包含数字、大小写字母、符号"
               @keyup.enter.native="handleRegister"
@@ -47,6 +48,7 @@
               v-model="registerForm.confirmPassword"
               type="password"
               auto-complete="off"
+              show-password
               placeholder="请确认登录密码"
               @keyup.enter.native="handleRegister"
             >
@@ -56,7 +58,7 @@
           <el-form-item prop="phone">
             <el-input
               v-model="registerForm.phone"
-              type="password"
+              type="text"
               auto-complete="off"
               placeholder="请输入手机号"
             >
@@ -87,8 +89,15 @@
               style="width: 63%"
             >
             </el-input>
-            <el-button class="button" @click="sendCode('phone')" v-show="!isDisabled">发送短信验证码</el-button>
-            <el-button class="button" disabled v-show="isDisabled" >{{text}}</el-button>
+            <el-button
+              class="button"
+              @click="sendCode('phone')"
+              v-show="!isDisabled"
+              >发送短信验证码</el-button
+            >
+            <el-button class="button" disabled v-show="isDisabled">{{
+              text
+            }}</el-button>
           </el-form-item>
         </div>
         <div v-if="activeNume == 2">
@@ -106,6 +115,7 @@
               v-model="registerForm.password"
               type="password"
               auto-complete="off"
+              show-password
               placeholder="请输入登录密码，6-20字符，包含数字、大小写字母、符号"
               @keyup.enter.native="handleRegister"
             >
@@ -115,6 +125,7 @@
             <el-input
               v-model="registerForm.confirmPassword"
               type="password"
+              show-password
               auto-complete="off"
               placeholder="请确认登录密码"
               @keyup.enter.native="handleRegister"
@@ -122,10 +133,10 @@
             </el-input>
           </el-form-item>
 
-          <el-form-item prop="phone">
+          <el-form-item prop="email">
             <el-input
-              v-model="registerForm.phone"
-              type="password"
+              v-model="registerForm.email"
+              type="text"
               auto-complete="off"
               placeholder="请输入邮箱"
             >
@@ -156,15 +167,22 @@
               style="width: 63%"
             >
             </el-input>
-            <el-button class="button" @click="sendCode('email')" v-show="!isDisabled">发送邮箱验证码</el-button>
-            <el-button class="button" disabled v-show="isDisabled" >{{text}}</el-button>
+            <el-button
+              class="button"
+              @click="sendCode('email')"
+              v-show="!isDisabled"
+              >发送邮箱验证码</el-button
+            >
+            <el-button class="button" disabled v-show="isDisabled">{{
+              text
+            }}</el-button>
           </el-form-item>
         </div>
         <div v-if="activeNume == 3">
           <div class="header-warning">
             <p>安全密码不同于登录密码，该密码用于加密您保护的私钥</p>
           </div>
-          <el-form-item  prop="username">
+          <el-form-item prop="username">
             <el-input
               v-model="registerForm.username"
               type="text"
@@ -174,40 +192,41 @@
             </el-input>
           </el-form-item>
           <el-form-item prop="password">
-        <el-input
-          v-model="registerForm.password"
-          type="password"
-          auto-complete="off"
-          placeholder="请输入安全密码，6-20字符，包含数字、大小写字母、符号"
-          @keyup.enter.native="handleRegister"
-        >
-        </el-input>
-      </el-form-item>
-      <el-form-item prop="confirmPassword">
-        <el-input
-          v-model="registerForm.confirmPassword"
-          type="password"
-          auto-complete="off"
-          placeholder="请确认安全登录密码"
-          @keyup.enter.native="handleRegister"
-        >
-        </el-input>
-      </el-form-item>
+            <el-input
+              v-model="registerForm.password"
+              type="password"
+              auto-complete="off"
+              show-password
+              placeholder="请输入安全密码，6-20字符，包含数字、大小写字母、符号"
+              @keyup.enter.native="handleRegister"
+            >
+            </el-input>
+          </el-form-item>
+          <el-form-item prop="confirmPassword">
+            <el-input
+              v-model="registerForm.confirmPassword"
+              type="password"
+              auto-complete="off"
+              show-password
+              placeholder="请确认安全登录密码"
+              @keyup.enter.native="handleRegister"
+            >
+            </el-input>
+          </el-form-item>
 
-      <el-form-item prop="code" v-if="captchaEnabled">
-        <el-input
-          v-model="registerForm.code"
-          auto-complete="off"
-          placeholder="请输入验证码"
-          style="width: 63%"
-          @keyup.enter.native="handleRegister"
-        >
-        </el-input>
-        <div class="register-code">
-          <img :src="codeUrl" @click="getCode" class="register-code-img" />
-        </div>
-      </el-form-item>
- 
+          <el-form-item prop="code" v-if="captchaEnabled">
+            <el-input
+              v-model="registerForm.code"
+              auto-complete="off"
+              placeholder="请输入验证码"
+              style="width: 63%"
+              @keyup.enter.native="handleRegister"
+            >
+            </el-input>
+            <div class="register-code">
+              <img :src="codeUrl" @click="getCode" class="register-code-img" />
+            </div>
+          </el-form-item>
         </div>
         <p class="footer">
           点击"注册"按钮，即代表您已阅读并同意 <a href="#">《**服务协议》</a>和
@@ -236,9 +255,7 @@
 </template>
 
 <script>
-import { getCodeImg, register,getCodeSms ,getCodeEmail} from "@/api/login";
-
-
+import { getCodeImg, register, getCodeSms, getCodeEmail } from "@/api/login";
 
 export default {
   name: "Register",
@@ -253,22 +270,26 @@ export default {
         callback();
       }
     };
+
     const validatePassword = (rule, value, callback) => {
       if (value == "") {
         callback(new Error("请输入您的密码"));
       } else if (
-        !/^\S*(?=\S{6,20})(?=\S*\d)(?=\S*[A-Z])(?=\S*[a-z])(?=\S*[!@#$%^&*? ])\S*$/.test(
+        !/^(?![A-Za-z0-9]+$)(?![a-z0-9\W]+$)(?![A-Za-z\W]+$)(?![A-Z0-9\W]+$)[a-zA-Z0-9\W]{6,20}$/.test(
           value
         )
       ) {
-        callback(new Error("用户密码长度必须介于 6 和 20 之间"));
+        callback(
+          new Error("密码必须包含数字，大小写字母，特殊字符，长度6-20！")
+        );
       } else {
-        if (this.ruleForm.confirmPassword !== "") {
-          this.$refs.ruleForm.validateField("confirmPassword");
+        if (this.registerForm.confirmPassword !== "") {
+          this.$refs.registerForm.validateField("confirmPassword");
         }
         callback();
       }
     };
+
     const equalToPassword = (rule, value, callback) => {
       if (this.registerForm.password !== value) {
         callback(new Error("两次输入的密码不一致"));
@@ -289,10 +310,16 @@ export default {
         callback();
       }
     };
-    const validateEmail=(rule,value,callback)=>{
-      if(value==''){callback(new Error("请输您的邮箱"));}
-      else if(! /^[A-Za-z0-9\u4e00-\u9fa5]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/.test(value)){ callback(new Error("请输入正确的邮箱"));}
-      else{
+    const validateEmail = (rule, value, callback) => {
+      if (value == "") {
+        callback(new Error("请输您的邮箱"));
+      } else if (
+        !/^[A-Za-z0-9\u4e00-\u9fa5]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/.test(
+          value
+        )
+      ) {
+        callback(new Error("请输入正确的邮箱"));
+      } else {
         callback();
       }
     };
@@ -300,10 +327,10 @@ export default {
       activeNume: "1",
       activeName: "first",
       codeUrl: "",
-      count:'',
-      time:'',
-      text:'',
-      isDisabled:false,
+      count: "",
+      time: "",
+      text: "",
+      isDisabled: false,
       registerForm: {
         username: "",
         password: "",
@@ -312,8 +339,8 @@ export default {
         code: "",
         uuid: "",
         smsCode: "",
-        email:'',
-        emailCode:'',
+        email: "",
+        emailCode: "",
       },
       registerRules: {
         username: [{ validator: validateUserName, trigger: "blur" }],
@@ -322,13 +349,15 @@ export default {
           { required: true, trigger: "blur", message: "请再次输入您的密码" },
           { required: true, validator: equalToPassword, trigger: "blur" },
         ],
-        phone: [{ validator: validatePhone, register: "blur" }],
+        phone: [{ validator: validatePhone, trigger: "blur" }],
         code: [{ required: true, trigger: "blur", message: "请输入验证码" }],
         smsCode: [
           { required: true, trigger: "blur", message: "请输入短信验证码" },
         ],
-        email:[{validator:validateEmail,trigger:'blur'}],
-        emailCode: [{ required: true, trigger: "blur", message: "请输入邮箱验证码" }],
+        email: [{ validator: validateEmail, trigger: "blur" }],
+        emailCode: [
+          { required: true, trigger: "blur", message: "请输入邮箱验证码" },
+        ],
       },
       loading: false,
       captchaEnabled: true,
@@ -340,18 +369,15 @@ export default {
   methods: {
     getCode() {
       getCodeImg().then((res) => {
-        console.log('-----------------------------',res)
         this.captchaEnabled =
           res.captchaEnabled === undefined ? true : res.captchaEnabled;
         if (this.captchaEnabled) {
-          console.log('-----------------------------',res)
           this.codeUrl = "data:image/gif;base64," + res.img;
           this.registerForm.uuid = res.uuid;
         }
       });
     },
     handleClick(tab, event) {
-      console.log(tab.name, event);
       this.$refs["registerForm"].resetFields();
       if (tab.name == "second") {
         this.activeNume = 2;
@@ -363,47 +389,74 @@ export default {
         this.activeNume = 1;
       }
     },
-    sendCode(type){
-      const vm=this
-      console.log(type)
-      if(type=='phone'){
-        getCodeSms(vm.phone,'register').then(res=>{
-        console.log(res)
-        if(res.code==200){
-          vm.isDisabled=false;
-          console.log('asdads')
+    sendCode(type) {
+      const vm = this;
+      console.log(type);
+      if (type == "phone") {
+        if (vm.registerForm.phone == "") {
+          vm.$message.error("请输入手机号");
+        } else if (
+          !/^(?:(?:\+|00)86)?1(?:(?:3[\d])|(?:4[5-79])|(?:5[0-35-9])|(?:6[5-7])|(?:7[0-8])|(?:8[\d])|(?:9[189]))\d{8}$/.test(
+            vm.registerForm.phone
+          )
+        ) {
+          // vm.$message.error("请输入正确的手机号");
+        } else if (vm.registerForm.code == "") {
+          vm.$message.error("图形验证码错误");
+        } else {
+          getCodeSms(
+            vm.registerForm.code,
+            vm.registerForm.phone,
+            "register",
+            vm.registerForm.uuid
+          ).then((res) => {
+            console.log(res);
+            if (res.code == 200) {
+              vm.isDisabled = false;
+              console.log("asdads");
+            }
+          });
         }
-      })
-      }else if(type=='email'){
-        getCodeEmail(vm.email,'register').then(res=>{
-        console.log(res)
-        if(res.code==200){
-          vm.isDisabled=false;
-          console.log('asdads')
+      } else if (type == "email") {
+        if (vm.registerForm.email == "") {
+          vm.$message.error("请输入邮箱号");
+        } else if (
+          !/^[A-Za-z0-9\u4e00-\u9fa5]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/.test(
+            vm.registerForm.email
+          )
+        ) {
+          //  vm.$message.error("请输入正确的邮箱");
+        } else if (vm.registerForm.code == "") {
+          vm.$message.error("图形验证码错误");
+        } else {
+          getCodeEmail(vm.email, "register").then((res) => {
+            console.log(res);
+            if (res.code == 200) {
+              vm.isDisabled = false;
+              console.log("asdads");
+            }
+          });
         }
-      })
+        const TIME_COUNT = 60;
+        vm.count = TIME_COUNT;
+        vm.isDisabled = true;
+        vm.text = vm.count + "s后重新获取 ";
+        vm.time = setInterval(() => {
+          if (vm.count > 0 && vm.count <= TIME_COUNT) {
+            vm.count--;
+            vm.text = vm.count + "s后重新获取 ";
+          } else {
+            vm.isDisabled = false;
+            clearInterval(vm.time);
+            vm.time = null;
+          }
+        }, 1000);
       }
-   
-      const TIME_COUNT=60;
-      vm.count=TIME_COUNT;
-      vm.isDisabled=true;
-      vm.text=vm.count+'s后重新获取 ';
-      vm.time=setInterval(() => {
-        if(vm.count>0 && vm.count<=TIME_COUNT){
-          vm.count--
-          vm.text=vm.count+'s后重新获取 ';
-        }else{
-          vm.isDisabled=false;
-          clearInterval(vm.time)
-          vm.time=null
-        }
-      }, 1000);
-
-
     },
     handleRegister() {
       this.$refs.registerForm.validate((valid) => {
         if (valid) {
+          console.log(valid, "valid");
           this.loading = true;
           register(this.registerForm)
             .then((res) => {
@@ -424,6 +477,7 @@ export default {
                 .catch(() => {});
             })
             .catch(() => {
+              console.log(valid, "validerro");
               this.loading = false;
               if (this.captchaEnabled) {
                 this.getCode();
@@ -437,16 +491,16 @@ export default {
 </script>
 
 <style rel="stylesheet/scss" lang="scss" scoped>
-  .header-warning{
-    height: 2rem;
-    line-height: 2rem;
-    background-color: #FFFBE6;
-    border:0.0625rem solid #FFE58F;
-    color: #E6A23C;
-    font-weight: normal;
-    font-size: 0.875rem;
-    margin-bottom:1.375rem ;
-  }
+.header-warning {
+  height: 2rem;
+  line-height: 2rem;
+  background-color: #fffbe6;
+  border: 0.0625rem solid #ffe58f;
+  color: #e6a23c;
+  font-weight: normal;
+  font-size: 0.875rem;
+  margin-bottom: 1.375rem;
+}
 .register-code img {
   width: 100%;
   height: 3.375rem;
@@ -576,5 +630,8 @@ export default {
 }
 .register-code-img {
   height: 38px;
+}
+::v-deep .el-input__suffix {
+  top: 0.625rem !important;
 }
 </style>
