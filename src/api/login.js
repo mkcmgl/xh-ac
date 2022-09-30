@@ -29,6 +29,26 @@ export function register(data) {
         data: data
     })
 }
+export function registerBid(data) {
+    return request({
+        url: '/register/bid',
+        headers: {
+            isToken: false
+        },
+        method: 'post',
+        data: data
+    })
+}
+export function registerEamil(data) {
+    return request({
+        url: '/register/email',
+        headers: {
+            isToken: false
+        },
+        method: 'post',
+        data: data
+    })
+}
 
 // 获取用户详细信息
 export function getInfo() {

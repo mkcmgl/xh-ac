@@ -243,6 +243,29 @@
             <span v-if="!loading">注 册</span>
             <span v-else>注 册 中...</span>
           </el-button>
+
+          <el-dialog
+            title="导出私钥"
+            :visible.sync="dialogVisible"
+            width="30%"
+            :before-close="handleClose"
+          >
+          <div class="privatetop">
+            <div>私钥导出后请在安全的环境中妥善保管，切勿保存至邮箱、网盘、微信收藏等;</div>
+             <div>请勿分享私钥，请勿使用网络工具传输私钥;</div> 
+             <div>请勿丢失私钥，丢失后无法找回;</div> 
+          </div>
+          <div>私钥：{{privateKey}}
+            <i class="el-icon-document-copy"></i>
+            
+          </div>
+            <span slot="footer" class="dialog-footer">
+              <el-button type="primary" @click="dialogVisible = false" class="privateButton"
+                >确 定</el-button
+              >
+            </span>
+          </el-dialog>
+
           <div style="float: right">
             <router-link class="link-type" :to="'/login'"
               >登录已有账户</router-link
@@ -255,7 +278,14 @@
 </template>
 
 <script>
-import { getCodeImg, register, getCodeSms, getCodeEmail } from "@/api/login";
+import {
+  getCodeImg,
+  register,
+  getCodeSms,
+  getCodeEmail,
+  registerEamil,
+  registerBid,
+} from "@/api/login";
 import { encrypt } from "../utils/jsencrypt";
 
 export default {
@@ -325,7 +355,9 @@ export default {
       }
     };
     return {
-      activeNume: "1",
+      privateKey:'',
+      dialogVisible: false,
+      activeNume: 1,
       activeName: "first",
       codeUrl: "",
       count: "",
@@ -366,7 +398,6 @@ export default {
   },
   created() {
     this.getCode();
-
   },
   methods: {
     getCode() {
@@ -456,44 +487,166 @@ export default {
       }
     },
     handleRegister() {
+
+
+      
       this.$refs.registerForm.validate((valid) => {
         if (valid) {
-          console.log(valid, "valid");
-          const{username,password,uuid,code,smsCode,phone}=this.registerForm
+          const {
+            username,
+            password,
+            uuid,
+            code,
+            smsCode,
+            phone,
+            email,
+            emailCode,
+            privateKey,
+          } = this.registerForm;
           this.loading = true;
-          register({username:encrypt(username),password:encrypt(password),uuid,code,receiveCode:encrypt(smsCode),phoneNumber:encrypt(phone)})
-            .then((res) => {
-              // const username = this.registerForm.username;
-              console.log(res)
-              this.$alert(
-                "<font color='red'>恭喜你，您的账号 " +
-                  username +
-                  " 注册成功！</font>",
-                "系统提示",
-                {
-                  dangerouslyUseHTMLString: true,
-                  type: "success",
-                }
-              )
-                .then(() => {
-                  this.$router.push("/login");
+          switch (this.activeNume) {
+            case 1:
+              register({
+                username: encrypt(username),
+                password: encrypt(password),
+                uuid,
+                code,
+                receiveCode: encrypt(smsCode),
+                phoneNumber: encrypt(phone),
+              })
+                .then((res) => {
+                  // const username = this.registerForm.username;
+                  console.log(res);
+                  this.$alert(
+                    "<font color='red'>恭喜你，您的账号 " +
+                      username +
+                      " 注册成功！</font>",
+                    "系统提示",
+                    {
+                      dangerouslyUseHTMLString: true,
+                      type: "success",
+                    }
+                  )
+                    .then(() => {
+                      this.$router.push("/login");
+                    })
+                    .catch(() => {});
                 })
-                .catch(() => {});
-            })
-            .catch((res) => {
-              this.loading = false;
-              if (this.captchaEnabled) {
-                this.getCode();
-              }
-            });
+                .catch((res) => {
+                  this.loading = false;
+                  if (this.captchaEnabled) {
+                    this.getCode();
+                  }
+                });
+              break;
+            case 2:
+              registerEamil({
+                username: encrypt(username),
+                passwodr: encrypt(password),
+                uuid,
+                code,
+                receiveCode: encrypt(emailCode),
+                email: encrypt(email),
+              })
+                .then((res) => {
+                  console.log(res);
+                  this.$alert(
+                    "<font color='red'>恭喜你，您的账号 " +
+                      username +
+                      " 注册成功！</font>",
+                    "系统提示",
+                    {
+                      dangerouslyUseHTMLString: true,
+                      type: "success",
+                    }
+                  )
+                    .then(() => {
+                      this.$router.push("/login");
+                    })
+                    .catch(() => {});
+                })
+                .catch((res) => {
+                  this.loading = false;
+                  if (this.captchaEnabled) {
+                    this.getCode();
+                  }
+                });
+              break;
+            case 3:
+         
+              registerBid({
+                username: encrypt(username),
+                securePassword: encrypt(password),
+                uuid,
+                code,
+              })
+                .then((res) => {
+                  // const username = this.registerForm.username;
+                  console.log(res);
+                  privateKey=res.privateKey
+                  this.$confirm(
+                    "恭喜你，您的账号" + username + " 注册成功！",
+                    "提示",
+                  
+                    {
+                      confirmButtonText: "确定",
+                      cancelButtonText: "取消",
+                      type: "success",
+                      showCancelButton: false,
+                    }
+                  )
+                    .then(() => {
+                      console.log(   this.dialogVisible );
+                      this.dialogVisible = true
+                    })
+                    .catch(() => {
+                      console.log(   this.dialogVisible );
+                      this.dialogVisible = true
+                    });
+
+                  this.$alert(
+
+                  )
+                })
+                .catch((res) => {
+                  this.loading = false;
+                  if (this.captchaEnabled) {
+                    this.getCode();
+                  }
+                });
+              break;
+
+          }
         }
       });
     },
+    handleClose(){}
   },
 };
 </script>
 
 <style rel="stylesheet/scss" lang="scss" scoped>
+ ::v-deep .el-dialog__footer{
+  display: flex;
+  justify-content: center;
+  }
+  .el-icon-document-copy{
+    color: #2f88ff;
+    cursor: pointer
+  }
+
+  .privatetop{
+    background-color:rgb(255, 251, 230) ;
+    border: .0625rem solid rgb(255, 229, 143);
+    padding-left: .625rem;
+    margin-bottom: 1.125rem;
+    div{
+      font-size: 0.5rem;
+      font-weight: 400;
+      color: #e6a23c;
+      line-height: 1.125rem;
+    }
+  }
 .header-warning {
   height: 2rem;
   line-height: 2rem;
