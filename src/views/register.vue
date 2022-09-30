@@ -256,6 +256,7 @@
 
 <script>
 import { getCodeImg, register, getCodeSms, getCodeEmail } from "@/api/login";
+import { encrypt } from "../utils/jsencrypt";
 
 export default {
   name: "Register",
@@ -334,10 +335,10 @@ export default {
       registerForm: {
         username: "",
         password: "",
+        uuid: "",
+        code: "",
         confirmPassword: "",
         phone: "",
-        code: "",
-        uuid: "",
         smsCode: "",
         email: "",
         emailCode: "",
@@ -365,6 +366,7 @@ export default {
   },
   created() {
     this.getCode();
+
   },
   methods: {
     getCode() {
@@ -457,10 +459,12 @@ export default {
       this.$refs.registerForm.validate((valid) => {
         if (valid) {
           console.log(valid, "valid");
+          const{username,password,uuid,code,smsCode,phone}=this.registerForm
           this.loading = true;
-          register(this.registerForm)
+          register({username:encrypt(username),password:encrypt(password),uuid,code,receiveCode:encrypt(smsCode),phoneNumber:encrypt(phone)})
             .then((res) => {
-              const username = this.registerForm.username;
+              // const username = this.registerForm.username;
+              console.log(res)
               this.$alert(
                 "<font color='red'>恭喜你，您的账号 " +
                   username +
@@ -476,8 +480,7 @@ export default {
                 })
                 .catch(() => {});
             })
-            .catch(() => {
-              console.log(valid, "validerro");
+            .catch((res) => {
               this.loading = false;
               if (this.captchaEnabled) {
                 this.getCode();
