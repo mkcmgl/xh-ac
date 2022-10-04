@@ -260,7 +260,7 @@
             
           </div>
             <span slot="footer" class="dialog-footer">
-              <el-button type="primary" @click="dialogVisible = false" class="privateButton"
+              <el-button type="primary" @click="handleClose" class="privateButton"
                 >确 定</el-button
               >
             </span>
@@ -500,8 +500,7 @@ export default {
             smsCode,
             phone,
             email,
-            emailCode,
-            privateKey,
+       
           } = this.registerForm;
           this.loading = true;
           switch (this.activeNume) {
@@ -582,8 +581,9 @@ export default {
               })
                 .then((res) => {
                   // const username = this.registerForm.username;
+                 
+                  this.privateKey=res.privateKey;
                   console.log(res);
-                  privateKey=res.privateKey
                   this.$confirm(
                     "恭喜你，您的账号" + username + " 注册成功！",
                     "提示",
@@ -603,10 +603,6 @@ export default {
                       console.log(   this.dialogVisible );
                       this.dialogVisible = true
                     });
-
-                  this.$alert(
-
-                  )
                 })
                 .catch((res) => {
                   this.loading = false;
@@ -620,7 +616,10 @@ export default {
         }
       });
     },
-    handleClose(){}
+    handleClose(){
+      this.dialogVisible=false;
+      this.$router.push('login')
+    }
   },
 };
 </script>
