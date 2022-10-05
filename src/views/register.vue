@@ -486,6 +486,9 @@ export default {
         }, 1000);
       }
     },
+
+
+    //注册校验及注册接口发送
     handleRegister() {
 
 

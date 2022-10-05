@@ -111,6 +111,7 @@
               type="primary"
               style="width: 100%"
               @click.native.prevent="handleLogin"
+              class="login"
             >
               <span v-if="!loading">登 录</span>
               <span v-else>登 录 中...</span>
@@ -266,6 +267,7 @@ export default {
         rememberMe: rememberMe === undefined ? false : Boolean(rememberMe),
       };
     },
+    //登录校验及发送登录接口
     handleLogin() {
       this.$refs.loginForm.validate((valid) => {
         if (valid) {
@@ -283,17 +285,18 @@ export default {
             Cookies.remove("password");
             Cookies.remove("rememberMe");
           }
-          // this.$store.dispatch("Login", this.loginForm).then(() => {
+          this.$store.dispatch("Login", this.loginForm).then(() => {
           this.$router.push({ path: this.redirect || "/" }).catch(() => {});
-          // }).catch(() => {
+          }).catch(() => {
           this.loading = false;
-          // if (this.captchaEnabled) {
-          //   this.getCode();
-          // }
-          // });
+          if (this.captchaEnabled) {
+            this.getCode();
+          }
+          });
         }
       });
     },
+    //切换登录方式
     handleClick(tab, event) {
       console.log(tab.name, event);
 
@@ -313,6 +316,7 @@ export default {
 
 
 <style rel="stylesheet/scss" lang="scss" scoped>
+
 .login-code img {
   width: 100%;
   height: 3.375rem;

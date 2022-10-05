@@ -1,5 +1,6 @@
 import { login, logout, getInfo } from '@/api/login'
 import { getToken, setToken, removeToken } from '@/utils/auth'
+import { encrypt } from '@/utils/jsencrypt';
 
 const user = {
   state: {
@@ -31,12 +32,14 @@ const user = {
   actions: {
     // 登录
     Login({ commit }, userInfo) {
-      const username = userInfo.username.trim()
-      const password = userInfo.password
+      const username = encrypt(userInfo.username.trim())
+      const password = encrypt(userInfo.password)
       const code = userInfo.code
       const uuid = userInfo.uuid
+      console.log('@@@@@@@@@@@',username)
       return new Promise((resolve, reject) => {
         login(username, password, code, uuid).then(res => {
+          console.log('##############',res)
           setToken(res.token)
           commit('SET_TOKEN', res.token)
           resolve()
