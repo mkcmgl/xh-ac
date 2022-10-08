@@ -353,6 +353,7 @@ export default {
   height: 3rem;
   border: 0.0625rem solid #2f88ff;
   color: #2f88ff;
+  padding: inherit;
 }
 .el-col-12 {
   height: 100%;

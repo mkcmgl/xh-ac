@@ -38,7 +38,7 @@
               type="password"
               show-password
               auto-complete="off"
-              placeholder="请输入登录密码，6-20字符，包含数字、大小写字母、符号"
+              placeholder="包含数字、大小写字母、符号(非空格)"
               @keyup.enter.native="handleRegister"
             >
             </el-input>
@@ -82,22 +82,29 @@
             v-if="captchaEnabled"
             style="width: 100%"
           >
-            <el-input
-              v-model="registerForm.smsCode"
-              auto-complete="off"
-              placeholder="请输入短信验证码"
-              style="width: 63%"
-            >
-            </el-input>
-            <el-button
-              class="button"
-              @click="sendCode('phone')"
-              v-show="!isDisabled"
-              >发送短信验证码</el-button
-            >
-            <el-button class="button" disabled v-show="isDisabled">{{
-              text
-            }}</el-button>
+
+            <el-row>
+              <el-col :span="15">
+                <el-input
+                v-model="registerForm.smsCode"
+                auto-complete="off"
+                placeholder="请输入短信验证码"
+                
+              >
+              </el-input>
+              </el-col>
+              <el-col :span="9">
+                <el-button
+                class="button"
+                @click="sendCode('phone')"
+                v-show="!isDisabled"
+                >发送短信验证码</el-button
+              >
+              <el-button class="button" disabled v-show="isDisabled">{{
+                text
+              }}</el-button>
+              </el-col>
+            </el-row>
           </el-form-item>
         </div>
         <div v-if="activeNume == 2">
@@ -116,7 +123,7 @@
               type="password"
               auto-complete="off"
               show-password
-              placeholder="请输入登录密码，6-20字符，包含数字、大小写字母、符号"
+              placeholder="包含数字、大小写字母、符号(非空格)"
               @keyup.enter.native="handleRegister"
             >
             </el-input>
@@ -160,14 +167,15 @@
             v-if="captchaEnabled"
             style="width: 100%"
           >
-            <el-input
+          <el-row>
+            <el-col :span="15">  <el-input
               v-model="registerForm.emailCode"
               auto-complete="off"
               placeholder="请输入邮箱验证码"
-              style="width: 63%"
+              style="width: 100%"
             >
-            </el-input>
-            <el-button
+            </el-input></el-col>
+            <el-col :span="9"><el-button
               class="button"
               @click="sendCode('email')"
               v-show="!isDisabled"
@@ -175,7 +183,8 @@
             >
             <el-button class="button" disabled v-show="isDisabled">{{
               text
-            }}</el-button>
+            }}</el-button></el-col>
+          </el-row>
           </el-form-item>
         </div>
         <div v-if="activeNume == 3">
@@ -197,7 +206,7 @@
               type="password"
               auto-complete="off"
               show-password
-              placeholder="请输入安全密码，6-20字符，包含数字、大小写字母、符号"
+              placeholder="包含数字、大小写字母、符号(非空格)"
               @keyup.enter.native="handleRegister"
             >
             </el-input>
@@ -250,17 +259,22 @@
             width="30%"
             :before-close="handleClose"
           >
-          <div class="privatetop">
-            <div>私钥导出后请在安全的环境中妥善保管，切勿保存至邮箱、网盘、微信收藏等;</div>
-             <div>请勿分享私钥，请勿使用网络工具传输私钥;</div> 
-             <div>请勿丢失私钥，丢失后无法找回;</div> 
-          </div>
-          <div>私钥：{{privateKey}}
-            <i class="el-icon-document-copy"></i>
-            
-          </div>
+            <div class="privatetop">
+              <div>
+                私钥导出后请在安全的环境中妥善保管，切勿保存至邮箱、网盘、微信收藏等;
+              </div>
+              <div>请勿分享私钥，请勿使用网络工具传输私钥;</div>
+              <div>请勿丢失私钥，丢失后无法找回;</div>
+            </div>
+            <div>
+              私钥：{{ privateKey }}
+              <i class="el-icon-document-copy"></i>
+            </div>
             <span slot="footer" class="dialog-footer">
-              <el-button type="primary" @click="handleClose" class="privateButton"
+              <el-button
+                type="primary"
+                @click="handleClose"
+                class="privateButton"
                 >确 定</el-button
               >
             </span>
@@ -355,7 +369,7 @@ export default {
       }
     };
     return {
-      privateKey:'',
+      privateKey: "",
       dialogVisible: false,
       activeNume: 1,
       activeName: "first",
@@ -487,24 +501,12 @@ export default {
       }
     },
 
-
     //注册校验及注册接口发送
     handleRegister() {
-
-
-      
       this.$refs.registerForm.validate((valid) => {
         if (valid) {
-          const {
-            username,
-            password,
-            uuid,
-            code,
-            smsCode,
-            phone,
-            email,
-       
-          } = this.registerForm;
+          const { username, password, uuid, code, smsCode, phone, email } =
+            this.registerForm;
           this.loading = true;
           switch (this.activeNume) {
             case 1:
@@ -575,7 +577,6 @@ export default {
                 });
               break;
             case 3:
-         
               registerBid({
                 username: encrypt(username),
                 securePassword: encrypt(password),
@@ -584,13 +585,13 @@ export default {
               })
                 .then((res) => {
                   // const username = this.registerForm.username;
-                 
-                  this.privateKey=res.privateKey;
+
+                  this.privateKey = res.privateKey;
                   console.log(res);
                   this.$confirm(
                     "恭喜你，您的账号" + username + " 注册成功！",
                     "提示",
-                  
+
                     {
                       confirmButtonText: "确定",
                       cancelButtonText: "取消",
@@ -599,12 +600,12 @@ export default {
                     }
                   )
                     .then(() => {
-                      console.log(   this.dialogVisible );
-                      this.dialogVisible = true
+                      console.log(this.dialogVisible);
+                      this.dialogVisible = true;
                     })
                     .catch(() => {
-                      console.log(   this.dialogVisible );
-                      this.dialogVisible = true
+                      console.log(this.dialogVisible);
+                      this.dialogVisible = true;
                     });
                 })
                 .catch((res) => {
@@ -614,41 +615,40 @@ export default {
                   }
                 });
               break;
-
           }
         }
       });
     },
-    handleClose(){
-      this.dialogVisible=false;
-      this.$router.push('login')
-    }
+    handleClose() {
+      this.dialogVisible = false;
+      this.$router.push("login");
+    },
   },
 };
 </script>
 
 <style rel="stylesheet/scss" lang="scss" scoped>
- ::v-deep .el-dialog__footer{
+::v-deep .el-dialog__footer {
   display: flex;
   justify-content: center;
-  }
-  .el-icon-document-copy{
-    color: #2f88ff;
-    cursor: pointer
-  }
+}
+.el-icon-document-copy {
+  color: #2f88ff;
+  cursor: pointer;
+}
 
-  .privatetop{
-    background-color:rgb(255, 251, 230) ;
-    border: .0625rem solid rgb(255, 229, 143);
-    padding-left: .625rem;
-    margin-bottom: 1.125rem;
-    div{
-      font-size: 0.5rem;
-      font-weight: 400;
-      color: #e6a23c;
-      line-height: 1.125rem;
-    }
+.privatetop {
+  background-color: rgb(255, 251, 230);
+  border: 0.0625rem solid rgb(255, 229, 143);
+  padding-left: 0.625rem;
+  margin-bottom: 1.125rem;
+  div {
+    font-size: 0.5rem;
+    font-weight: 400;
+    color: #e6a23c;
+    line-height: 1.125rem;
   }
+}
 .header-warning {
   height: 2rem;
   line-height: 2rem;
@@ -693,11 +693,13 @@ export default {
     color: #2f88ff;
   }
 }
+
 .button {
-  width: 11.25rem;
+  width: 100%;
+  height: 3.2rem;
   margin-left: 1.25rem;
   font-size: 0.9375rem;
-  height: 3rem;
+  padding: inherit;
   border: 0.0625rem solid #2f88ff;
   color: #2f88ff;
 }
@@ -747,7 +749,7 @@ export default {
   border-radius: 6px;
   background: #ffffff;
   width: 37.5rem;
-  padding: 25px 25px 5px 25px;
+
   .el-input {
     height: 8px;
     input {
