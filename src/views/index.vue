@@ -130,24 +130,24 @@
         <div class="wapCenter">
           <el-row :gutter="20">
             <el-col :span="12">
-              <div class="grid-content bg-purple1">
+              <div class="grid-content bg-purple footer">
                 <div class="rightImg">
-                  <img src="@/assets/images/548.png" class="img" />
+                  <img src="@/assets/images/551.png" class="img" />
                 </div>
                 <div class="leftImg">
-                  <img src="@/assets/images/7.png" class="img" />
+                  <img src="@/assets/images/3.png" class="img" />
                 </div>
                 <span class="spanTitle">BaaS服务</span>
-                <span class="spanFooter">提供一站式区块链服务</span>
+
               </div>
             </el-col>
             <el-col :span="12"
-              ><div class="grid-content bg-purple2">
+              ><div class="grid-content bg-purple footer">
                 <div class="rightImg">
-                  <img src="@/assets/images/549.png" class="img" />
+                  <img src="@/assets/images/552.png" class="img" />
                 </div>
                 <div class="leftImg">
-                  <img src="@/assets/images/6.png" class="img" />
+                  <img src="@/assets/images/m4.png" class="img" />
                 </div>
                 <span class="spanTitle">分布式数字身份</span>
                 <span class="spanFooter">实现分布式数字证书签发</span>
@@ -157,7 +157,23 @@
           </el-row>
         </div>
         <el-button class="button-center" type="primary">立刻进入</el-button>
-      </div>v
+      </div>
+
+    </div>
+    <div class="home-right">
+      <div>
+        <img src="@/assets/images/u1.png" />
+      </div>
+     
+      <span class="name">你好！{name}</span>  
+      <div class="userInfo">
+        <span class="userInfoTitle">数字身份</span>
+        <span class="userInfoData">did:bid:efg4TSphNKNWFW1Ymm2FavY21iNLPHev</span>        
+        <span class="userInfoTitle">实名认证</span>   
+        <span class="userInfoData">是否认证</span> 
+        <span class="userInfoTitle">最近登录</span>   
+        <span class="userInfoData">timetime</span> 
+      </div>
     </div>
   </div>
 </template>
@@ -174,6 +190,54 @@ export default {
 </script>
 
 <style scoped lang="scss">
+
+
+.home-right {
+  height: 18.75rem;
+  width: 43.75rem;
+  background: #fff;
+  position: absolute;
+  top: 5rem;
+  right: 1.25rem;
+  img{
+    margin-top:1.875rem ;
+    margin-left: 1.875rem;
+    height: 5rem;
+  }
+  .name{
+    font-size: 1.5rem;
+    font-family: PingFang SC-Bold, PingFang SC;
+    font-weight: bold;
+    color: #333333;
+    display: block;
+    margin-top: -3.6875rem;
+    margin-left: 8.8125rem;
+  }
+.userInfo{
+  margin-top: 3.1875rem;
+  margin-left: 1.875rem;
+  .userInfoTitle{
+    font-size: 1.125rem;
+    font-family: PingFang SC-常规体, PingFang SC;
+    font-weight: normal;
+    color: #999999;
+    margin-top: 1.875rem;
+    display: block;
+  }
+  .userInfoData{
+    display: block;
+    margin-top: -1.25rem;
+    margin-left: 6.875rem;
+    font-size: 1rem;
+font-family: PingFang SC-常规体, PingFang SC;
+font-weight: normal;
+color: #333333;
+  }
+}
+}
+.home-left {
+position: relative;
+}
 
 .rightImg {
   position: absolute;
@@ -226,10 +290,37 @@ export default {
   margin-top: 0.3rem;
   margin-left: 6.25rem;
 }
+.grid-content.bg-purple.footer{
+  background: #F5F8FF;
+  .spanTitle {
+    font-size: 1.375rem;
+    font-family: PingFang SC-Heavy, PingFang SC;
+    font-weight: 800;
+    color: #333;
+    display: inline-block;
+    margin-top: 2.5rem;
+    margin-left: 7.5rem;
+  }
+
+  .rightImg {
+    position: absolute;
+    top: 1.4rem;
+    left: 2.625rem;
+    .img {
+      height: 4.125rem;
+    }
+  }
+  .leftImg {
+    position: absolute;
+    top: 1rem;
+    left: 42rem;
+    .img {
+      height: 5.125rem;
+    }
+  }
+}
 .bg-purple1 {
-  background: linear-gradient(137deg, #50a5fa, #5ea1fb 26%, #85c6ff);
-
-
+  background: linear-gradient(137deg, #50a5fa, #5ea1fb 26%, #85c6ff)
 }
 .bg-purple2 {
   background: linear-gradient(156deg, #a485e3 0%, #b394f1 100%);

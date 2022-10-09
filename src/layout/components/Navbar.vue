@@ -1,13 +1,22 @@
 <template>
   <div class="navbar">
-    <hamburger id="hamburger-container" :is-active="sidebar.opened" class="hamburger-container" @toggleClick="toggleSideBar" />
+    <!-- <hamburger id="hamburger-container" :is-active="sidebar.opened" class="hamburger-container" @toggleClick="toggleSideBar" />
 
     <breadcrumb id="breadcrumb-container" class="breadcrumb-container" v-if="!topNav"/>
-    <top-nav id="topmenu-container" class="topmenu-container" v-if="topNav"/>
+    <top-nav id="topmenu-container" class="topmenu-container" v-if="topNav"/> -->
 
+    <div class="logo">
+      <!-- <img src="@/assets/images/u1.png" /> -->
+      <img src="@/assets/images/5402x.png" >
+    </div>
+
+    <div class="indexLogo">
+      <img src="@/assets/images/168.png">
+      <div>概览</div>
+    </div>
     <div class="right-menu">
       <template v-if="device!=='mobile'">
-        <search id="header-search" class="right-menu-item" />
+        <!-- <search id="header-search" class="right-menu-item" />
         
         <el-tooltip content="源码地址" effect="dark" placement="bottom">
           <ruo-yi-git id="ruoyi-git" class="right-menu-item hover-effect" />
@@ -21,16 +30,17 @@
 
         <el-tooltip content="布局大小" effect="dark" placement="bottom">
           <size-select id="size-select" class="right-menu-item hover-effect" />
-        </el-tooltip>
+        </el-tooltip> -->
 
       </template>
-
+      <div class="avatar-wrapper">
+        <img src="@/assets/images/155.png" class="user-avatar">
+        
+      </div>
+      <div class="userName">{name}</div>
       <el-dropdown class="avatar-container right-menu-item hover-effect" trigger="click">
-        <div class="avatar-wrapper">
-          <img :src="avatar" class="user-avatar">
-          <i class="el-icon-caret-bottom" />
-        </div>
-        <el-dropdown-menu slot="dropdown">
+    
+        <el-dropdown-menu slot="dropdown" >
           <router-link to="/user/profile">
             <el-dropdown-item>个人中心</el-dropdown-item>
           </router-link>
@@ -111,25 +121,73 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+
+.avatar-wrapper{
+      position: absolute;
+    left: -65px;
+  img{
+    height: 2.1875rem;
+  }
+}
+
+
+
+
+
+
+
 .navbar {
-  height: 50px;
+  height: 3.75rem;
   overflow: hidden;
   position: relative;
   background: #fff;
-  box-shadow: 0 1px 4px rgba(0,21,41,.08);
+  box-shadow: 0 0.0625rem 0.25rem rgba(0,21,41,.08);
+  .logo{
 
-  .hamburger-container {
-    line-height: 46px;
-    height: 100%;
-    float: left;
-    cursor: pointer;
-    transition: background .3s;
-    -webkit-tap-highlight-color:transparent;
-
-    &:hover {
-      background: rgba(0, 0, 0, .025)
+    img{
+      width: 15.625rem;
+      margin-left: 1.875rem;
+      margin-top: 0.75rem;
     }
   }
+  .indexLogo{
+    margin-top: -2.25rem;
+    margin-left: 21.875rem;
+    img{
+   width: 1.5625rem;
+    }
+    div{ 
+      margin-top: -2.125rem;
+      margin-left: 2.1875rem;
+      font-size: 1.5rem;
+      font-family: PingFang SC-常规体, PingFang SC;
+      font-weight: normal;
+      color: #666666;
+    }
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+ 
 
   .breadcrumb-container {
     float: left;
@@ -147,54 +205,22 @@ export default {
 
   .right-menu {
     float: right;
-    height: 100%;
-    line-height: 50px;
+
+    margin-top: -1.875rem;
 
     &:focus {
       outline: none;
     }
-
-    .right-menu-item {
-      display: inline-block;
-      padding: 0 8px;
-      height: 100%;
-      font-size: 18px;
-      color: #5a5e66;
-      vertical-align: text-bottom;
-
-      &.hover-effect {
-        cursor: pointer;
-        transition: background .3s;
-
-        &:hover {
-          background: rgba(0, 0, 0, .025)
-        }
-      }
+    .userName {
+      position: relative;
+      top: 6px;
+      right: 20px;
+      font-size: 16px;
+      font-family: PingFang SC-Regular, PingFang SC;
+      font-weight: 400;
+      color: #707070;
     }
 
-    .avatar-container {
-      margin-right: 30px;
-
-      .avatar-wrapper {
-        margin-top: 5px;
-        position: relative;
-
-        .user-avatar {
-          cursor: pointer;
-          width: 40px;
-          height: 40px;
-          border-radius: 10px;
-        }
-
-        .el-icon-caret-bottom {
-          cursor: pointer;
-          position: absolute;
-          right: -20px;
-          top: 25px;
-          font-size: 12px;
-        }
-      }
-    }
   }
 }
 </style>
