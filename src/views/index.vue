@@ -1,100 +1,165 @@
 <template>
-<div class="back">
-  <div class="home-left">
-    <div class="title">总览</div>
+  <div class="back">
+    <div class="home-left">
+      <div class="title">总览</div>
 
-    <div class="leftWap">
-      <div class="wapTop">
-        <div class="leftTop">业务运营管理平台</div>
-        <div class="rightTop">提供子链、公共服务等生态接入运营管理功能</div>
+      <div class="leftWap">
+        <div class="wapTop">
+          <div class="leftTop">业务运营管理平台</div>
+          <div class="rightTop">提供子链、公共服务等生态接入运营管理功能</div>
+        </div>
+        <div class="wapCenter">
+          <el-row>
+            <el-col :span="8">
+              <div class="cernter-left">
+                <span class="text1">子链接入数</span>
+                <span class="num">5</span>
+                <span class="text2">公共服务接入数</span>
+                <span class="num">5</span>
+              </div>
+            </el-col>
+            <el-col :span="16">
+              <div class="cernter-right">
+                <span class="user">使用指南</span>
+                <span class="number">01</span>
+                <span class="text">创建数字身份</span>
+                <span class="number">02</span>
+                <span class="text">实名认证</span>
+                <span class="number">03</span>
+                <span class="text">子链/公共服务接入</span>
+              </div>
+            </el-col>
+          </el-row>
+        </div>
+        <el-button class="button-center" type="primary">立刻进入</el-button>
       </div>
-      <div class="wapCenter">
-        <el-row>
-          <el-col :span="8">
-            <div class="cernter-left">
-              <span class="text1">子链接入数</span>
-              <span class="num">5</span>
-              <span class="text2">公共服务接入数</span>
-              <span class="num">5</span>
-            </div>
-          </el-col>
-          <el-col :span="16">
-            <div class="cernter-right">
-              <span class="user">使用指南</span>
-              <span class="number">01</span>
-              <span class="text">创建数字身份</span>
-              <span class="number">02</span>
-              <span class="text">实名认证</span>
-              <span class="number">03</span>
-              <span class="text">子链/公共服务接入</span>
-            </div>
-          </el-col>
-        </el-row>
+      <div class="leftWap">
+        <div class="wapTop">
+          <div class="leftTop">融合标识管理平台</div>
+          <div class="rightTop">提供对新型分布式标识和工业互联网标识的融合管理</div>
+        </div>
+        <div class="wapCenter">
+          <el-row>
+            <el-col :span="8">
+              <div class="cernter-left">
+                <span class="text1">标识注册量</span>
+                <span class="num">5</span>
+                <span class="text2">标识解析量</span>
+                <span class="num">5</span>
+              </div>
+            </el-col>
+            <el-col :span="16">
+              <div class="cernter-right">
+                <span class="user">使用指南</span>
+                <span class="number">01</span>
+                <span class="text">创建标识数据模板</span>
+                <span class="number">02</span>
+                <span class="text">标识数据注册</span>
+                <span class="number">03</span>
+                <span class="text">标识数据解析</span>
+              </div>
+            </el-col>
+          </el-row>
+        </div>
+        <el-button class="button-center" type="primary">立刻进入</el-button>
       </div>
-      <el-button class="button-center" type="primary">立刻进入</el-button>
-    </div>
-    <div class="leftWap">
-      <div class="wapTop">
-        <div class="leftTop">业务运营管理平台</div>
-        <div class="rightTop">提供子链、公共服务等生态接入运营管理功能</div>
+      <div class="leftWap">
+        <div class="wapTop">
+          <div class="leftTop">公共服务管理平台</div>
+          <div class="rightTop">提供公共服务及服务共享功能</div>
+        </div>
+        <div class="wapCenter">
+          <el-row :gutter="20">
+            <el-col :span="6">
+              <div class="grid-content bg-purple1">
+                <div class="rightImg">
+                  <img src="@/assets/images/548.png" class="img" />
+                </div>
+                <div class="leftImg">
+                  <img src="@/assets/images/7.png" class="img" />
+                </div>
+                <span class="spanTitle">BaaS服务</span>
+                <span class="spanFooter">提供一站式区块链服务</span>
+              </div>
+            </el-col>
+            <el-col :span="6"
+              ><div class="grid-content bg-purple2">
+                <div class="rightImg">
+                  <img src="@/assets/images/549.png" class="img" />
+                </div>
+                <div class="leftImg">
+                  <img src="@/assets/images/6.png" class="img" />
+                </div>
+                <span class="spanTitle">分布式数字身份</span>
+                <span class="spanFooter">实现分布式数字证书签发</span>
+              </div></el-col
+            >
+            <el-col :span="6"
+              ><div class="grid-content bg-purple3">
+                <div class="rightImg">
+                  <img src="@/assets/images/567.png" class="img" />
+                </div>
+                <div class="leftImg">
+                  <img src="@/assets/images/5.png" class="img" />
+                </div>
+                <span class="spanTitle">通用存证服务</span>
+                <span class="spanFooter">电子数据可信化保存</span>
+              </div></el-col
+            >
+            <el-col :span="6"
+              ><div class="grid-content bg-purple4">
+                <div class="rightImg">
+                  <img src="@/assets/images/550.png" class="img" />
+                </div>
+                <div class="leftImg">
+                  <img src="@/assets/images/4.png" class="img" />
+                </div>
+                <span class="spanTitle">NFT服务</span>
+                <span class="spanFooter">实现NFT铸造、管理</span>
+              </div></el-col
+            >
+          </el-row>
+        </div>
+        <el-button class="button-center" type="primary">立刻进入</el-button>
       </div>
-      <div class="wapCenter">
-        <el-row>
-          <el-col :span="8">
-            <div class="cernter-left">
-              <span class="text1">子链接入数</span>
-              <span class="num">5</span>
-              <span class="text2">公共服务接入数</span>
-              <span class="num">5</span>
-            </div>
-          </el-col>
-          <el-col :span="16">
-            <div class="cernter-right">
-              <span class="user">使用指南</span>
-              <span class="number">01</span>
-              <span class="text">创建数字身份</span>
-              <span class="number">02</span>
-              <span class="text">实名认证</span>
-              <span class="number">03</span>
-              <span class="text">子链/公共服务接入</span>
-            </div>
-          </el-col>
-        </el-row>
-      </div>
-      <el-button class="button-center" type="primary">立刻进入</el-button>
-    </div>
-    <div class="leftWap">
-      <div class="wapTop">
-        <div class="leftTop">公共服务管理平台</div>
-        <div class="rightTop">提供公共服务及服务共享功能</div>
-      </div>
-      <div class="wapCenter">
-        <el-row>
-          <el-col :span="8">
-            <div class="cernter-left">
-              <span class="text1">子链接入数</span>
-              <span class="num">5</span>
-              <span class="text2">公共服务接入数</span>
-              <span class="num">5</span>
-            </div>
-          </el-col>
-          <el-col :span="16">
-            <div class="cernter-right">
-              <span class="user">使用指南</span>
-              <span class="number">01</span>
-              <span class="text">创建数字身份</span>
-              <span class="number">02</span>
-              <span class="text">实名认证</span>
-              <span class="number">03</span>
-              <span class="text">子链/公共服务接入</span>
-            </div>
-          </el-col>
-        </el-row>
-      </div>
-      <el-button class="button-center" type="primary">立刻进入</el-button>
+      <div v-show="true" class="leftWap">
+        <div class="wapTop">
+          <div class="leftTop">监测监管服务平台</div>
+          <div class="rightTop">平台运行情况持续检测监管</div>
+        </div>
+        <div class="wapCenter">
+          <el-row :gutter="20">
+            <el-col :span="12">
+              <div class="grid-content bg-purple1">
+                <div class="rightImg">
+                  <img src="@/assets/images/548.png" class="img" />
+                </div>
+                <div class="leftImg">
+                  <img src="@/assets/images/7.png" class="img" />
+                </div>
+                <span class="spanTitle">BaaS服务</span>
+                <span class="spanFooter">提供一站式区块链服务</span>
+              </div>
+            </el-col>
+            <el-col :span="12"
+              ><div class="grid-content bg-purple2">
+                <div class="rightImg">
+                  <img src="@/assets/images/549.png" class="img" />
+                </div>
+                <div class="leftImg">
+                  <img src="@/assets/images/6.png" class="img" />
+                </div>
+                <span class="spanTitle">分布式数字身份</span>
+                <span class="spanFooter">实现分布式数字证书签发</span>
+              </div></el-col
+            >
+
+          </el-row>
+        </div>
+        <el-button class="button-center" type="primary">立刻进入</el-button>
+      </div>v
     </div>
   </div>
-</div>
 </template>
 
 <script>
@@ -109,20 +174,103 @@ export default {
 </script>
 
 <style scoped lang="scss">
-.button-center{
+
+.rightImg {
+  position: absolute;
+  top: 1.875rem;
+  left: 2.625rem;
+  .img {
+    height: 3.125rem;
+  }
+}
+.leftImg {
+  position: absolute;
+  top: 1rem;
+  left: 22rem;
+  .img {
+    height: 5.125rem;
+  }
+}
+.wapCenter {
+  margin-top: 2rem;
+}
+
+.el-row {
+  margin-right: 0.7rem !important;
+  margin-bottom: 30px;
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+.el-col {
+  border-radius: 4px;
+}
+.bg-purple-dark {
+  background: #99a9bf;
+}
+.spanTitle {
+  font-size: 1.375rem;
+  font-family: PingFang SC-Heavy, PingFang SC;
+  font-weight: 800;
+  color: #ffffff;
+  display: inline-block;
+  margin-top: 1.5rem;
+  margin-left: 6.25rem;
+}
+.spanFooter {
+  font-size: 1.125rem;
+  font-family: PingFang SC-常规体, PingFang SC;
+  font-weight: normal;
+  color: #fff;
+  display: inline-block;
+  margin-top: 0.3rem;
+  margin-left: 6.25rem;
+}
+.bg-purple1 {
+  background: linear-gradient(137deg, #50a5fa, #5ea1fb 26%, #85c6ff);
+
+
+}
+.bg-purple2 {
+  background: linear-gradient(156deg, #a485e3 0%, #b394f1 100%);
+}
+.bg-purple3 {
+  background: linear-gradient(137deg, #6e94fb 0%, #85a6ff 100%);
+}
+.bg-purple4 {
+  background: linear-gradient(138deg, #6bc1e1 0%, #85dddd 100%);
+  .leftImg {
+    left: 20rem;
+  
+  }
+}
+.bg-purple-light {
+  background: #e5e9f2;
+}
+.grid-content {
+  border-radius: 4px;
+  min-height: 6.875rem;
+  position: relative;
+}
+.row-bg {
+  padding: 10px 0;
+  background-color: #f9fafc;
+}
+
+.button-center {
   position: absolute;
   right: 1.25rem;
-  top:1.875rem;
+  top: 0.875rem;
   width: 6.5625rem;
   height: 2.5rem;
   padding: 0;
-  font-size: 12Px;
-  border-radius: .333333rem .333333rem .333333rem .333333rem;
-  font-family: PingFang SC-Regular,PingFang SC;
+  font-size: 12px;
+  border-radius: 0.333333rem 0.333333rem 0.333333rem 0.333333rem;
+  font-family: PingFang SC-Regular, PingFang SC;
 }
 .leftWap {
   width: 110rem;
-  height: 11.5rem;
+  height: 12.5rem;
   position: relative;
   background: #ffffff;
   border-radius: 4px 4px 4px 4px;
@@ -163,7 +311,7 @@ export default {
   .text1 {
     display: inline-block;
     height: 3.125rem;
-    font-size: 0.875rem;
+    font-size: 1.25rem;
     color: #333333;
     font-weight: normal;
     line-height: 3.125rem;
@@ -173,7 +321,7 @@ export default {
   .num {
     display: inline-block;
     height: 3.125rem;
-    font-size: 30px;
+    font-size: 2.8125rem;
     font-weight: bold;
     color: #333333;
     line-height: 3.125rem;
@@ -183,7 +331,7 @@ export default {
     display: inline-block;
     height: 3.125rem;
     margin-left: 6.25rem;
-    font-size: 0.875rem;
+    font-size: 1.25rem;
     font-weight: normal;
     color: #333333;
     line-height: 3.125rem;
