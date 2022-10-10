@@ -1,7 +1,8 @@
 <template>
   <div class="back">
+    <div class="title">总览</div>
     <div class="home-left">
-      <div class="title">总览</div>
+ 
 
       <div class="leftWap">
         <div class="wapTop">
@@ -36,7 +37,9 @@
       <div class="leftWap">
         <div class="wapTop">
           <div class="leftTop">融合标识管理平台</div>
-          <div class="rightTop">提供对新型分布式标识和工业互联网标识的融合管理</div>
+          <div class="rightTop">
+            提供对新型分布式标识和工业互联网标识的融合管理
+          </div>
         </div>
         <div class="wapCenter">
           <el-row>
@@ -138,7 +141,6 @@
                   <img src="@/assets/images/3.png" class="img" />
                 </div>
                 <span class="spanTitle">BaaS服务</span>
-
               </div>
             </el-col>
             <el-col :span="12"
@@ -153,28 +155,41 @@
                 <span class="spanFooter">实现分布式数字证书签发</span>
               </div></el-col
             >
-
           </el-row>
         </div>
         <el-button class="button-center" type="primary">立刻进入</el-button>
       </div>
-
     </div>
     <div class="home-right">
       <div>
         <img src="@/assets/images/u1.png" />
       </div>
-     
-      <span class="name">你好！{name}</span>  
-      <div class="userInfo">
-        <span class="userInfoTitle">数字身份</span>
-        <span class="userInfoData">did:bid:efg4TSphNKNWFW1Ymm2FavY21iNLPHev</span>        
-        <span class="userInfoTitle">实名认证</span>   
-        <span class="userInfoData">是否认证</span> 
-        <span class="userInfoTitle">最近登录</span>   
-        <span class="userInfoData">timetime</span> 
-      </div>
+
+      <span class="name">你好！{name}</span>
+
+      <ul class="userInfo">
+        <li >
+          <span class="userInfoTitle">数字身份</span>
+          <span class="userInfoData"
+            >did:bid:efg4TSphNKNWFW1Ymm2FavY21iNLPHev</span
+          >
+        </li>
+        <li>
+          <span class="userInfoTitle">实名认证</span>
+          <span class="userInfoData">是否认证</span>
+        </li>
+        <li>
+          <span class="userInfoTitle">最近登录</span>
+          <span class="userInfoData">timetime</span>
+        </li>
+      </ul>
+
+      <!-- <div class="userInfo">
+      
+
+      </div> -->
     </div>
+    
   </div>
 </template>
 
@@ -190,21 +205,17 @@ export default {
 </script>
 
 <style scoped lang="scss">
-
-
 .home-right {
-  height: 18.75rem;
   width: 43.75rem;
   background: #fff;
-  position: absolute;
-  top: 5rem;
-  right: 1.25rem;
-  img{
-    margin-top:1.875rem ;
+
+  float: right;
+  img {
+    margin-top: 1.875rem;
     margin-left: 1.875rem;
     height: 5rem;
   }
-  .name{
+  .name {
     font-size: 1.5rem;
     font-family: PingFang SC-Bold, PingFang SC;
     font-weight: bold;
@@ -213,30 +224,33 @@ export default {
     margin-top: -3.6875rem;
     margin-left: 8.8125rem;
   }
-.userInfo{
-  margin-top: 3.1875rem;
-  margin-left: 1.875rem;
-  .userInfoTitle{
-    font-size: 1.125rem;
+
+  .userInfo{
+    list-style-type: none;
+    margin-top: 2.5rem;
+    li{
+      margin-bottom:2rem;
+
+    }
+    .userInfoTitle{
+      margin-right: 2.25rem;
+      font-size: 1.125rem;
+ 
+      font-family: PingFang SC-常规体, PingFang SC;
+      font-weight: normal;
+      color: #999999;
+    }
+    .userInfoData{
+      font-size: 1.125rem;
     font-family: PingFang SC-常规体, PingFang SC;
     font-weight: normal;
-    color: #999999;
-    margin-top: 1.875rem;
-    display: block;
+    color: #333333;
+    word-break: break-all;
+    }
   }
-  .userInfoData{
-    display: block;
-    margin-top: -1.25rem;
-    margin-left: 6.875rem;
-    font-size: 1rem;
-font-family: PingFang SC-常规体, PingFang SC;
-font-weight: normal;
-color: #333333;
-  }
-}
 }
 .home-left {
-position: relative;
+  float: left
 }
 
 .rightImg {
@@ -290,8 +304,8 @@ position: relative;
   margin-top: 0.3rem;
   margin-left: 6.25rem;
 }
-.grid-content.bg-purple.footer{
-  background: #F5F8FF;
+.grid-content.bg-purple.footer {
+  background: #f5f8ff;
   .spanTitle {
     font-size: 1.375rem;
     font-family: PingFang SC-Heavy, PingFang SC;
@@ -320,7 +334,7 @@ position: relative;
   }
 }
 .bg-purple1 {
-  background: linear-gradient(137deg, #50a5fa, #5ea1fb 26%, #85c6ff)
+  background: linear-gradient(137deg, #50a5fa, #5ea1fb 26%, #85c6ff);
 }
 .bg-purple2 {
   background: linear-gradient(156deg, #a485e3 0%, #b394f1 100%);
@@ -332,7 +346,6 @@ position: relative;
   background: linear-gradient(138deg, #6bc1e1 0%, #85dddd 100%);
   .leftImg {
     left: 20rem;
-  
   }
 }
 .bg-purple-light {
