@@ -385,14 +385,14 @@ export default {
   margin-bottom: 1.5625rem;
 }
 .wapTop {
-  height: 1.375rem;
+  height: 1.875rem;
 
   margin-top: 0.9375rem;
   padding-left: 1.125rem;
-  border-left: 0.5rem solid #2f88ff;
+  border-left: 0.36rem solid #2f88ff;
 }
 .leftTop {
-  font-size: 16px;
+  font-size: 1.5rem;
   font-weight: 800;
   color: #333333;
   line-height: 22px;
@@ -400,7 +400,7 @@ export default {
 }
 .rightTop {
   margin-left: 3.125rem;
-  font-size: 0.875rem;
+  font-size: 1.2rem;
   font-weight: normal;
   color: #999999;
   line-height: 22px;
