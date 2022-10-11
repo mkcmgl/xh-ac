@@ -2,8 +2,6 @@
   <div class="back">
     <div class="title">总览</div>
     <div class="home-left">
- 
-
       <div class="leftWap">
         <div class="wapTop">
           <div class="leftTop">业务运营管理平台</div>
@@ -64,7 +62,7 @@
             </el-col>
           </el-row>
         </div>
-        <el-button class="button-center" type="primary" @click="qwe">立刻进入</el-button>
+        <el-button class="button-center" type="primary">立刻进入</el-button>
       </div>
       <div class="leftWap">
         <div class="wapTop">
@@ -165,22 +163,30 @@
         <img src="@/assets/images/u1.png" />
       </div>
 
-      <span class="name">你好！{name}</span>
+      <span class="name">你好！{{ userData.userName }}</span>
 
       <ul class="userInfo">
-        <li >
+        <li>
           <span class="userInfoTitle">数字身份</span>
-          <span class="userInfoData"
-            >did:bid:efg4TSphNKNWFW1Ymm2FavY21iNLPHev</span
-          >
+          <span class="userInfoData didtrue" v-if="userData.did">{{
+            userData.did
+          }}</span>
+          <span class="userInfoData didfalse" v-else>未创建</span>
+          <span class="toIdentity" v-if="!userData.did">立即创建</span>
         </li>
         <li>
           <span class="userInfoTitle">实名认证</span>
-          <span class="userInfoData">是否认证</span>
+          <span class="userInfoData true" v-show="authColor">{{
+            getauthData
+          }}</span>
+          <span class="userInfoData false" v-show="!authColor">{{
+            getauthData
+          }}</span>
+          <span class="userGoAuth" v-show="!authColor">立刻认证</span>
         </li>
         <li>
           <span class="userInfoTitle">最近登录</span>
-          <span class="userInfoData">timetime</span>
+          <span class="userInfoData">{{ userData.createTime }}</span>
         </li>
       </ul>
 
@@ -189,40 +195,84 @@
 
       </div> -->
     </div>
-    
   </div>
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapState } from "vuex";
 export default {
   name: "Index",
   data() {
-    return {};
+    return {
+      authColor: false,
+    };
   },
-  created(){
-    console.log('123333333333')
-console.log(this.userData)
+  created() {
+    console.log("123333333333");
+    console.log(this.userData);
   },
-  computed:{
+  computed: {
     ...mapState({
-      userData:state=>state.user.userData
-    })
- 
+      userData: (state) => state.user.userData,
+    }),
+    getauthData() {
+      if (this.userData.authStatus == 1) {
+        this.authColor = true;
+        return "已认证";
+      } else if (this.userData.authStatus == 2) {
+        this.authColor = true;
+        return "认证中";
+      } else if (this.userData.authStatus == 0) {
+        this.authColor = false;
+        return "未认证";
+      } else {
+        this.authColor = false;
+        return "认证未通过";
+      }
+    },
   },
-  methods: {
-    qwe(){
-      console.log(this.userData)
-    }
-  },
+  methods: {},
 };
 </script>
 
 <style scoped lang="scss">
+span.userInfoData.true {
+  background-color: #ddf5e9;
+  color: #4cb883;
+  padding: 5px 18px;
+  border-radius: 0.333333rem 0.333333rem 0.333333rem 0.333333rem;
+}
+span.userInfoData.false {
+  background-color: #f4f3f7;
+  padding: 5px 18px;
+  border-radius: 0.333333rem 0.333333rem 0.333333rem 0.333333rem;
+}
+span.userGoAuth {
+  margin-left: 1.25rem;
+  font-size: 1.25rem;
+  font-family: PingFang SC-常规体, PingFang SC;
+  font-weight: normal;
+  color: #2f88ff;
+}
+span.userInfoData.didfalse {
+  background-color: #f4f3f7;
+  padding: 0.3125rem 0px;
+  border-radius: 0.333333rem 0.333333rem 0.333333rem 0.333333rem;
+  width: 5.5rem;
+  text-align: center;
+  display: inline-block;
+}
+span.toIdentity {
+  margin-left: 1.25rem;
+  font-size: 1.25rem;
+  font-family: PingFang SC-常规体, PingFang SC;
+  font-weight: normal;
+  color: #2f88ff;
+}
 .home-right {
   width: 43.75rem;
   background: #fff;
-
+  margin-right: 1.875rem;
   float: right;
   img {
     margin-top: 1.875rem;
@@ -239,32 +289,31 @@ console.log(this.userData)
     margin-left: 8.8125rem;
   }
 
-  .userInfo{
+  .userInfo {
     list-style-type: none;
     margin-top: 2.5rem;
-    li{
-      margin-bottom:2rem;
-
+    li {
+      margin-bottom: 2rem;
     }
-    .userInfoTitle{
+    .userInfoTitle {
       margin-right: 2.25rem;
       font-size: 1.125rem;
- 
+
       font-family: PingFang SC-常规体, PingFang SC;
       font-weight: normal;
       color: #999999;
     }
-    .userInfoData{
+    .userInfoData {
       font-size: 1.125rem;
-    font-family: PingFang SC-常规体, PingFang SC;
-    font-weight: normal;
-    color: #333333;
-    word-break: break-all;
+      font-family: PingFang SC-常规体, PingFang SC;
+      font-weight: normal;
+      color: #333333;
+      word-break: break-all;
     }
   }
 }
 .home-left {
-  float: left
+  float: left;
 }
 
 .rightImg {

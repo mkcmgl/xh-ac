@@ -287,9 +287,9 @@ export default {
           }
           this.$store.dispatch("Login", this.loginForm).then(() => {
 
-            this.$store.dispatch('GetDidInfo').then(()=>{
+            // this.$store.dispatch('GetDidInfo').then(()=>{
               this.$router.push({ path: this.redirect || "/" }).catch(() => {});
-            })
+            // })
          
        
           }).catch(() => {

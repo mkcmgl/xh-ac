@@ -10,9 +10,9 @@
       <img src="@/assets/images/5402x.png" />
     </div>
 
-    <div class="indexLogo">
+    <div class="indexLogo hoverTo">
       <img src="@/assets/images/168.png" />
-      <div>概览</div>
+      <div >概览</div>
     </div>
 
     <div class="right-menu">
@@ -55,7 +55,7 @@
             <div class="avatar-wrapper">
               <img src="@/assets/images/155.png" class="user-avatar" />
             </div>
-            <span class="el-dropdown-link"> {name} </span>
+            <span class="el-dropdown-link"> {{userData.userName}} </span>
           </div>
           <el-dropdown-menu slot="dropdown">
             <!-- <el-dropdown-item icon="el-icon-plus">黄金糕</el-dropdown-item>
@@ -75,19 +75,19 @@
     </div>
     <div class="selectList">
       <span class="dian"></span>
-      <span class="rightTitle">数字身份</span>
+      <span class="rightTitle hoverTo">数字身份</span>
       <span class="dian"></span>
-      <span class="rightTitle">公共服务</span>
+      <span class="rightTitle hoverTo">公共服务</span>
+      <span class="dian "></span>
+      <span class="rightTitle hoverTo">子链接入</span>
       <span class="dian"></span>
-      <span class="rightTitle">子链接入</span>
-      <span class="dian"></span>
-      <span class="rightTitle">注册标识</span>
+      <span class="rightTitle hoverTo">注册标识</span>
     </div>
   </div>
 </template>
 
 <script>
-import { mapGetters } from "vuex";
+import { mapGetters ,mapState} from "vuex";
 import Breadcrumb from "@/components/Breadcrumb";
 import TopNav from "@/components/TopNav";
 import Hamburger from "@/components/Hamburger";
@@ -110,6 +110,9 @@ export default {
   },
   computed: {
     ...mapGetters(["sidebar", "avatar", "device"]),
+    ...mapState({
+      userData:state=>state.user.userData
+    }),
     setting: {
       get() {
         return this.$store.state.settings.showSettings;
@@ -149,6 +152,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import "~@/assets/styles/public.scss";
 .avatar-wrapper {
   margin-top: 0.75rem;
   display: inline-block;
@@ -186,7 +190,6 @@ export default {
     .rightTitle {
       font-family: PingFang SC-Regular, PingFang SC;
       font-weight: 400;
-      color: #707070;
       margin-right: 2.5rem;
     }
   }
@@ -215,7 +218,7 @@ export default {
       font-size: 1.5rem;
       font-family: PingFang SC-常规体, PingFang SC;
       font-weight: normal;
-      color: #666666;
+
       float: left;
       height: 3.5rem;
       line-height: 3.5rem;
