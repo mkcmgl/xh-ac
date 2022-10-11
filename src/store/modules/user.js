@@ -11,7 +11,8 @@ const user = {
         name: '',
         avatar: '',
         roles: [],
-        permissions: []
+        permissions: [],
+        userData: {},
     },
 
     mutations: {
@@ -29,6 +30,9 @@ const user = {
         },
         SET_PERMISSIONS: (state, permissions) => {
             state.permissions = permissions
+        },
+        SET_USERINFO: (state, userData) => {
+            state.userData = userData
         }
     },
 
@@ -56,6 +60,7 @@ const user = {
             return new Promise((resolve, reject) => {
                 getDidInfo().then(res => {
                     console.log(res)
+                    commit('SET_USERINFO', res.data)
                     resolve(res)
                 }).catch(error => {
                     reject(error)

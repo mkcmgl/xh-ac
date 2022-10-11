@@ -286,7 +286,12 @@ export default {
             Cookies.remove("rememberMe");
           }
           this.$store.dispatch("Login", this.loginForm).then(() => {
-          this.$router.push({ path: this.redirect || "/" }).catch(() => {});
+
+            this.$store.dispatch('GetDidInfo').then(()=>{
+              this.$router.push({ path: this.redirect || "/" }).catch(() => {});
+            })
+         
+       
           }).catch(() => {
           this.loading = false;
           if (this.captchaEnabled) {

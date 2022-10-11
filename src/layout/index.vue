@@ -30,7 +30,13 @@ export default {
     RightPanel,
     Settings,
     Sidebar,
+  
     
+  },
+  created(){
+    // this.getInfo();
+    // this.getDidInfo();
+    // console.log(this.userData);
   },
   mixins: [ResizeMixin],
   computed: {
@@ -40,7 +46,8 @@ export default {
       sidebar: state => state.app.sidebar,
       device: state => state.app.device,
       needTagsView: state => state.settings.tagsView,
-      fixedHeader: state => state.settings.fixedHeader
+      fixedHeader: state => state.settings.fixedHeader,
+      // userData:state=>state.user.userData
     }),
     classObj() {
       return {
@@ -55,6 +62,7 @@ export default {
     }
   },
   methods: {
+
     handleClickOutside() {
       this.$store.dispatch('app/closeSideBar', { withoutAnimation: false })
     }

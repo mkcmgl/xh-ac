@@ -64,7 +64,7 @@
             </el-col>
           </el-row>
         </div>
-        <el-button class="button-center" type="primary">立刻进入</el-button>
+        <el-button class="button-center" type="primary" @click="qwe">立刻进入</el-button>
       </div>
       <div class="leftWap">
         <div class="wapTop">
@@ -194,13 +194,27 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
 export default {
   name: "Index",
   data() {
     return {};
   },
-
-  methods: {},
+  created(){
+    console.log('123333333333')
+console.log(this.userData)
+  },
+  computed:{
+    ...mapState({
+      userData:state=>state.user.userData
+    })
+ 
+  },
+  methods: {
+    qwe(){
+      console.log(this.userData)
+    }
+  },
 };
 </script>
 
