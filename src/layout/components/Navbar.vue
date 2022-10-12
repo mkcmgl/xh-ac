@@ -10,7 +10,7 @@
       <img src="@/assets/images/5402x.png" />
     </div>
 
-    <div class="indexLogo hoverTo">
+    <div class="indexLogo hoverTo" @click="goIndex">
       <img src="@/assets/images/168.png" />
       <div >概览</div>
     </div>
@@ -75,7 +75,7 @@
     </div>
     <div class="selectList">
       <span class="dian"></span>
-      <span class="rightTitle hoverTo">数字身份</span>
+      <span class="rightTitle hoverTo" @click="goIdentity">数字身份</span>
       <span class="dian"></span>
       <span class="rightTitle hoverTo">公共服务</span>
       <span class="dian "></span>
@@ -131,6 +131,13 @@ export default {
     },
   },
   methods: {
+    goIndex(){
+      this.$router.push('/index')
+    },
+    goIdentity(){
+      // this.$store.dispatch("app/toggleSideBarHide",false);
+      this.$router.push('/did')
+    },
     toggleSideBar() {
       this.$store.dispatch("app/toggleSideBar");
     },

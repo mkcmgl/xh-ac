@@ -73,6 +73,19 @@ export const constantRoutes = [{
                 import ('@/views/index'),
             name: 'Index',
             meta: { title: '首页', icon: 'dashboard', affix: true }
+        }, ]
+    },
+    {
+        path: '',
+        component: Layout,
+        hidden: true,
+        redirect: 'noredirect',
+        children: [{
+            path: 'did',
+            component: () =>
+                import ('@/views/did/index'),
+            name: 'did',
+            meta: { title: '个人中心', icon: 'user' }
         }]
     },
     {

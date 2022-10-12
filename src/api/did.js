@@ -9,3 +9,11 @@ export function getDidInfo() {
 
     })
 }
+export function getData() {
+
+    return request({
+        url: '/overview/getData',
+        method: 'get',
+
+    })
+}

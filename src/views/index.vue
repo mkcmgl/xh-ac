@@ -12,9 +12,9 @@
             <el-col :span="8">
               <div class="cernter-left">
                 <span class="text1">子链接入数</span>
-                <span class="num">5</span>
+                <span class="num">{{data.childLinkNum}}</span>
                 <span class="text2">公共服务接入数</span>
-                <span class="num">5</span>
+                <span class="num">{{data.publicServiceLinkNum}}</span>
               </div>
             </el-col>
             <el-col :span="16">
@@ -44,9 +44,9 @@
             <el-col :span="8">
               <div class="cernter-left">
                 <span class="text1">标识注册量</span>
-                <span class="num">5</span>
+                <span class="num">{{data.registerTotalNum}}</span>
                 <span class="text2">标识解析量</span>
-                <span class="num">5</span>
+                <span class="num">{{data.resolveTotalNum}}</span>
               </div>
             </el-col>
             <el-col :span="16">
@@ -200,16 +200,18 @@
 
 <script>
 import { mapState } from "vuex";
+import { getData } from "@/api/did";
 export default {
-  name: "Index",
+  name: "index",
   data() {
     return {
       authColor: false,
+      data:{},
     };
   },
   created() {
-    console.log("123333333333");
-    console.log(this.userData);
+    console.log("getNumeData");
+    this.getNumeData();
   },
   computed: {
     ...mapState({
@@ -231,7 +233,14 @@ export default {
       }
     },
   },
-  methods: {},
+  methods: {
+    getNumeData() {
+      getData().then((res) => {
+              this.data=res.data
+              console.log(this.data)
+      });
+    },
+  },
 };
 </script>
 
@@ -307,7 +316,7 @@ span.toIdentity {
       font-size: 1.125rem;
       font-family: PingFang SC-常规体, PingFang SC;
       font-weight: normal;
-      color: #333333;
+
       word-break: break-all;
     }
   }

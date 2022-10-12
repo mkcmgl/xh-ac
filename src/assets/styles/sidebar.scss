@@ -15,19 +15,20 @@
         height: 100%;
         position: fixed;
         font-size: 0px;
-        top: 0;
+        top: 03.75rem;
         bottom: 0;
         left: 0;
         z-index: 1001;
         overflow: hidden;
-        -webkit-box-shadow: 2px 0 6px rgba(0, 21, 41, .35);
-        box-shadow: 2px 0 6px rgba(0, 21, 41, .35);
+        // -webkit-box-shadow: 2px 0 6px rgba(0, 21, 41, .35);
+        // box-shadow: 2px 0 6px rgba(0, 21, 41, .35);
         // reset element-ui css
         .horizontal-collapse-transition {
             transition: 0s width ease-in-out, 0s padding-left ease-in-out, 0s padding-right ease-in-out;
         }
         .scrollbar-wrapper {
             overflow-x: hidden !important;
+            background-color: rgb(255, 255, 255);
         }
         .el-scrollbar__bar.is-vertical {
             right: 0px;
