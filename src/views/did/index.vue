@@ -24,8 +24,8 @@
         width="200"
         trigger="hover"
       >
-        <p class="editTo hoverTo" >导出私钥</p>
-        <p class="editTo hoverTo">修改安全密码</p>
+        <p class="editTo hoverTo" @click="showDialog('key')">导出私钥</p>
+        <p class="editTo hoverTo" @click="showDialog('psw')">修改安全密码</p>
       </el-popover>
       <span class="rightGo" v-popover:test>操作</span>
       </div>
@@ -90,6 +90,24 @@
         </el-row>
       </div>
     </div>
+    <el-dialog
+    v-if="showType=='key'"
+  title="导出私钥"
+  :visible.sync="dialogVisible"
+  width="30%"
+  :before-close="handleClose">
+
+    <el-form >
+      <el-form-item label="安全密码">
+        <el-input v-model="" placeholder="请输入安全密码"></el-input>
+      </el-form-item>
+    </el-form>
+
+  <span slot="footer" class="dialog-footer">
+    <el-button @click="dialogVisible = false">取 消</el-button>
+    <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
+  </span>
+</el-dialog>
   </div>
 </template>
 
@@ -98,12 +116,27 @@ export default {
   name: "Did",
 
   data() {
-    return {};
+    return {
+      dialogVisible:false,
+      showType:'',
+    };
   },
 
   mounted() {},
 
-  methods: {},
+  methods: {
+    showDialog(value){
+      this.dialogVisible=true;
+      this.showType=value;
+    },
+    handleClose(){
+      this.$confirm('确认关闭？')
+          .then(_ => {
+            done();
+          })
+          .catch(_ => {});
+    }
+  },
 };
 </script>
 
