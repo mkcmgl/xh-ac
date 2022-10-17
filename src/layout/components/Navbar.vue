@@ -203,8 +203,10 @@ export default {
 
   height: 3.75rem;
   overflow: hidden;
-  position: relative;
+  position: fixed;
   background: #fff;
+  width: 100%;
+  z-index: 1000;
   box-shadow: 0 0.0625rem 0.25rem rgba(0, 21, 41, 0.08);
   .logo {
     img {

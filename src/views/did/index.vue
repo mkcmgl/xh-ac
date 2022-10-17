@@ -6,15 +6,17 @@
         <span class="myNumTitle">我的数字身份</span>
         <div class="mainNumData">
           <img src="@/assets/images/num1.png" />
-          <div class="user" v-if="false">
-            <span class="numDataTitle">你好！{???????}</span>
-            <span class="numData">{???????????????????????????????????}</span>
+          <div class="user" v-if="userData.did != null">
+            <span class="numDataTitle">你好！{{ userData.userName }}</span>
+            <span class="numData">{{ userData.did }}</span>
             <span class="userType">{????}</span>
           </div>
           <div class="user" v-else>
             <span class="numDatatitle"
               >温馨提示：您还未创建数字身份，请
-              <span class="creat" @click="showDialog('choiseMackId',6)">立即创建</span></span
+              <span class="creat" @click="showDialog('choiseMackId', 6)"
+                >立即创建</span
+              ></span
             >
           </div>
         </div>
@@ -25,7 +27,7 @@
           width="200"
           trigger="hover"
         >
-          <p class="editTo hoverTo" @click="showDialog('key',3)">导出私钥</p>
+          <p class="editTo hoverTo" @click="showDialog('key', 3)">导出私钥</p>
           <p class="editTo hoverTo" @click="showDialog('psw', 0)">
             修改安全密码
           </p>
@@ -42,29 +44,41 @@
               <ul class="userDataList">
                 <li>
                   <span class="name">账号</span>
-                  <span class="nameData">{机构实名认证}</span>
+                  <span class="nameData">{{ userData.userName }}</span>
                 </li>
                 <li>
                   <span class="name">账号ID</span>
-                  <span class="nameData">{221}</span>
+                  <span class="nameData">{{ userData.userId }}</span>
                 </li>
                 <li>
                   <span class="name">手机号</span>
-                  <span class="nameData">{1231*****321}</span>
+                  <span class="nameData">{{ phoneNumber }}</span>
                 </li>
                 <li>
                   <span class="name">注册时间</span>
-                  <span class="nameData">{2022-4-19 12：03：05}</span>
+                  <span class="nameData">{{ userData.createTime }}</span>
                 </li>
-                <li v-if="true">
+                <li>
                   <span class="name">认证状态</span>
-                  <span class="nameData"  >{未认证}</span>
-                  <span class="edit" v-if="true" @click="toAuth">立刻认证</span>
-                </li>
-                <li v-if="false">
-                  <span class="name">认证状态</span>
-                  <span class="nameData">{未认证}</span>
-                  <span class="editId">立即认证</span>
+                  <div
+                    v-if="userData.authStatus == 1 || userData.authStatus == 2"
+                    style="display: inline"
+                  >
+                    <span class="nameData nameTrueBack">{{
+                      authStatusDsc
+                    }}</span>
+                  </div>
+                  <div v-else style="display: inline">
+                    <span class="nameData nameFaleBack">{{
+                      authStatusDsc
+                    }}</span>
+                    <span
+                      class="edit"
+                      v-if="userData.authStatus"
+                      @click="toAuth"
+                      >立刻认证</span
+                    >
+                  </div>
                 </li>
               </ul>
             </div>
@@ -224,35 +238,38 @@
       </span>
     </el-dialog>
     <el-dialog
-    v-if="showType == 'choiseMackId'"
-    title="选择方式"
-    :visible.sync="dialogVisible"
-    width="30%"
-    :before-close="handleClose"
-    class="keyTitle"
-  >
-   <div class="mackId ">
-    <img  src="@/assets/images/did553.png">
-    <div class="choiseList">
-      <span class="mackDidTitle">创建数字身份</span>
-      <span class="mackDidData">创建基于该星火·链网骨干节点的数字身份</span>
-    </div>
-    <i class="leftIcon el-icon-arrow-right"></i>
-   </div>
-   <div class="mackId ">
-    <img  src="@/assets/images/did553.png">
-    <div class="choiseList">
-      <span class="mackDidTitle">导入数字身份</span>
-      <span class="mackDidData">已有基于该星火·链网骨干节点的数字身份，通过导入私钥、Keystore恢复数字身份</span>
-    </div>
-    <i class="leftIcon el-icon-arrow-right"></i>
-   </div>
-
-  </el-dialog>
+      v-if="showType == 'choiseMackId'"
+      title="选择方式"
+      :visible.sync="dialogVisible"
+      width="30%"
+      :before-close="handleClose"
+      class="keyTitle"
+    >
+      <div class="mackId">
+        <img src="@/assets/images/did553.png" />
+        <div class="choiseList">
+          <span class="mackDidTitle">创建数字身份</span>
+          <span class="mackDidData">创建基于该星火·链网骨干节点的数字身份</span>
+        </div>
+        <i class="leftIcon el-icon-arrow-right"></i>
+      </div>
+      <div class="mackId">
+        <img src="@/assets/images/did553.png" />
+        <div class="choiseList">
+          <span class="mackDidTitle">导入数字身份</span>
+          <span class="mackDidData"
+            >已有基于该星火·链网骨干节点的数字身份，通过导入私钥、Keystore恢复数字身份</span
+          >
+        </div>
+        <i class="leftIcon el-icon-arrow-right"></i>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
 <script>
+import { mapState } from "vuex";
+import { encrypt } from "@/utils/jsencrypt";
 export default {
   name: "Did",
 
@@ -265,7 +282,26 @@ export default {
   },
 
   mounted() {},
-
+  computed: {
+    ...mapState({
+      userData: (state) => state.user.userData,
+    }),
+    phoneNumber() {
+      console.log(encrypt(this.userData.phonenumber));
+      return encrypt(this.userData.phonenumber);
+    },
+    authStatusDsc() {
+      if (this.userData.authStatus == 1) {
+        return "已认证";
+      } else if (this.userData.authStatus == 2) {
+        return "认证中";
+      } else if (this.userData.authStatus == 3) {
+        return "未通过认证";
+      } else {
+        return "未认证";
+      }
+    },
+  },
   methods: {
     showDialog(value, type) {
       this.dialogVisible = true;
@@ -281,9 +317,9 @@ export default {
         })
         .catch((_) => {});
     },
-    toAuth(){
-      this.$router.push('/auth')
-    }
+    toAuth() {
+      this.$router.push("/auth");
+    },
   },
 };
 </script>
@@ -291,15 +327,15 @@ export default {
 <style lang="scss" scoped>
 @import "~@/assets/styles/public.scss";
 
-  .leftIcon {
-    float: right;
-    margin-top: 2.6rem;
-    margin-right: 10px;
-    font-size: 1.25rem;
+.leftIcon {
+  float: right;
+  margin-top: 2.6rem;
+  margin-right: 10px;
+  font-size: 1.25rem;
 }
 
 .mackId {
-  background: #F0F6FF;
+  background: #f0f6ff;
   border-radius: 4px 4px 4px 4px;
   height: 6.25rem;
   margin-bottom: 1rem;
@@ -308,40 +344,40 @@ export default {
     height: 3.75rem;
     margin-left: 1.25rem;
     margin-top: 1.25rem;
+  }
+  .choiseList {
+    float: left;
+    margin-top: 1.25rem;
+    margin-left: 1.25rem;
+    width: 80%;
+    .mackDidTitle {
+      display: block;
+      font-family: PingFang SC-Bold, PingFang SC;
+      font-weight: bold;
+      color: #333333;
+      font-size: 1.125rem;
+    }
+    .mackDidData {
+      font-size: 1rem;
+      font-family: PingFang SC-常规体, PingFang SC;
+      font-weight: normal;
+      color: #666666;
+      margin-top: 0.625rem;
+      display: block;
+      word-break: break-all;
+    }
+  }
 }
-.choiseList {
-  float: left;
-  margin-top: 1.25rem;
-  margin-left: 1.25rem;
-  width: 80%;
-  .mackDidTitle {
-    display: block;
-    font-family: PingFang SC-Bold, PingFang SC;
-    font-weight: bold;
-    color: #333333;
-    font-size: 1.125rem;
-}
-.mackDidData {
-  font-size: 1rem;
-  font-family: PingFang SC-常规体, PingFang SC;
-  font-weight: normal;
-  color: #666666;
-  margin-top: 0.625rem;
-  display: block;
-  word-break: break-all;
-}
-}
-}
-.mackId:hover{
+.mackId:hover {
   background: rgb(85, 165, 255);
 }
 .phoneCode {
   width: 66%;
 }
-.creat{
+.creat {
   font-family: PingFang SC-Bold, PingFang SC;
-font-weight: bold;
-color: #2F88FF;
+  font-weight: bold;
+  color: #2f88ff;
 }
 .getPhoneCode {
   border: 0.083333rem solid #1890ff;
@@ -388,7 +424,6 @@ color: #2F88FF;
   font-family: PingFang SC-Bold, PingFang SC;
 }
 .right {
- 
   .title {
     font-size: 1.75rem;
     font-family: PingFang SC-Bold, PingFang SC;
@@ -425,7 +460,6 @@ color: #2F88FF;
           color: #333333;
           /* margin-top: 26px; */
           /* margin-left: 40px; */
-       
         }
         .numData {
           /* margin-top: 6px; */
@@ -434,7 +468,6 @@ color: #2F88FF;
           font-weight: 400;
           color: #999;
           font-size: 1rem;
-          margin-top: 0.5rem;
         }
         .userType {
           display: inline-block;
@@ -511,6 +544,18 @@ color: #2F88FF;
           color: #333;
           font-weight: 500;
         }
+        .nameTrueBack {
+          background-color: #ddf5e9;
+          color: #4cb883;
+          padding: 0.3125rem 1.125rem;
+          border-radius: 0.333333rem 0.333333rem 0.333333rem 0.333333rem;
+        }
+        .nameFalseBack {
+          background-color: #f4f3f7;
+          padding: 0.3125rem 1.125rem;
+          border-radius: 0.333333rem 0.333333rem 0.333333rem 0.333333rem;
+        }
+
         .edit {
           margin-left: 20px;
           cursor: pointer;
