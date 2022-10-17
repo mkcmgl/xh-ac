@@ -85,7 +85,20 @@ export const constantRoutes = [{
             component: () =>
                 import ('@/views/did/index'),
             name: 'did',
-            meta: { title: '个人中心', icon: 'user' }
+            meta: { title: '账户中心', icon: 'user' }
+        }]
+    },
+    {
+        path: '',
+        component: Layout,
+        hidden: true,
+        redirect: 'noredirect',
+        children: [{
+            path: 'auth',
+            component: () =>
+                import ('@/views/auth/index'),
+            name: 'auth',
+            meta: { title: '实名认证', icon: 'user' }
         }]
     },
     {

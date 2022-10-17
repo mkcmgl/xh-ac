@@ -59,7 +59,7 @@
                 <li v-if="true">
                   <span class="name">认证状态</span>
                   <span class="nameData"  >{未认证}</span>
-                  <span class="edit" v-if="true">立刻认证</span>
+                  <span class="edit" v-if="true" @click="toAuth">立刻认证</span>
                 </li>
                 <li v-if="false">
                   <span class="name">认证状态</span>
@@ -281,6 +281,9 @@ export default {
         })
         .catch((_) => {});
     },
+    toAuth(){
+      this.$router.push('/auth')
+    }
   },
 };
 </script>
@@ -385,8 +388,7 @@ color: #2F88FF;
   font-family: PingFang SC-Bold, PingFang SC;
 }
 .right {
-  margin-left: 20rem;
-  padding: 1.25rem 1.875rem;
+ 
   .title {
     font-size: 1.75rem;
     font-family: PingFang SC-Bold, PingFang SC;
