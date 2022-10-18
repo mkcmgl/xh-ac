@@ -100,7 +100,21 @@ export const constantRoutes = [{
             component: () =>
                 import ('@/views/auth/index'),
             name: 'auth',
-            meta: { title: '实名认证', icon: 'user' }
+            meta: { title: '实名认证', icon: 'user' },
+
+        }]
+    },
+    {
+        path: '',
+        component: Layout,
+        hidden: true,
+
+        redirect: 'noredirect',
+        children: [{
+            path: 'auth/authMaterail',
+            component: () =>
+                import ('@/views/auth/authMaterail/index'),
+            name: 'authMaterail',
         }]
     },
     {

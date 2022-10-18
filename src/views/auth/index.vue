@@ -39,7 +39,7 @@
         点击“下一步”按钮，即代表您已知晓并同意将该数字身份标识写入凭证文件中
       </div>
       <div class="centerNext">
-        <div class="next">下一步</div>
+        <div class="next" @click="toAuthMaterail">下一步</div>
       </div>
     </div>
   </div>
@@ -60,7 +60,11 @@ export default {
       userData: (state) => state.user.userData,
     }),
   },
-  methods: {},
+  methods: {
+    toAuthMaterail(){
+      this.$router.push('/auth/authMaterail')
+    }
+  },
 };
 </script>
 
