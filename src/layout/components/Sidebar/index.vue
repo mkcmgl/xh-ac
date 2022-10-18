@@ -3,20 +3,25 @@
         <logo v-if="showLogo" :collapse="isCollapse" />
         <el-scrollbar  wrap-class="scrollbar-wrapper">
             <el-menu
+            class="menuList" 
                 :default-active="activeMenu"
                 :collapse="!isCollapse"
                 :background-color="settings.sideTheme === 'theme-dark' ? variables.menuBackground : variables.menuLightBackground"
-                :text-color="settings.sideTheme === 'theme-dark' ? variables.menuColor : variables.menuLightColor"
                 :unique-opened="true"
                 :active-text-color="settings.theme"
                 :collapse-transition="false"
+                :text-color="settings.sideTheme === 'theme-dark' ? variables.menuColor : variables.menuLightColor"
+                
                 mode="vertical"
             >
+            <!-- text-color="rgb(102, 102, 102)" -->
+
                 <sidebar-item
                     v-for="(route, index) in sidebarRouters"
                     :key="route.path  + index"
                     :item="route"
                     :base-path="route.path"
+                
                 />
             </el-menu>
         </el-scrollbar>
@@ -52,6 +57,13 @@ export default {
         isCollapse() {
             return !this.sidebar.opened;
         }
+    },
+    mounted(){
+        console.log(this.sidebarRouters)
     }
 };
 </script>
+
+<style scoped lang="scss">
+
+</style>

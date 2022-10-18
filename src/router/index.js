@@ -78,7 +78,8 @@ export const constantRoutes = [{
     {
         path: '',
         component: Layout,
-        hidden: true,
+        hidden: false,
+
         redirect: 'noredirect',
         children: [{
             path: 'did',
@@ -91,7 +92,8 @@ export const constantRoutes = [{
     {
         path: '',
         component: Layout,
-        hidden: true,
+        hidden: false,
+
         redirect: 'noredirect',
         children: [{
             path: 'auth',

@@ -182,7 +182,7 @@
           <span class="userInfoData false" v-show="!authColor">{{
             getauthData
           }}</span>
-          <span class="userGoAuth" v-show="!authColor">立刻认证</span>
+          <span class="userGoAuth" v-show="!authColor" @click="toAuth">立刻认证</span>
         </li>
         <li>
           <span class="userInfoTitle">最近登录</span>
@@ -240,20 +240,29 @@ export default {
               console.log(this.data)
       });
     },
+    toAuth(){
+      this.$router.push("/auth");
+    }
   },
 };
 </script>
 
 <style scoped lang="scss">
+
+.back{
+
+    padding-top: 3.75rem;
+}
+
 span.userInfoData.true {
   background-color: #ddf5e9;
   color: #4cb883;
-  padding: 5px 18px;
+  padding: 0.3125rem 1.125rem;
   border-radius: 0.333333rem 0.333333rem 0.333333rem 0.333333rem;
 }
 span.userInfoData.false {
   background-color: #f4f3f7;
-  padding: 5px 18px;
+  padding: 0.3125rem 1.125rem;
   border-radius: 0.333333rem 0.333333rem 0.333333rem 0.333333rem;
 }
 span.userGoAuth {

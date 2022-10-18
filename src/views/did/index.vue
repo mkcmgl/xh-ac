@@ -9,7 +9,8 @@
           <div class="user" v-if="userData.did != null">
             <span class="numDataTitle">你好！{{ userData.userName }}</span>
             <span class="numData">{{ userData.did }}</span>
-            <span class="userType">{????}</span>
+            <span class="userType">{{switchRoles}}</span>
+            
           </div>
           <div class="user" v-else>
             <span class="numDatatitle"
@@ -89,18 +90,48 @@
               <ul class="userDataList">
                 <li>
                   <span class="name">登录密码</span>
-                  <span class="nameData">{***}</span>
-                  <span class="edit" @click="showDialog('psw', 1)">修改</span>
+                  <div
+                  v-if="userData.password==''"
+                  style="display: inline"
+                  >
+                  <span class="nameData">无</span>
+                  <span class="edit" @click="showDialog('psw', 1)">设置</span>
+                </div>
+                <div v-else  style="display: inline">
+                  <span class="nameData">******</span>
+                  <span class="edit" @click="showDialog('psw', 11)">修改</span>
+                </div>
+                  
                 </li>
                 <li>
                   <span class="name">手机号</span>
-                  <span class="nameData">{1231***231}</span>
+                  <div
+                  v-if="userData.phonenumber==''"
+                  style="display: inline"
+                  >
+                  <span class="nameData">无</span>
                   <span class="edit" @click="showDialog('phone', 3)">绑定</span>
+                </div>
+                <div v-else  style="display: inline">
+                  <span class="nameData">{{phoneNumber}}</span>
+                  <span class="edit" @click="showDialog('phone', 33)">修改</span>
+                </div>
+
                 </li>
                 <li>
                   <span class="name">邮箱</span>
-                  <span class="nameData">{1231***@qq.com}</span>
+                  <div
+                  v-if="userData.email==''"
+                  style="display: inline"
+                  >
+                  <span class="nameData">无</span>
                   <span class="edit" @click="showDialog('email', 4)">绑定</span>
+                </div>
+                <div v-else  style="display: inline">
+                  <span class="nameData">{{emaillNumber}}</span>
+                  <span class="edit" @click="showDialog('email', 44)">修改</span>
+                </div>
+
                 </li>
               </ul>
             </div>
@@ -269,7 +300,7 @@
 
 <script>
 import { mapState } from "vuex";
-import { encrypt } from "@/utils/jsencrypt";
+import { encrypt,decrypt } from "@/utils/jsencrypt";
 export default {
   name: "Did",
 
@@ -285,10 +316,17 @@ export default {
   computed: {
     ...mapState({
       userData: (state) => state.user.userData,
+      roles:(state)=>state.user.roles,
     }),
     phoneNumber() {
-      console.log(encrypt(this.userData.phonenumber));
-      return encrypt(this.userData.phonenumber);
+      const phone =decrypt(this.userData.phonenumber)
+      const phoneX= phone.substring(0,3) + "****" + phone.substring(8);
+      return phoneX;
+    },
+    emaillNumber(){
+      const email =decrypt(this.userData.email)
+      const emailX= email.substring(0,3) + "****" + email.substring(email.lenght-10);
+      return emailX; 
     },
     authStatusDsc() {
       if (this.userData.authStatus == 1) {
@@ -301,6 +339,29 @@ export default {
         return "未认证";
       }
     },
+    switchRoles(){
+      const roleName =this.roles[0]
+ 
+      switch (roleName) {
+        case 'organization':
+          return '企业用户';
+        case 'admin':
+          return '管理员';
+          case 'common':
+          return '普通角色';
+          case 'manager':
+          return '超级管理员';
+          case 'person':
+          return '个人用户';
+          case 'backbone':
+          return '骨干链管理员';
+          case 'subchain':
+          return '子链管理员';
+      
+        default:
+          break;
+      }
+    }
   },
   methods: {
     showDialog(value, type) {

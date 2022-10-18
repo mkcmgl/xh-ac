@@ -4,11 +4,11 @@
     class="app-wrapper"
     :style="{ '--current-color': theme }"
   >
-    <div
+    <!-- <div
       v-if="device === 'mobile' && sidebar.opened"
       class="drawer-bg"
       @click="handleClickOutside"
-    />
+    /> -->
     <sidebar v-if="!sidebar.hide" class="sidebar-container" />
 
     <div
@@ -74,12 +74,10 @@ export default {
     $route: {
       handler(to, from) {
         console.log(to);
-        if (to.fullPath == "/did") {
-          console.log("todid", to);
-          this.$store.dispatch("app/toggleSideBarHide", false);
-        } else if (to.fullPath == "/index") {
-          console.log("toIndex", from);
+        if (to.fullPath == "/index") {
           this.$store.dispatch("app/toggleSideBarHide", true);
+        } else {
+          this.$store.dispatch("app/toggleSideBarHide", false);
         }
       },
       deep:true,
@@ -101,7 +99,7 @@ export default {
 .app-wrapper {
   @include clearfix;
   position: relative;
-  height: 100%;
+
   width: 100%;
   background-color: rgb(242, 248, 253);
   &.mobile.openSidebar {

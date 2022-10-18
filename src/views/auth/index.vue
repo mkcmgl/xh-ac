@@ -123,15 +123,16 @@ export default {
     color: #333333;
   }
   .centerNum {
-    padding: 2.5rem 0;
+    padding: 5.5rem 0;
     .centerDid {
       display: inline;
       background: #f0f7fd;
-      padding: 0.625rem;
+      padding: 1.625rem;
       font-size: 1.5rem;
       font-family: PingFang SC-Regular, PingFang SC;
       font-weight: 400;
       color: #2f88ff;
+      border-radius: 0.3333rem;
     }
   }
   .centerNextDsc {
