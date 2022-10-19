@@ -30,25 +30,27 @@
         <div class="mainTitle">基本信息</div>
         <div class="centerNext">
           <el-form
-            ref="ruleForm"
+            ref="authForm"
+            :model="authFormData"
+            :rules="authFormRules"
             label-position="left"
             label-width="9.375rem"
-            class="ruleForm"
+            class="authForm"
           >
-            <el-form-item label="注册类型" prop="name">
-              <el-button>企业</el-button>
-              <el-button>个人</el-button>
+            <el-form-item label="注册类型" prop="authType">
+              <el-button @click="selectType(0)" :class="enterpriseClass">企业</el-button>
+              <el-button @click="selectType(1)" :class="personalClass">个人</el-button>
             </el-form-item>
-            <el-form-item label="机构名称" prop="name">
+            <el-form-item label="机构名称" prop="orgName">
               <el-input placeholder="请输入机构名称"></el-input>
             </el-form-item>
-            <el-form-item label="机构简称" prop="name">
+            <el-form-item label="机构简称" prop="org">
               <el-input placeholder="请输入机构简称"></el-input>
             </el-form-item>
-            <el-form-item label="统一社会信用代码" prop="name">
+            <el-form-item label="统一社会信用代码" prop="creditCode">
               <el-input placeholder="请输入信用代码"></el-input>
             </el-form-item>
-            <el-form-item label="营业执照" prop="name">
+            <el-form-item label="营业执照">
               <el-row :gutter="20">
                 <el-col :span="8">
                   <el-upload
@@ -76,13 +78,13 @@
                       大小不超过 <b style="color: #f56c6c">{{ fileSize }}MB</b>
                     </template>
                   </div>
-                  <div class="el-upload__tip"  v-if="showTip">
+                  <div class="el-upload__tip" v-if="showTip">
                     <template v-if="fileType">
                       2、格式为
                       <b style="color: #f56c6c">{{ fileType.join("/") }}</b>
                     </template>
                   </div>
-                  <div class="el-upload__tip"  v-if="showTip">
+                  <div class="el-upload__tip" v-if="showTip">
                     <template v-if="fileType">
                       3、上传的图片需清晰完整
                     </template>
@@ -94,21 +96,38 @@
                 <img width="100%" :src="dialogImageUrl" alt="" />
               </el-dialog>
             </el-form-item>
-            <el-form-item label="地址"></el-form-item>
-            <el-form-item label="详细地址">
+            <el-form-item label="地址" prop="address"></el-form-item>
+            <el-form-item label="详细地址" prop="addressDetail">
               <el-input placeholder="请输入地址"></el-input>
             </el-form-item>
-            <el-form-item label="联系人姓名">
+            <el-form-item label="联系人姓名" prop="contactName">
               <el-input placeholder="请输入联系人姓名"></el-input>
             </el-form-item>
-            <el-form-item label="联系人手机号">
+            <el-form-item label="联系人手机号" prop="contactPhone">
               <el-input placeholder="请输入联系人手机号"></el-input>
             </el-form-item>
-            <el-form-item label="联系人邮箱">
+            <el-form-item label="联系人邮箱" prop="contactEmail">
               <el-input placeholder="请输入联系人邮箱"></el-input>
             </el-form-item>
-            <el-form-item label="授权书">
 
+            <el-form-item label="授权书">
+              <el-upload
+                class="upload-demo"
+                :action="uploadFileUrl"
+                :on-preview="handlePictureCardPreview"
+                :limit="limit"
+                :before-upload="handleBeforeUpload"
+                :on-exceed="handleExceed"
+                :on-success="uploadSuccess"
+                :on-remove="handleDelete"
+                :headers="headers"
+                list-type="picture"
+              >
+                <el-button size="small" type="primary">点击上传</el-button>
+                <div slot="tip" class="el-upload__tip">
+                  只能上传jpg/png文件，且不超过500kb
+                </div>
+              </el-upload>
             </el-form-item>
           </el-form>
         </div>
@@ -148,6 +167,37 @@ export default {
   },
   data() {
     return {
+
+      authFormData:{
+        authType:0,
+        orgName:'',
+        org:'',
+        creditCode:'',
+        //营业执照图片路径
+        businessLicense:'',
+        address:'',
+        addressDetail:'',
+        contactName:'',
+        contactPhone:'',
+        contactEmail:'',
+        //授权书上传路径
+        la:'',
+        //真实姓名
+        realName:'',
+        idNumber:'',
+        idPortrait:'',
+        idEmblem:'',
+        
+      },
+      authFormRules:{
+
+      },
+
+
+
+
+
+
       dialogVisible: false,
       dialogImageUrl: "",
       number: 0,
@@ -158,19 +208,27 @@ export default {
         Authorization: "Bearer " + getToken(),
       },
       fileList: [],
-
+      enterpriseClass:{
+        selectTypeClass:true,
+      },
+      personalClass:{
+        selectTypeClass:false,
+      },
       fileUploader: true,
       displayType: false,
     };
   },
 
-  mounted() {},
+  mounted() {
+
+  },
   watch: {
     value: {
       handler(val) {
         if (val) {
           let temp = 1;
           // 首先将值转为数组
+          console.log("// 首先将值转为数组");
           const list = Array.isArray(val) ? val : this.value.split(",");
           // 然后将数组转为对象数组
           this.fileList = list.map((item) => {
@@ -202,6 +260,20 @@ export default {
     },
   },
   methods: {
+    //选择类型
+    selectType(val){
+      if(val==0){
+        this.enterpriseClass.selectTypeClass=true
+        this.personalClass.selectTypeClass=false;
+
+      }else if(val==1){
+        this.enterpriseClass.selectTypeClass=false;
+        this.personalClass.selectTypeClass=true;
+      }
+    },
+
+
+
     // 上传前校检格式和大小
     handleBeforeUpload(file) {
       // 校检文件类型
@@ -230,7 +302,7 @@ export default {
           return false;
         }
       }
-      this.$modal.loading("正在上传文件，请稍候...");
+      // this.$modal.loading("正在上传文件，请稍候...");
       this.number++;
       return true;
     },
@@ -241,17 +313,33 @@ export default {
     // 上传失败
     handleUploadError(err) {
       this.$modal.msgError("上传图片失败，请重试");
-      this.$modal.closeLoading();
+      //loding 全屏
+      // this.$modal.closeLoading();
     },
     // 上传成功回调
     handleUploadSuccess(res, file) {
       if (res.code === 200) {
         this.uploadList.push({ name: res.fileName, url: res.fileName });
+        console.log("uploadedSuccessfully成共1");
         this.uploadedSuccessfully();
         this.displayType = true;
       } else {
         this.number--;
-        this.$modal.closeLoading();
+        // this.$modal.closeLoading();
+        this.$modal.msgError(res.msg);
+        this.$refs.fileUpload.handleRemove(file);
+        this.uploadedSuccessfully();
+      }
+    },
+    uploadSuccess(res, file) {
+      if (res.code === 200) {
+        this.uploadList.push({ name: res.fileName, url: res.fileName });
+        console.log("uploadedSuccessfully成共2");
+        this.uploadedSuccessfully();
+     
+      } else {
+        this.number--;
+        // this.$modal.closeLoading();
         this.$modal.msgError(res.msg);
         this.$refs.fileUpload.handleRemove(file);
         this.uploadedSuccessfully();
@@ -271,7 +359,7 @@ export default {
         this.uploadList = [];
         this.number = 0;
         this.$emit("input", this.listToString(this.fileList));
-        this.$modal.closeLoading();
+        // this.$modal.closeLoading();
       }
     },
     // 获取文件名称
@@ -301,8 +389,15 @@ export default {
 
 <style lang="scss" scoped>
 @import "~@/assets/styles/public.scss";
-.ruleForm {
+
+
+.authForm {
   width: 50rem;
+}
+.selectTypeClass{
+  
+  background-color: #1890ff;
+  color: #ffff;
 }
 .el-upload__tip {
   margin: 0;
@@ -314,8 +409,15 @@ export default {
   ::v-deep .el-upload-list--picture-card {
     display: grid;
     li {
-      width: 100%;
-      height: 100%;
+      width: 12.5rem;
+      height: 12.5rem;
+    }
+  }
+  ::v-deep .el-upload--picture-card{
+    width: 12.5rem;
+    height: 12.5rem;
+    i{
+      line-height: 12.5rem;
     }
   }
 }
@@ -378,7 +480,7 @@ export default {
 }
 .centerMain {
   background: #ffff;
-  
+
   margin: 3.125rem 0.625rem 0 0.625rem;
   .main {
     width: 100%;
