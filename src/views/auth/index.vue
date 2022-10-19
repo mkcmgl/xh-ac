@@ -159,6 +159,7 @@ export default {
       width: 16.25rem;
       background: #2f88ff;
       border-radius: 0.5rem;
+      cursor: pointer;
     }
   }
 }

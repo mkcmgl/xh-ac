@@ -38,8 +38,8 @@
     </div>
     <div class="userIdentity">
       <div class="userIdData">
-        <el-row :gutter="30">
-          <el-col :span="12">
+        <!-- <el-row :gutter="30">
+          <el-col :span="12"> -->
             <div class="userDataAndLogin">
               <span class="userDataTitle">基本信息</span>
               <ul class="userDataList">
@@ -83,8 +83,8 @@
                 </li>
               </ul>
             </div>
-          </el-col>
-          <el-col :span="12">
+          <!-- </el-col>
+          <el-col :span="12"> -->
             <div class="userDataAndLogin">
               <span class="userDataTitle">登录方式</span>
               <ul class="userDataList">
@@ -135,8 +135,8 @@
                 </li>
               </ul>
             </div>
-          </el-col>
-        </el-row>
+          <!-- </el-col>
+        </el-row> -->
       </div>
     </div>
     <el-dialog
@@ -391,13 +391,13 @@ export default {
 .leftIcon {
   float: right;
   margin-top: 2.6rem;
-  margin-right: 10px;
+  margin-right: 0.625rem;
   font-size: 1.25rem;
 }
 
 .mackId {
   background: #f0f6ff;
-  border-radius: 4px 4px 4px 4px;
+  border-radius: 0.25rem 0.25rem 0.25rem 0.25rem;
   height: 6.25rem;
   margin-bottom: 1rem;
   img {
@@ -493,6 +493,10 @@ export default {
   }
   .center {
     position: relative;
+    display: grid;
+    margin-top: 2rem;
+    width: 100%;
+    height: 100%;
     span.myNumTitle {
       font-size: 1.375rem;
       font-family: PingFang SC-Heavy, PingFang SC;
@@ -511,7 +515,7 @@ export default {
         /* margin-left: 112px; */
         /* display: block; */
         float: left;
-        margin-top: 3.625rem;
+        margin-top: 1.625rem;
         margin-left: 2.5rem;
         .numDataTitle {
           display: inline-block;
@@ -550,21 +554,19 @@ export default {
     .numIdentity {
       background-color: #ffff;
       padding: 1.125rem 1.875rem;
-      height: 12.5rem;
-      margin-top: 2rem;
     }
 
     span.numDataTitle {
       display: inline-block;
-      font-size: 18px;
+      font-size: 1.125rem;
       font-family: PingFang SC-Heavy, PingFang SC;
       font-weight: 800;
       color: #333333;
     }
     .rightGo {
       position: absolute;
-      right: 30px;
-      top: 25px;
+      right: 1.875rem;
+      top: 1.5625rem;
       font-size: 1.166667rem;
       font-family: PingFang SC-Bold, PingFang SC;
       font-weight: 700;
@@ -574,10 +576,11 @@ export default {
 
   .userIdData {
     margin-top: 2rem;
-
+    display: flex;
+    justify-content: space-between;
     .userDataAndLogin {
       background-color: #ffff;
-      height: 18.75rem;
+      width: 49%;
       padding: 1.25rem 1.875rem;
     }
     .userDataTitle {
@@ -600,7 +603,7 @@ export default {
           display: inline-block;
         }
         .nameData {
-          font-size: 18px;
+          font-size: 1.125rem;
           font-family: PingFang SC-Bold, PingFang SC;
           color: #333;
           font-weight: 500;
@@ -618,12 +621,12 @@ export default {
         }
 
         .edit {
-          margin-left: 20px;
+          margin-left: 1.25rem;
           cursor: pointer;
           font-family: PingFang SC-Bold, PingFang SC;
           font-weight: 700;
           color: #2f88ff;
-          font-size: 18px;
+          font-size: 1.125rem;
         }
       }
     }

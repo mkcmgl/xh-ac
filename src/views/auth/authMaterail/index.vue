@@ -94,6 +94,22 @@
                 <img width="100%" :src="dialogImageUrl" alt="" />
               </el-dialog>
             </el-form-item>
+            <el-form-item label="地址"></el-form-item>
+            <el-form-item label="详细地址">
+              <el-input placeholder="请输入地址"></el-input>
+            </el-form-item>
+            <el-form-item label="联系人姓名">
+              <el-input placeholder="请输入联系人姓名"></el-input>
+            </el-form-item>
+            <el-form-item label="联系人手机号">
+              <el-input placeholder="请输入联系人手机号"></el-input>
+            </el-form-item>
+            <el-form-item label="联系人邮箱">
+              <el-input placeholder="请输入联系人邮箱"></el-input>
+            </el-form-item>
+            <el-form-item label="授权书">
+
+            </el-form-item>
           </el-form>
         </div>
         <div class="next">提交认证</div>
@@ -362,7 +378,7 @@ export default {
 }
 .centerMain {
   background: #ffff;
-  height: 46rem;
+  
   margin: 3.125rem 0.625rem 0 0.625rem;
   .main {
     width: 100%;
