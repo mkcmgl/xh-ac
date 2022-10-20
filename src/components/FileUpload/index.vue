@@ -166,11 +166,11 @@ export default {
     handleUploadSuccess(res, file) {
       if (res.code === 200) {
         if(this.listType!=''){
-          console.log(res)
+         
           this.$modal.closeLoading();
         }else{
-          console.log(res)
-          this.$modal.closeLoading();
+  
+        this.$modal.closeLoading();
         this.uploadList.push({ name: res.fileName, url: res.fileName });
         this.uploadedSuccessfully();
         }

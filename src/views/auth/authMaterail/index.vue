@@ -51,7 +51,7 @@
               <el-form-item label="统一社会信用代码" prop="creditCode">
                 <el-input @keyup.enter.native="handleAuthForm"  v-model="authFormData.creditCode" type="text" placeholder="请输入信用代码"></el-input>
               </el-form-item>
-              <el-form-item label="营业执照">
+              <el-form-item label="营业执照" prop="businessLicense">
                 <IdUpload></IdUpload>
               </el-form-item>
               <el-form-item label="地址" prop="address"></el-form-item>
@@ -68,7 +68,7 @@
                 <el-input @keyup.enter.native="handleAuthForm" type="text" placeholder="请输入联系人邮箱"></el-input>
               </el-form-item>
   
-              <el-form-item label="授权书">
+              <el-form-item label="授权书" prop="la">
 
                 <FileUpload listType="picture" :fileType="['png', 'jpg', 'jpeg']" :limit="1"></FileUpload>
 
@@ -99,10 +99,10 @@
               <el-form-item label="身份证" prop="idNumber">
                 <el-input @keyup.enter.native="handleAuthForm" type="text" placeholder="请输入身份证" v-model="authFormData.idNumber"></el-input>
               </el-form-item>
-              <el-form-item label="身份证头像面">
+              <el-form-item label="身份证头像面" prop="idPortrait">
                 <IdUpload></IdUpload>
               </el-form-item>
-              <el-form-item label="身份证国徽面">
+              <el-form-item label="身份证国徽面" prop="idEmblem">
                 <IdUpload></IdUpload>
               </el-form-item>
 
@@ -118,50 +118,39 @@
 <script>
 export default {
   name: "authMaterail",
-  props: {
-    // 值
-    value: [String, Object, Array],
-    // 数量限制
-    limit: {
-      type: Number,
-      default: 1,
-    },
-    // 大小限制(MB)
-    fileSize: {
-      type: Number,
-      default: 5,
-    },
-    // 文件类型, 例如['png', 'jpg', 'jpeg']
-    fileType: {
-      type: Array,
-      default: () => ["jpg", "jpeg", "png"],
-    },
-    // 是否显示提示
-    isShowTip: {
-      type: Boolean,
-      default: true,
-    },
-  },
+  // props: {
+  //   // 值
+  //   value: [String, Object, Array],
+  //   // 数量限制
+  //   limit: {
+  //     type: Number,
+  //     default: 1,
+  //   },
+  //   // 大小限制(MB)
+  //   fileSize: {
+  //     type: Number,
+  //     default: 5,
+  //   },
+  //   // 文件类型, 例如['png', 'jpg', 'jpeg']
+  //   fileType: {
+  //     type: Array,
+  //     default: () => ["jpg", "jpeg", "png"],
+  //   },
+  //   // 是否显示提示
+  //   isShowTip: {
+  //     type: Boolean,
+  //     default: true,
+  //   },
+  // },
   data() {
 
-      const validateContactPhone=(rule, value, callback)=>{
-      if (value === "") {
-        callback(new Error("请输入联系人手机号"));
-      } else if (
-        !/^(?:(?:\+|00)86)?1(?:(?:3[\d])|(?:4[5-79])|(?:5[0-35-9])|(?:6[5-7])|(?:7[0-8])|(?:8[\d])|(?:9[189]))\d{8}$/.test(
-          value
-        )
-      ) {
-        callback(new Error("请输入正确的手机号"));
-      } else {
-        callback();
-      }
-    };
+
     const validateOrgName=(rules,value,callback)=>{
       if (value === "") {
         callback(new Error("请输入机构名称"));
-      } else if (!/^[a-zA-Z0-9_-]{1,20}$/.test(value)) {
-        callback(new Error("机构名称长度必须介于 1 和 20 之间"));
+        
+      } else if (1<value.lenght && value.lenght<20) {
+        callback(new Error("请输入正确的机构名称，长度必须介于 1 和 20 之间"));
       } else {
         callback();
       }
@@ -170,7 +159,7 @@ export default {
       if (value === "") {
         callback(new Error("请输入机构简称"));
       } else if (!/^[a-zA-Z0-9_-]{1,10}$/.test(value)) {
-        callback(new Error("机构简称必须介于 1 和 10 之间"));
+        callback(new Error("请输入正确的机构简称，长度必须介于 1 和 10 之间"));
       } else {
         callback();
       }
@@ -195,6 +184,7 @@ export default {
     const validatorAddressDetail=(rules,value,callback)=>{
       if (value === "") {
         callback(new Error("请输入详细地址"));
+        
       } else if (!/^[a-zA-Z0-9_-]{1,20}$/.test(value)) {
         callback(new Error("详细地址必须介于 1 和 20 之间"));
       } else {
@@ -206,6 +196,19 @@ export default {
         callback(new Error("请输入联系人姓名"));
       } else if (!/^[a-zA-Z0-9_-]{1,20}$/.test(value)) {
         callback(new Error("联系人姓名长度必须介于 1 和 20 之间"));
+      } else {
+        callback();
+      }
+    };
+    const validateContactPhone=(rule, value, callback)=>{
+      if (value === "") {
+        callback(new Error("请输入联系人手机号"));
+      } else if (
+        !/^(?:(?:\+|00)86)?1(?:(?:3[\d])|(?:4[5-79])|(?:5[0-35-9])|(?:6[5-7])|(?:7[0-8])|(?:8[\d])|(?:9[189]))\d{8}$/.test(
+          value
+        )
+      ) {
+        callback(new Error("请输入正确的手机号"));
       } else {
         callback();
       }
@@ -282,19 +285,20 @@ export default {
         idEmblem:'',
       },
       authFormRules:{
+        authType:[{required: true}],
           orgName:[{required: true,  validator:validateOrgName,trigger:'blur'}],
           org:[{required: true, validator:validateOrg,trigger:'blur'}],
           creditCode:[{required: true, validator:validateCreditCode,trigger:'blur'}],
           businessLicense:[{required: true, validator:validateBusinessLicense,trigger:'blur'}],
           addressDetail:[{required: true, validator:validatorAddressDetail,trigger:'blur'}],
           contactName:[{required: true, validator:validateContactName,trigger:'blur'}] ,
-          contactPhone:[{require:true,validator:validateContactPhone,trigger:'blur'}],
-          contactEmail:[{require:true,validator:validateContactEmail,trigger:'blur'}],
-          la:[{require:true,validator:validateLa,trigger:'blur'}],
-          realName:[{require:true,validator:validateRealName,trigger:'blur'}],
-          idNumber:[{require:true,validator:validateIdNumber,trigger:'blur'}],
-          idPortrait:[{require:true,validator:validateIdPortrait,trigger:'blur'}],
-          idEmblem:[{require:true,validator:validateIdEmblem,trigger:'blur'}],
+          contactPhone:[{required:true,validator:validateContactPhone,trigger:'blur'}],
+          contactEmail:[{required:true,validator:validateContactEmail,trigger:'blur'}],
+          la:[{required:true,validator:validateLa,trigger:'blur'}],
+          realName:[{required:true,validator:validateRealName,trigger:'blur'}],
+          idNumber:[{required:true,validator:validateIdNumber,trigger:'blur'}],
+          idPortrait:[{required:true,validator:validateIdPortrait,trigger:'blur'}],
+          idEmblem:[{required:true,validator:validateIdEmblem,trigger:'blur'}],
       },
 
 
