@@ -259,7 +259,7 @@ export default {
       };
     },
   },
-  methods: {
+  methods: {                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               
     //选择类型
     selectType(val){
       if(val==0){
