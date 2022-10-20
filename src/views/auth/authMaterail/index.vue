@@ -41,97 +41,199 @@
               <el-button @click="selectType(0)" :class="enterpriseClass">企业</el-button>
               <el-button @click="selectType(1)" :class="personalClass">个人</el-button>
             </el-form-item>
-            <el-form-item label="机构名称" prop="orgName">
-              <el-input placeholder="请输入机构名称"></el-input>
-            </el-form-item>
-            <el-form-item label="机构简称" prop="org">
-              <el-input placeholder="请输入机构简称"></el-input>
-            </el-form-item>
-            <el-form-item label="统一社会信用代码" prop="creditCode">
-              <el-input placeholder="请输入信用代码"></el-input>
-            </el-form-item>
-            <el-form-item label="营业执照">
-              <el-row :gutter="20">
-                <el-col :span="8">
-                  <el-upload
-                    multiple
-                    :action="uploadFileUrl"
-                    :before-upload="handleBeforeUpload"
-                    list-type="picture-card"
-                    :limit="limit"
-                    :on-error="handleUploadError"
-                    :on-exceed="handleExceed"
-                    :on-success="handleUploadSuccess"
-                    :on-preview="handlePictureCardPreview"
-                    :headers="headers"
-                    :class="UploaderClass"
-                    :on-remove="handleDelete"
-                    ref="fileUpload"
-                  >
-                    <i class="el-icon-plus"></i>
-                  </el-upload>
-                </el-col>
-                <el-col :span="15">
-                  <div class="el-upload__tip" v-if="showTip">
-                    1、请上传
-                    <template v-if="fileSize">
-                      大小不超过 <b style="color: #f56c6c">{{ fileSize }}MB</b>
-                    </template>
+            <div v-show="authFormData.authType==0">
+              <el-form-item label="机构名称" prop="orgName">
+                <el-input @keyup.enter.native="handleAuthForm" type="text" placeholder="请输入机构名称" v-model="authFormData.orgName"></el-input>
+              </el-form-item>
+              <el-form-item label="机构简称" prop="org">
+                <el-input @keyup.enter.native="handleAuthForm" type="text" placeholder="请输入机构简称" v-model="authFormData.org"></el-input>
+              </el-form-item>
+              <el-form-item label="统一社会信用代码" prop="creditCode">
+                <el-input @keyup.enter.native="handleAuthForm"  v-model="authFormData.creditCode" type="text" placeholder="请输入信用代码"></el-input>
+              </el-form-item>
+              <el-form-item label="营业执照">
+                <el-row :gutter="20">
+                  <el-col :span="8">
+                    <el-upload
+                      multiple
+                      :action="uploadFileUrl"
+                      :before-upload="handleBeforeUpload"
+                      list-type="picture-card"
+                      :limit="limit"
+                      :on-error="handleUploadError"
+                      :on-exceed="handleExceed"
+                      :on-success="(e1,e2)=>handleUploadSuccess(e1,e2,'qweqweqwe')"
+                      :on-preview="handlePictureCardPreview"
+                      :headers="headers"
+                      :class="UploaderClass"
+                      :on-remove="handleDelete"
+                      ref="fileUpload"
+                    >
+                      <i class="el-icon-plus"></i>
+                    </el-upload>
+                  </el-col>
+                  <el-col :span="15">
+                    <div class="el-upload__tip" v-if="showTip">
+                      1、请上传
+                      <template v-if="fileSize">
+                        大小不超过 <b style="color: #f56c6c">{{ fileSize }}MB</b>
+                      </template>
+                    </div>
+                    <div class="el-upload__tip" v-if="showTip">
+                      <template v-if="fileType">
+                        2、格式为
+                        <b style="color: #f56c6c">{{ fileType.join("/") }}</b>
+                      </template>
+                    </div>
+                    <div class="el-upload__tip" v-if="showTip">
+                      <template v-if="fileType">
+                        3、上传的图片需清晰完整
+                      </template>
+                    </div>
+                  </el-col>
+                </el-row>
+  
+                <el-dialog :visible.sync="dialogVisible">
+                  <img width="100%" :src="dialogImageUrl" alt="" />
+                </el-dialog>
+              </el-form-item>
+              <el-form-item label="地址" prop="address"></el-form-item>
+              <el-form-item label="详细地址" prop="addressDetail">
+                <el-input @keyup.enter.native="handleAuthForm" type="text" placeholder="请输入地址"></el-input>
+              </el-form-item>
+              <el-form-item label="联系人姓名" prop="contactName">
+                <el-input @keyup.enter.native="handleAuthForm" type="text" placeholder="请输入联系人姓名"></el-input>
+              </el-form-item>
+              <el-form-item label="联系人手机号" prop="contactPhone">
+                <el-input @keyup.enter.native="handleAuthForm" type="text" placeholder="请输入联系人手机号"></el-input>
+              </el-form-item>
+              <el-form-item label="联系人邮箱" prop="contactEmail">
+                <el-input @keyup.enter.native="handleAuthForm" type="text" placeholder="请输入联系人邮箱"></el-input>
+              </el-form-item>
+  
+              <el-form-item label="授权书">
+                <el-upload
+                  class="upload-demo"
+                  :action="uploadFileUrl"
+                  :on-preview="handlePictureCardPreview"
+                  :limit="limit"
+                  :before-upload="handleBeforeUpload"
+                  :on-exceed="handleExceed"
+                  :on-success="uploadSuccess"
+                  :on-remove="handleDelete"
+                  :headers="headers"
+                  list-type="picture"
+                >
+                  <el-button size="small" type="primary">点击上传</el-button>
+                  <div slot="tip" class="el-upload__tip">
+                    只能上传jpg/png文件，且不超过500kb
                   </div>
-                  <div class="el-upload__tip" v-if="showTip">
-                    <template v-if="fileType">
-                      2、格式为
-                      <b style="color: #f56c6c">{{ fileType.join("/") }}</b>
-                    </template>
-                  </div>
-                  <div class="el-upload__tip" v-if="showTip">
-                    <template v-if="fileType">
-                      3、上传的图片需清晰完整
-                    </template>
-                  </div>
-                </el-col>
-              </el-row>
-
-              <el-dialog :visible.sync="dialogVisible">
-                <img width="100%" :src="dialogImageUrl" alt="" />
-              </el-dialog>
-            </el-form-item>
-            <el-form-item label="地址" prop="address"></el-form-item>
-            <el-form-item label="详细地址" prop="addressDetail">
-              <el-input placeholder="请输入地址"></el-input>
-            </el-form-item>
-            <el-form-item label="联系人姓名" prop="contactName">
-              <el-input placeholder="请输入联系人姓名"></el-input>
-            </el-form-item>
-            <el-form-item label="联系人手机号" prop="contactPhone">
-              <el-input placeholder="请输入联系人手机号"></el-input>
-            </el-form-item>
-            <el-form-item label="联系人邮箱" prop="contactEmail">
-              <el-input placeholder="请输入联系人邮箱"></el-input>
-            </el-form-item>
-
-            <el-form-item label="授权书">
-              <el-upload
-                class="upload-demo"
-                :action="uploadFileUrl"
-                :on-preview="handlePictureCardPreview"
-                :limit="limit"
-                :before-upload="handleBeforeUpload"
-                :on-exceed="handleExceed"
-                :on-success="uploadSuccess"
-                :on-remove="handleDelete"
-                :headers="headers"
-                list-type="picture"
-              >
-                <el-button size="small" type="primary">点击上传</el-button>
-                <div slot="tip" class="el-upload__tip">
-                  只能上传jpg/png文件，且不超过500kb
-                </div>
-              </el-upload>
-            </el-form-item>
+                </el-upload>
+              </el-form-item>
+            </div>
+            <div v-show="authFormData.authType==1">
+              <el-form-item label="姓名" prop="realName">
+                <el-input @keyup.enter.native="handleAuthForm" type="text" placeholder="请输入姓名" v-model="authFormData.realName"></el-input>
+              </el-form-item>
+              <el-form-item label="身份证" prop="idNumber">
+                <el-input @keyup.enter.native="handleAuthForm" type="text" placeholder="请输入身份证" v-model="authFormData.idNumber"></el-input>
+              </el-form-item>
+              <el-form-item label="身份证头像面">
+                <el-row :gutter="20">
+                  <el-col :span="8">
+                    <el-upload
+                      multiple
+                      :action="uploadFileUrl"
+                      :before-upload="handleBeforeUpload"
+                      list-type="picture-card"
+                      :limit="limit"
+                      :on-error="handleUploadError"
+                      :on-exceed="handleExceed"
+                      :on-success="idPortraitUploadSuccess"
+                      :on-preview="handlePictureCardPreview"
+                      :headers="headers"
+                      :class="UploaderClass"
+                      :on-remove="handleDelete"
+                      ref="fileUpload"
+                    >
+                      <i class="el-icon-plus"></i>
+                    </el-upload>
+                  </el-col>
+                  <el-col :span="15">
+                    <div class="el-upload__tip" v-if="showTip">
+                      1、请上传
+                      <template v-if="fileSize">
+                        大小不超过 <b style="color: #f56c6c">{{ fileSize }}MB</b>
+                      </template>
+                    </div>
+                    <div class="el-upload__tip" v-if="showTip">
+                      <template v-if="fileType">
+                        2、格式为
+                        <b style="color: #f56c6c">{{ fileType.join("/") }}</b>
+                      </template>
+                    </div>
+                    <div class="el-upload__tip" v-if="showTip">
+                      <template v-if="fileType">
+                        3、上传的图片需清晰完整
+                      </template>
+                    </div>
+                  </el-col>
+                </el-row>
+  
+                <el-dialog :visible.sync="dialogVisible">
+                  <img width="100%" :src="dialogImageUrl" alt="" />
+                </el-dialog>
+              </el-form-item>
+              <el-form-item label="身身份证国徽面">
+                <el-row :gutter="20">
+                  <el-col :span="8">
+                    <el-upload
+                      multiple
+                      :action="uploadFileUrl"
+                      :before-upload="handleBeforeUpload"
+                      list-type="picture-card"
+                      :limit="limit"
+                      :on-error="handleUploadError"
+                      :on-exceed="handleExceed"
+                      :on-success="idEmblemUploadSuccess"
+                      :on-preview="handlePictureCardPreview"
+                      :headers="headers"
+                      :class="UploaderClass"
+                      :on-remove="handleDelete"
+                      ref="fileUpload"
+                    >
+                      <i class="el-icon-plus"></i>
+                    </el-upload>
+                  </el-col>
+                  <el-col :span="15">
+                    <div class="el-upload__tip" v-if="showTip">
+                      1、请上传
+                      <template v-if="fileSize">
+                        大小不超过 <b style="color: #f56c6c">{{ fileSize }}MB</b>
+                      </template>
+                    </div>
+                    <div class="el-upload__tip" v-if="showTip">
+                      <template v-if="fileType">
+                        2、格式为
+                        <b style="color: #f56c6c">{{ fileType.join("/") }}</b>
+                      </template>
+                    </div>
+                    <div class="el-upload__tip" v-if="showTip">
+                      <template v-if="fileType">
+                        3、上传的图片需清晰完整
+                      </template>
+                    </div>
+                  </el-col>
+                </el-row>
+  
+                <el-dialog :visible.sync="dialogVisible">
+                  <img width="100%" :src="dialogImageUrl" alt="" />
+                </el-dialog>
+              </el-form-item>
+            </div>
           </el-form>
         </div>
-        <div class="next">提交认证</div>
+        <div :loading="loadingForm" class="next">提交认证</div>
       </div>
     </div>
   </div>
@@ -166,8 +268,124 @@ export default {
     },
   },
   data() {
-    return {
 
+      const validateContactPhone=(rule, value, callback)=>{
+      if (value === "") {
+        callback(new Error("请输入联系人手机号"));
+      } else if (
+        !/^(?:(?:\+|00)86)?1(?:(?:3[\d])|(?:4[5-79])|(?:5[0-35-9])|(?:6[5-7])|(?:7[0-8])|(?:8[\d])|(?:9[189]))\d{8}$/.test(
+          value
+        )
+      ) {
+        callback(new Error("请输入正确的手机号"));
+      } else {
+        callback();
+      }
+    };
+    const validateOrgName=(rules,value,callback)=>{
+      if (value === "") {
+        callback(new Error("请输入机构名称"));
+      } else if (!/^[a-zA-Z0-9_-]{1,20}$/.test(value)) {
+        callback(new Error("机构名称长度必须介于 1 和 20 之间"));
+      } else {
+        callback();
+      }
+    };
+    const validateOrg=(rules,value,callback)=>{
+      if (value === "") {
+        callback(new Error("请输入机构简称"));
+      } else if (!/^[a-zA-Z0-9_-]{1,10}$/.test(value)) {
+        callback(new Error("机构简称必须介于 1 和 10 之间"));
+      } else {
+        callback();
+      }
+    };
+    const validateCreditCode=(rules,value,callback)=>{
+      if (value === "") {
+        callback(new Error("请输入统一社会信用代码"));
+        
+      } else if (!/^[0-9A-HJ-NPQRTUWXY]{2}\d{6}[0-9A-HJ-NPQRTUWXY]{10}$/.test(value)) {
+        callback(new Error("请输入正确的统一社会信用代码"));
+      } else {
+        callback();
+      }
+    };
+    const validateBusinessLicense=(rules,value,callback)=>{
+      if (value === "") {
+        callback(new Error("请上传营业执照"));
+      } else {
+        callback();
+      }
+    };
+    const validatorAddressDetail=(rules,value,callback)=>{
+      if (value === "") {
+        callback(new Error("请输入详细地址"));
+      } else if (!/^[a-zA-Z0-9_-]{1,20}$/.test(value)) {
+        callback(new Error("详细地址必须介于 1 和 20 之间"));
+      } else {
+        callback();
+      }
+    };
+    const validateContactName=(rules,value,callback)=>{
+      if (value === "") {
+        callback(new Error("请输入联系人姓名"));
+      } else if (!/^[a-zA-Z0-9_-]{1,20}$/.test(value)) {
+        callback(new Error("联系人姓名长度必须介于 1 和 20 之间"));
+      } else {
+        callback();
+      }
+    };
+    const validateContactEmail=(rules,value,callback)=>{
+      if (value === "") {
+        callback(new Error("请输入联系人邮箱"));
+
+      } else if (!/^[A-Za-z0-9\u4e00-\u9fa5]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/.test(value)) {
+        callback(new Error("请输入正确的邮箱"));
+      } else {
+        callback();
+      }
+    };
+    const validateLa=(rules,value,callback)=>{
+      if (value === "") {
+        callback(new Error("请上传授权书"));
+      } else {
+        callback();
+      }
+    };
+    const validateRealName=(rules,value,callback)=>{
+      if (value === "") {
+        callback(new Error("请输入真实姓名"));
+      } else if (!/^[a-zA-Z0-9_-]{1,20}$/.test(value)) {
+        callback(new Error("真实姓名长度必须介于 1 和 20 之间"));
+      } else {
+        callback();
+      }
+    };
+    const validateIdNumber=(rules,value,callback)=>{
+      if (value === "") {
+        callback(new Error("请输入身份证号码"));
+
+      } else if (!/^[1-9]\d{5}(?:18|19|20)\d{2}(?:0[1-9]|10|11|12)(?:0[1-9]|[1-2]\d|30|31)\d{3}[\dXx]$/.test(value)) {
+        callback(new Error("机构名称长度必须介于 1 和 20 之间"));
+      } else {
+        callback();
+      }
+    };
+    const validateIdPortrait=(rules,value,callback)=>{
+      if (value === "") {
+        callback(new Error("请上传身份证人像面"));
+      } else {
+        callback();
+      }
+    };
+    const validateIdEmblem=(rules,value,callback)=>{
+      if (value === "") {
+        callback(new Error("请上传身份证国像面"));
+      } else {
+        callback();
+      }
+    };
+    return {
       authFormData:{
         authType:0,
         orgName:'',
@@ -187,10 +405,21 @@ export default {
         idNumber:'',
         idPortrait:'',
         idEmblem:'',
-        
       },
       authFormRules:{
-
+          orgName:[{required: true,  validator:validateOrgName,trigger:'blur'}],
+          org:[{required: true, validator:validateOrg,trigger:'blur'}],
+          creditCode:[{required: true, validator:validateCreditCode,trigger:'blur'}],
+          businessLicense:[{required: true, validator:validateBusinessLicense,trigger:'blur'}],
+          addressDetail:[{required: true, validator:validatorAddressDetail,trigger:'blur'}],
+          contactName:[{required: true, validator:validateContactName,trigger:'blur'}] ,
+          contactPhone:[{require:true,validator:validateContactPhone,trigger:'blur'}],
+          contactEmail:[{require:true,validator:validateContactEmail,trigger:'blur'}],
+          la:[{require:true,validator:validateLa,trigger:'blur'}],
+          realName:[{require:true,validator:validateRealName,trigger:'blur'}],
+          idNumber:[{require:true,validator:validateIdNumber,trigger:'blur'}],
+          idPortrait:[{require:true,validator:validateIdPortrait,trigger:'blur'}],
+          idEmblem:[{require:true,validator:validateIdEmblem,trigger:'blur'}],
       },
 
 
@@ -202,7 +431,7 @@ export default {
       dialogImageUrl: "",
       number: 0,
       uploadList: [],
-      baseUrl: process.env.VUE_APP_BASE_API,
+      // baseUrl: process.env.VUE_APP_BASE_API,
       uploadFileUrl: process.env.VUE_APP_BASE_API + "/common/upload", // 上传的图片服务器地址
       headers: {
         Authorization: "Bearer " + getToken(),
@@ -216,6 +445,9 @@ export default {
       },
       fileUploader: true,
       displayType: false,
+      idPortraitType:false,
+      idEmblemType:false,
+      loadingForm:false,
     };
   },
 
@@ -245,6 +477,7 @@ export default {
       },
       deep: true,
       immediate: true,
+      loading:false,
     },
   },
   computed: {
@@ -255,21 +488,54 @@ export default {
     UploaderClass() {
       return {
         fileUploader: this.fileUploader,
+        idPortraitType: this.idPortraitType,
+        idEmblemType: this.idEmblemType,
         displayType: this.displayType,
       };
     },
   },
-  methods: {                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               
-    //选择类型
+  methods: {      
+
+    //选择实名类型
     selectType(val){
+      this.$refs.authForm.resetFields();
       if(val==0){
+        this.authFormData.authType=val;
         this.enterpriseClass.selectTypeClass=true
         this.personalClass.selectTypeClass=false;
 
       }else if(val==1){
+        this.authFormData.authType=val;
         this.enterpriseClass.selectTypeClass=false;
         this.personalClass.selectTypeClass=true;
       }
+    },
+    handleAuthForm() {
+      this.$refs.authForm.validate((valid)=>{
+        if(valid){
+          const {
+        authType,
+        orgName,
+        org,
+        creditCode,
+        addressDetail,
+        contactName,
+        contactPhone,
+        contactEmail,
+
+        //真实姓名
+        realName,
+        idNumber,
+          }=this.authForm;
+          this.loadingForm = true;
+         switch(authType){
+          case 0:
+          break;
+          case 1:
+          break;
+         } 
+        }
+      })
     },
 
 
@@ -317,8 +583,11 @@ export default {
       // this.$modal.closeLoading();
     },
     // 上传成功回调
-    handleUploadSuccess(res, file) {
+    handleUploadSuccess(res, file,e3) {
+      console.log(res, file,e3)
       if (res.code === 200) {
+        console.log(res);
+        this.authFormData.businessLicense=res.fileName;
         this.uploadList.push({ name: res.fileName, url: res.fileName });
         console.log("uploadedSuccessfully成共1");
         this.uploadedSuccessfully();
@@ -331,12 +600,49 @@ export default {
         this.uploadedSuccessfully();
       }
     },
+    //授权书上传成功
     uploadSuccess(res, file) {
       if (res.code === 200) {
+        this.authFormData.la=res.fileName;
+        console.log(this.authFormData.la)
         this.uploadList.push({ name: res.fileName, url: res.fileName });
         console.log("uploadedSuccessfully成共2");
         this.uploadedSuccessfully();
      
+      } else {
+        this.number--;
+        // this.$modal.closeLoading();
+        this.$modal.msgError(res.msg);
+        this.$refs.fileUpload.handleRemove(file);
+        this.uploadedSuccessfully();
+      }
+    },
+    //身份证头像面上传成功
+    idPortraitUploadSuccess(res,file){
+      if (res.code === 200) {
+        this.authFormData.idPortrait=res.fileName;
+        console.log(this.authFormData.idPortrait)
+        this.uploadList.push({ name: res.fileName, url: res.fileName });
+        console.log("uploadedSuccessfully成共3");
+        this.uploadedSuccessfully();
+        this.idPortraitType = true;
+      } else {
+        this.number--;
+        // this.$modal.closeLoading();
+        this.$modal.msgError(res.msg);
+        this.$refs.fileUpload.handleRemove(file);
+        this.uploadedSuccessfully();
+      }
+    },
+        //身份证国徽面上传成功
+    idEmblemUploadSuccess(res,file){
+      if (res.code === 200) {
+        this.authFormData.idEmblem=res.fileName;
+        console.log(this.authFormData.idEmblem)
+        this.uploadList.push({ name: res.fileName, url: res.fileName });
+        console.log("uploadedSuccessfully成共3");
+        this.uploadedSuccessfully();
+        this.idEmblemType = true;
       } else {
         this.number--;
         // this.$modal.closeLoading();
