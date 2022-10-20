@@ -52,50 +52,7 @@
                 <el-input @keyup.enter.native="handleAuthForm"  v-model="authFormData.creditCode" type="text" placeholder="请输入信用代码"></el-input>
               </el-form-item>
               <el-form-item label="营业执照">
-                <el-row :gutter="20">
-                  <el-col :span="8">
-                    <el-upload
-                      multiple
-                      :action="uploadFileUrl"
-                      :before-upload="handleBeforeUpload"
-                      list-type="picture-card"
-                      :limit="limit"
-                      :on-error="handleUploadError"
-                      :on-exceed="handleExceed"
-                      :on-success="(e1,e2)=>handleUploadSuccess(e1,e2,'qweqweqwe')"
-                      :on-preview="handlePictureCardPreview"
-                      :headers="headers"
-                      :class="UploaderClass"
-                      :on-remove="handleDelete"
-                      ref="fileUpload"
-                    >
-                      <i class="el-icon-plus"></i>
-                    </el-upload>
-                  </el-col>
-                  <el-col :span="15">
-                    <div class="el-upload__tip" v-if="showTip">
-                      1、请上传
-                      <template v-if="fileSize">
-                        大小不超过 <b style="color: #f56c6c">{{ fileSize }}MB</b>
-                      </template>
-                    </div>
-                    <div class="el-upload__tip" v-if="showTip">
-                      <template v-if="fileType">
-                        2、格式为
-                        <b style="color: #f56c6c">{{ fileType.join("/") }}</b>
-                      </template>
-                    </div>
-                    <div class="el-upload__tip" v-if="showTip">
-                      <template v-if="fileType">
-                        3、上传的图片需清晰完整
-                      </template>
-                    </div>
-                  </el-col>
-                </el-row>
-  
-                <el-dialog :visible.sync="dialogVisible">
-                  <img width="100%" :src="dialogImageUrl" alt="" />
-                </el-dialog>
+                <IdUpload></IdUpload>
               </el-form-item>
               <el-form-item label="地址" prop="address"></el-form-item>
               <el-form-item label="详细地址" prop="addressDetail">
@@ -112,15 +69,19 @@
               </el-form-item>
   
               <el-form-item label="授权书">
-                <el-upload
+
+                <FileUpload listType="picture" :fileType="['png', 'jpg', 'jpeg']" :limit="1"></FileUpload>
+
+
+                <!-- <el-upload
                   class="upload-demo"
                   :action="uploadFileUrl"
                   :on-preview="handlePictureCardPreview"
                   :limit="limit"
                   :before-upload="handleBeforeUpload"
                   :on-exceed="handleExceed"
-                  :on-success="uploadSuccess"
-                  :on-remove="handleDelete"
+                  :on-success="(e1,e2)=>handleUploadSuccess(e1,e2,'2')"
+                  :on-remove="(e1)=>handleDelete(e1,'2')"
                   :headers="headers"
                   list-type="picture"
                 >
@@ -128,7 +89,7 @@
                   <div slot="tip" class="el-upload__tip">
                     只能上传jpg/png文件，且不超过500kb
                   </div>
-                </el-upload>
+                </el-upload> -->
               </el-form-item>
             </div>
             <div v-show="authFormData.authType==1">
@@ -139,97 +100,12 @@
                 <el-input @keyup.enter.native="handleAuthForm" type="text" placeholder="请输入身份证" v-model="authFormData.idNumber"></el-input>
               </el-form-item>
               <el-form-item label="身份证头像面">
-                <el-row :gutter="20">
-                  <el-col :span="8">
-                    <el-upload
-                      multiple
-                      :action="uploadFileUrl"
-                      :before-upload="handleBeforeUpload"
-                      list-type="picture-card"
-                      :limit="limit"
-                      :on-error="handleUploadError"
-                      :on-exceed="handleExceed"
-                      :on-success="idPortraitUploadSuccess"
-                      :on-preview="handlePictureCardPreview"
-                      :headers="headers"
-                      :class="UploaderClass"
-                      :on-remove="handleDelete"
-                      ref="fileUpload"
-                    >
-                      <i class="el-icon-plus"></i>
-                    </el-upload>
-                  </el-col>
-                  <el-col :span="15">
-                    <div class="el-upload__tip" v-if="showTip">
-                      1、请上传
-                      <template v-if="fileSize">
-                        大小不超过 <b style="color: #f56c6c">{{ fileSize }}MB</b>
-                      </template>
-                    </div>
-                    <div class="el-upload__tip" v-if="showTip">
-                      <template v-if="fileType">
-                        2、格式为
-                        <b style="color: #f56c6c">{{ fileType.join("/") }}</b>
-                      </template>
-                    </div>
-                    <div class="el-upload__tip" v-if="showTip">
-                      <template v-if="fileType">
-                        3、上传的图片需清晰完整
-                      </template>
-                    </div>
-                  </el-col>
-                </el-row>
-  
-                <el-dialog :visible.sync="dialogVisible">
-                  <img width="100%" :src="dialogImageUrl" alt="" />
-                </el-dialog>
+                <IdUpload></IdUpload>
               </el-form-item>
-              <el-form-item label="身身份证国徽面">
-                <el-row :gutter="20">
-                  <el-col :span="8">
-                    <el-upload
-                      multiple
-                      :action="uploadFileUrl"
-                      :before-upload="handleBeforeUpload"
-                      list-type="picture-card"
-                      :limit="limit"
-                      :on-error="handleUploadError"
-                      :on-exceed="handleExceed"
-                      :on-success="idEmblemUploadSuccess"
-                      :on-preview="handlePictureCardPreview"
-                      :headers="headers"
-                      :class="UploaderClass"
-                      :on-remove="handleDelete"
-                      ref="fileUpload"
-                    >
-                      <i class="el-icon-plus"></i>
-                    </el-upload>
-                  </el-col>
-                  <el-col :span="15">
-                    <div class="el-upload__tip" v-if="showTip">
-                      1、请上传
-                      <template v-if="fileSize">
-                        大小不超过 <b style="color: #f56c6c">{{ fileSize }}MB</b>
-                      </template>
-                    </div>
-                    <div class="el-upload__tip" v-if="showTip">
-                      <template v-if="fileType">
-                        2、格式为
-                        <b style="color: #f56c6c">{{ fileType.join("/") }}</b>
-                      </template>
-                    </div>
-                    <div class="el-upload__tip" v-if="showTip">
-                      <template v-if="fileType">
-                        3、上传的图片需清晰完整
-                      </template>
-                    </div>
-                  </el-col>
-                </el-row>
-  
-                <el-dialog :visible.sync="dialogVisible">
-                  <img width="100%" :src="dialogImageUrl" alt="" />
-                </el-dialog>
+              <el-form-item label="身份证国徽面">
+                <IdUpload></IdUpload>
               </el-form-item>
+
             </div>
           </el-form>
         </div>
@@ -240,7 +116,6 @@
 </template>
 
 <script>
-import { getToken } from "@/utils/auth";
 export default {
   name: "authMaterail",
   props: {
@@ -423,63 +298,24 @@ export default {
       },
 
 
-
-
-
-
-      dialogVisible: false,
-      dialogImageUrl: "",
-      number: 0,
-      uploadList: [],
-      // baseUrl: process.env.VUE_APP_BASE_API,
-      uploadFileUrl: process.env.VUE_APP_BASE_API + "/common/upload", // 上传的图片服务器地址
-      headers: {
-        Authorization: "Bearer " + getToken(),
-      },
-      fileList: [],
       enterpriseClass:{
         selectTypeClass:true,
       },
       personalClass:{
         selectTypeClass:false,
       },
+
       fileUploader: true,
-      displayType: false,
-      idPortraitType:false,
-      idEmblemType:false,
       loadingForm:false,
+
+     
     };
   },
 
   mounted() {
 
   },
-  watch: {
-    value: {
-      handler(val) {
-        if (val) {
-          let temp = 1;
-          // 首先将值转为数组
-          console.log("// 首先将值转为数组");
-          const list = Array.isArray(val) ? val : this.value.split(",");
-          // 然后将数组转为对象数组
-          this.fileList = list.map((item) => {
-            if (typeof item === "string") {
-              item = { name: item, url: item };
-            }
-            item.uid = item.uid || new Date().getTime() + temp++;
-            return item;
-          });
-        } else {
-          this.fileList = [];
-          return [];
-        }
-      },
-      deep: true,
-      immediate: true,
-      loading:false,
-    },
-  },
+ 
   computed: {
     // 是否显示提示
     showTip() {
@@ -540,155 +376,6 @@ export default {
 
 
 
-    // 上传前校检格式和大小
-    handleBeforeUpload(file) {
-      // 校检文件类型
-      if (this.fileType) {
-        let fileExtension = "";
-        if (file.name.lastIndexOf(".") > -1) {
-          fileExtension = file.name.slice(file.name.lastIndexOf(".") + 1);
-        }
-        const isTypeOk = this.fileType.some((type) => {
-          if (file.type.indexOf(type) > -1) return true;
-          if (fileExtension && fileExtension.indexOf(type) > -1) return true;
-          return false;
-        });
-        if (!isTypeOk) {
-          this.$modal.msgError(
-            `文件格式不正确, 请上传${this.fileType.join("/")}格式文件!`
-          );
-          return false;
-        }
-      }
-      // 校检文件大小
-      if (this.fileSize) {
-        const isLt = file.size / 1024 / 1024 < this.fileSize;
-        if (!isLt) {
-          this.$modal.msgError(`上传文件大小不能超过 ${this.fileSize} MB!`);
-          return false;
-        }
-      }
-      // this.$modal.loading("正在上传文件，请稍候...");
-      this.number++;
-      return true;
-    },
-    // 文件个数超出
-    handleExceed() {
-      this.$modal.msgError(`上传文件数量不能超过 ${this.limit} 个!`);
-    },
-    // 上传失败
-    handleUploadError(err) {
-      this.$modal.msgError("上传图片失败，请重试");
-      //loding 全屏
-      // this.$modal.closeLoading();
-    },
-    // 上传成功回调
-    handleUploadSuccess(res, file,e3) {
-      console.log(res, file,e3)
-      if (res.code === 200) {
-        console.log(res);
-        this.authFormData.businessLicense=res.fileName;
-        this.uploadList.push({ name: res.fileName, url: res.fileName });
-        console.log("uploadedSuccessfully成共1");
-        this.uploadedSuccessfully();
-        this.displayType = true;
-      } else {
-        this.number--;
-        // this.$modal.closeLoading();
-        this.$modal.msgError(res.msg);
-        this.$refs.fileUpload.handleRemove(file);
-        this.uploadedSuccessfully();
-      }
-    },
-    //授权书上传成功
-    uploadSuccess(res, file) {
-      if (res.code === 200) {
-        this.authFormData.la=res.fileName;
-        console.log(this.authFormData.la)
-        this.uploadList.push({ name: res.fileName, url: res.fileName });
-        console.log("uploadedSuccessfully成共2");
-        this.uploadedSuccessfully();
-     
-      } else {
-        this.number--;
-        // this.$modal.closeLoading();
-        this.$modal.msgError(res.msg);
-        this.$refs.fileUpload.handleRemove(file);
-        this.uploadedSuccessfully();
-      }
-    },
-    //身份证头像面上传成功
-    idPortraitUploadSuccess(res,file){
-      if (res.code === 200) {
-        this.authFormData.idPortrait=res.fileName;
-        console.log(this.authFormData.idPortrait)
-        this.uploadList.push({ name: res.fileName, url: res.fileName });
-        console.log("uploadedSuccessfully成共3");
-        this.uploadedSuccessfully();
-        this.idPortraitType = true;
-      } else {
-        this.number--;
-        // this.$modal.closeLoading();
-        this.$modal.msgError(res.msg);
-        this.$refs.fileUpload.handleRemove(file);
-        this.uploadedSuccessfully();
-      }
-    },
-        //身份证国徽面上传成功
-    idEmblemUploadSuccess(res,file){
-      if (res.code === 200) {
-        this.authFormData.idEmblem=res.fileName;
-        console.log(this.authFormData.idEmblem)
-        this.uploadList.push({ name: res.fileName, url: res.fileName });
-        console.log("uploadedSuccessfully成共3");
-        this.uploadedSuccessfully();
-        this.idEmblemType = true;
-      } else {
-        this.number--;
-        // this.$modal.closeLoading();
-        this.$modal.msgError(res.msg);
-        this.$refs.fileUpload.handleRemove(file);
-        this.uploadedSuccessfully();
-      }
-    },
-    // 删除文件
-    handleDelete(index) {
-      this.fileList.splice(index, 1);
-      console.log("删除文件");
-      this.displayType = false;
-      this.$emit("input", this.listToString(this.fileList));
-    },
-    // 上传结束处理
-    uploadedSuccessfully() {
-      if (this.number > 0 && this.uploadList.length === this.number) {
-        this.fileList = this.fileList.concat(this.uploadList);
-        this.uploadList = [];
-        this.number = 0;
-        this.$emit("input", this.listToString(this.fileList));
-        // this.$modal.closeLoading();
-      }
-    },
-    // 获取文件名称
-    getFileName(name) {
-      if (name.lastIndexOf("/") > -1) {
-        return name.slice(name.lastIndexOf("/") + 1);
-      } else {
-        return "";
-      }
-    },
-    // 对象转成指定字符串分隔
-    listToString(list, separator) {
-      let strs = "";
-      separator = separator || ",";
-      for (let i in list) {
-        strs += list[i].url + separator;
-      }
-      return strs != "" ? strs.substr(0, strs.length - 1) : "";
-    },
-    handlePictureCardPreview(file) {
-      this.dialogImageUrl = file.url;
-      this.dialogVisible = true;
-    },
   },
 };
 </script>
@@ -728,6 +415,16 @@ export default {
   }
 }
 .displayType {
+  ::v-deep .el-upload--picture-card {
+    display: none;
+  }
+}
+.idPortraitType {
+  ::v-deep .el-upload--picture-card {
+    display: none;
+  }
+}
+.idEmblemType {
   ::v-deep .el-upload--picture-card {
     display: none;
   }

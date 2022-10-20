@@ -37,6 +37,8 @@ import DictTag from '@/components/DictTag'
 import VueMeta from 'vue-meta'
 // 字典数据组件
 import DictData from '@/components/DictData'
+//上传图片组件
+import IdUpload from '@/components/IdUpload';
 
 import './rem';
 
@@ -59,6 +61,7 @@ Vue.component('Editor', Editor)
 Vue.component('FileUpload', FileUpload)
 Vue.component('ImageUpload', ImageUpload)
 Vue.component('ImagePreview', ImagePreview)
+Vue.component('IdUpload', IdUpload)
 
 Vue.use(directive)
 Vue.use(plugins)

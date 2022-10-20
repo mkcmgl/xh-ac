@@ -4,13 +4,17 @@
       multiple
       :action="uploadFileUrl"
       :before-upload="handleBeforeUpload"
-      :file-list="fileList"
       :limit="limit"
+      :on-remove="handleDelete"
       :on-error="handleUploadError"
       :on-exceed="handleExceed"
+      :on-preview="handlePictureCardPreview"
       :on-success="handleUploadSuccess"
-      :show-file-list="false"
       :headers="headers"
+      :list-type="listType"
+      :file-list="fileList"
+      :show-file-list="listType==''?false:true"
+   
       class="upload-file-uploader"
       ref="fileUpload"
     >
@@ -26,7 +30,7 @@
     </el-upload>
 
     <!-- 文件列表 -->
-    <transition-group class="upload-file-list el-upload-list el-upload-list--text" name="el-fade-in-linear" tag="ul">
+    <transition-group v-show="listType==''?true:false" class="upload-file-list el-upload-list el-upload-list--text" name="el-fade-in-linear" tag="ul">
       <li :key="file.url" class="el-upload-list__item ele-upload-list__item-content" v-for="(file, index) in fileList">
         <el-link :href="`${baseUrl}${file.url}`" :underline="false" target="_blank">
           <span class="el-icon-document"> {{ getFileName(file.name) }} </span>
@@ -51,6 +55,10 @@ export default {
     limit: {
       type: Number,
       default: 5,
+    },
+    listType:{
+      type:String,
+      default:'',
     },
     // 大小限制(MB)
     fileSize: {
@@ -90,7 +98,11 @@ export default {
           // 然后将数组转为对象数组
           this.fileList = list.map(item => {
             if (typeof item === "string") {
-              item = { name: item, url: item };
+              if (item.indexOf(this.baseUrl) === -1) {
+                  item = { name: this.baseUrl + item, url: this.baseUrl + item };
+              } else {
+                  item = { name: item, url: item };
+              }
             }
             item.uid = item.uid || new Date().getTime() + temp++;
             return item;
@@ -153,8 +165,16 @@ export default {
     // 上传成功回调
     handleUploadSuccess(res, file) {
       if (res.code === 200) {
+        if(this.listType!=''){
+          console.log(res)
+          this.$modal.closeLoading();
+        }else{
+          console.log(res)
+          this.$modal.closeLoading();
         this.uploadList.push({ name: res.fileName, url: res.fileName });
         this.uploadedSuccessfully();
+        }
+        
       } else {
         this.number--;
         this.$modal.closeLoading();
@@ -163,6 +183,13 @@ export default {
         this.uploadedSuccessfully();
       }
     },
+    // handleDelete(file) {
+    //   const findex = this.fileList.map(f => f.name).indexOf(file.name);
+    //   if(findex > -1) {
+    //     this.fileList.splice(findex, 1);
+    //     this.$emit("input", this.listToString(this.fileList));
+    //   }
+    // },
     // 删除文件
     handleDelete(index) {
       this.fileList.splice(index, 1);
@@ -194,7 +221,12 @@ export default {
         strs += list[i].url + separator;
       }
       return strs != '' ? strs.substr(0, strs.length - 1) : '';
-    }
+    },
+     // 预览
+    handlePictureCardPreview(file) {
+      this.dialogImageUrl = file.url;
+      this.dialogVisible = true;
+    },
   }
 };
 </script>
