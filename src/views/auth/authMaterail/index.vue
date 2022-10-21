@@ -71,7 +71,7 @@
                 ></el-input>
               </el-form-item>
               <el-form-item label="营业执照" prop="businessLicense">
-                <IdUpload @fileName="getFileName"></IdUpload>
+                <IdUpload ref="businessImg" @fileName="getFileName" ></IdUpload>
               </el-form-item>
               <el-form-item label="地址" prop="address">
                 <el-row>
@@ -392,7 +392,7 @@ export default {
         org: "",
         creditCode: "",
         //营业执照图片路径
-        businessLicense: {},
+        businessLicense: "",
         //详细地址
         address: "",
         addressDetail: "",
@@ -479,6 +479,7 @@ export default {
       cityCode:'',
       //区县
       areaCode:'',
+     
     };
   },
 
@@ -559,12 +560,13 @@ export default {
 
     //图片地址参数
     getFileName(event){
-      console.log(event,"?")
+      this.authFormData.businessLicense=event.fileName 
     },
 
     //选择实名类型
     selectType(val) {
       this.$refs.authForm.resetFields();
+      this.$refs.businessImg.handleDelete()
       if (val == 0) {
         this.authFormData.authType = val;
         this.enterpriseClass.selectTypeClass = true;

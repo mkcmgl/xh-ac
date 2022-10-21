@@ -15,6 +15,7 @@
                 :headers="headers"
                 :class="UploaderClass"
                 :on-remove="(e1)=>handleDelete(e1,'1')"
+                :file-list="fileList"
               >
                 <i class="el-icon-plus"></i>
               </el-upload>
@@ -51,6 +52,7 @@ import { getToken } from "@/utils/auth";
 export default {
     name: 'IdUpload',
     props: {
+  
     // 值
     value: [String, Object, Array],
     // 数量限制
@@ -120,9 +122,15 @@ export default {
       immediate: true,
       loading:false,
     },
+
+    
+    
+  },
+  created(){
+
   },
     mounted() {
-        
+
     },
     computed:{
             // 是否显示提示
@@ -187,13 +195,14 @@ export default {
         // this.authFormData.businessLicense=res.fileName;
       if (res.code === 200) {
 
-        this.displayType = true;
-        this.uploadList.push({ name: res.fileName, url: res.fileName });
-        console.log("uploadedSuccessfully成共1");
-        this.uploadedSuccessfully();
+        // this.displayType = true;
+        // this.uploadList.push({ name: res.fileName, url: res.fileName });
+        // console.log("uploadedSuccessfully成共1");
+        // this.uploadedSuccessfully();
       } else {
+        console.log('上传文件返回code不为200')
         this.number--;
-        // this.$modal.closeLoading();
+        this.$modal.closeLoading();
         this.$modal.msgError(res.msg);
         this.$refs.fileUpload.handleRemove(file);
         this.uploadedSuccessfully();
