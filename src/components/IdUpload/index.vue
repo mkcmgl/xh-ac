@@ -52,7 +52,11 @@ import { getToken } from "@/utils/auth";
 export default {
     name: 'IdUpload',
     props: {
-  
+    // type:{
+    //   type: String,
+    //   default: '',
+    // },  
+    
     // 值
     value: [String, Object, Array],
     // 数量限制
@@ -191,40 +195,46 @@ export default {
     // 上传成功回调
     handleUploadSuccess(res, file) {
         console.log(res,file)
-        this.$emit('fileName',res)
+        // console.log(this.type,'type')
+        
+        // this.$emit('fileName',res)
         // this.authFormData.businessLicense=res.fileName;
       if (res.code === 200) {
-
-        // this.displayType = true;
-        // this.uploadList.push({ name: res.fileName, url: res.fileName });
-        // console.log("uploadedSuccessfully成共1");
-        // this.uploadedSuccessfully();
+        this.fileList.push(file)
+      //   // this.$emit('input',res.fileName)
+      //   // this.displayType = true;
+      //   this.uploadList.push({ name: res.fileName, url: res.fileName });
+      //   // console.log("uploadedSuccessfully成共1");
+        this.uploadedSuccessfully();
       } else {
         console.log('上传文件返回code不为200')
-        this.number--;
-        this.$modal.closeLoading();
+      //   this.number--;
+      //   this.$modal.closeLoading();
         this.$modal.msgError(res.msg);
-        this.$refs.fileUpload.handleRemove(file);
-        this.uploadedSuccessfully();
+      //   this.$refs.fileUpload.handleRemove(file);
+      //   this.uploadedSuccessfully();
       }
     },
 
     // 删除文件
     handleDelete(index,e3) {
-        this.displayType = false;
-      this.fileList.splice(index, 1);
+      // this.displayType = false;
+      this.fileList=[]
+      console.log(this.fileList)
       console.log("删除文件");
-      this.$emit("input", this.listToString(this.fileList));
+      // this.$emit("input", this.listToString(this.fileList));
     },
     // 上传结束处理
     uploadedSuccessfully() {
-      if (this.number > 0 && this.uploadList.length === this.number) {
-        this.fileList = this.fileList.concat(this.uploadList);
-        this.uploadList = [];
-        this.number = 0;
-        this.$emit("input", this.listToString(this.fileList));
-        // this.$modal.closeLoading();
-      }
+  
+      // if (this.number > 0 && this.uploadList.length === this.number) {
+      //   // this.fileList = this.fileList.concat(this.uploadList);
+        console.log(this.fileList)
+      //   // this.uploadList = [];
+      //   this.number = 0;
+      //   // this.$emit("input", this.listToString(this.fileList));
+      //   // this.$modal.closeLoading();
+      // }
     },
     // 获取文件名称
     getFileName(name) {

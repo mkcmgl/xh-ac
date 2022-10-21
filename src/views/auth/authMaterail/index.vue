@@ -71,7 +71,8 @@
                 ></el-input>
               </el-form-item>
               <el-form-item label="营业执照" prop="businessLicense">
-                <IdUpload ref="businessImg" @fileName="getFileName" ></IdUpload>
+                <!-- " -->
+                <IdUpload   ref="businessImg" ></IdUpload>
               </el-form-item>
               <el-form-item label="地址" prop="address">
                 <el-row>
@@ -185,10 +186,12 @@
                 ></el-input>
               </el-form-item>
               <el-form-item label="身份证头像面" prop="idPortrait">
-                <IdUpload></IdUpload>
+                <!-- type="idPortrait" -->
+                <IdUpload  ref="idPortrait"></IdUpload>
               </el-form-item>
               <el-form-item label="身份证国徽面" prop="idEmblem">
-                <IdUpload></IdUpload>
+                <!-- type="idEmblem"  -->
+                <IdUpload   ref="idEmblem"></IdUpload>
               </el-form-item>
             </div>
           </el-form>
@@ -559,14 +562,18 @@ export default {
     },
 
     //图片地址参数
-    getFileName(event){
-      this.authFormData.businessLicense=event.fileName 
-    },
+    // getFileName(event){
+    //   this.authFormData.businessLicense=event.fileName 
+    // },
 
     //选择实名类型
     selectType(val) {
       this.$refs.authForm.resetFields();
+      
       this.$refs.businessImg.handleDelete()
+      this.$refs.idPortrait.handleDelete()
+      this.$refs.idEmblem.handleDelete()
+      
       if (val == 0) {
         this.authFormData.authType = val;
         this.enterpriseClass.selectTypeClass = true;
