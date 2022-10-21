@@ -17,3 +17,28 @@ export function getData() {
 
     })
 }
+export function getProvince() {
+
+    return request({
+        url: '/area/getProvince',
+        method: 'get',
+
+    })
+}
+export function getCity(params) {
+
+    return request({
+        url: "/area/getCity",
+        method: 'get',
+        params
+    })
+}
+
+export function getArea(params) {
+
+    return request({
+        url: "/area/getArea",
+        method: 'get',
+        params
+    })
+}

@@ -38,40 +38,115 @@
             class="authForm"
           >
             <el-form-item label="注册类型" prop="authType">
-              <el-button @click="selectType(0)" :class="enterpriseClass">企业</el-button>
-              <el-button @click="selectType(1)" :class="personalClass">个人</el-button>
+              <el-button @click="selectType(0)" :class="enterpriseClass"
+                >企业</el-button
+              >
+              <el-button @click="selectType(1)" :class="personalClass"
+                >个人</el-button
+              >
             </el-form-item>
-            <div v-show="authFormData.authType==0">
+            <div v-show="authFormData.authType == 0">
               <el-form-item label="机构名称" prop="orgName">
-                <el-input @keyup.enter.native="handleAuthForm" type="text" placeholder="请输入机构名称" v-model="authFormData.orgName"></el-input>
+                <el-input
+                  @keyup.enter.native="handleAuthForm"
+                  type="text"
+                  placeholder="请输入机构名称"
+                  v-model="authFormData.orgName"
+                ></el-input>
               </el-form-item>
               <el-form-item label="机构简称" prop="org">
-                <el-input @keyup.enter.native="handleAuthForm" type="text" placeholder="请输入机构简称" v-model="authFormData.org"></el-input>
+                <el-input
+                  @keyup.enter.native="handleAuthForm"
+                  type="text"
+                  placeholder="请输入机构简称"
+                  v-model="authFormData.org"
+                ></el-input>
               </el-form-item>
               <el-form-item label="统一社会信用代码" prop="creditCode">
-                <el-input @keyup.enter.native="handleAuthForm"  v-model="authFormData.creditCode" type="text" placeholder="请输入信用代码"></el-input>
+                <el-input
+                  @keyup.enter.native="handleAuthForm"
+                  v-model="authFormData.creditCode"
+                  type="text"
+                  placeholder="请输入信用代码"
+                ></el-input>
               </el-form-item>
               <el-form-item label="营业执照" prop="businessLicense">
-                <IdUpload></IdUpload>
+                <IdUpload @fileName="getFileName"></IdUpload>
               </el-form-item>
-              <el-form-item label="地址" prop="address"></el-form-item>
+              <el-form-item label="地址" prop="address">
+                <el-row>
+                  <el-col :span="8">
+                    <el-select  v-model="value" clearable placeholder="请选择">
+                      <el-option
+                        v-for="(item,index) in options"
+                        :key="index"
+                        :label="item.regionName"
+                        :value="item.regionCode"
+                       
+                        >
+                      </el-option>
+                    </el-select>
+                  </el-col>
+               
+                <el-col :span="8">
+                  <el-select v-model="cityCode" clearable placeholder="请选择">
+                    <el-option
+                      v-for="(item,index) in city"
+                      :key="index"
+                      :label="item.regionName"
+                      :value="item.regionCode">
+                    </el-option>
+                  </el-select>
+                </el-col>
+                <el-col :span="8">
+                  <el-select v-model="areaCode" clearable placeholder="请选择">
+                    <el-option
+                    v-for="(item,index) in area"
+                    :key="index"
+                    :label="item.regionName"
+                    :value="item.regionCode">
+                  </el-option>
+                  </el-select>
+                </el-col>
+              </el-row>
+
+               
+              </el-form-item>
               <el-form-item label="详细地址" prop="addressDetail">
-                <el-input @keyup.enter.native="handleAuthForm" type="text" placeholder="请输入地址"></el-input>
+                <el-input
+                  @keyup.enter.native="handleAuthForm"
+                  type="text"
+                  placeholder="请输入地址"
+                ></el-input>
               </el-form-item>
               <el-form-item label="联系人姓名" prop="contactName">
-                <el-input @keyup.enter.native="handleAuthForm" type="text" placeholder="请输入联系人姓名"></el-input>
+                <el-input
+                  @keyup.enter.native="handleAuthForm"
+                  type="text"
+                  placeholder="请输入联系人姓名"
+                ></el-input>
               </el-form-item>
               <el-form-item label="联系人手机号" prop="contactPhone">
-                <el-input @keyup.enter.native="handleAuthForm" type="text" placeholder="请输入联系人手机号"></el-input>
+                <el-input
+                  @keyup.enter.native="handleAuthForm"
+                  type="text"
+                  placeholder="请输入联系人手机号"
+                ></el-input>
               </el-form-item>
               <el-form-item label="联系人邮箱" prop="contactEmail">
-                <el-input @keyup.enter.native="handleAuthForm" type="text" placeholder="请输入联系人邮箱"></el-input>
+                <el-input
+                  @keyup.enter.native="handleAuthForm"
+                  type="text"
+                  placeholder="请输入联系人邮箱"
+                ></el-input>
               </el-form-item>
-  
+
               <el-form-item label="授权书" prop="la">
-
-                <FileUpload listType="picture" :fileType="['png', 'jpg', 'jpeg']" :limit="1"></FileUpload>
-
+                <FileUpload
+                  listType="picture"
+                  :fileType="['png', 'jpg', 'jpeg']"
+                  :limit="1"
+                ></FileUpload>
 
                 <!-- <el-upload
                   class="upload-demo"
@@ -92,12 +167,22 @@
                 </el-upload> -->
               </el-form-item>
             </div>
-            <div v-show="authFormData.authType==1">
+            <div v-show="authFormData.authType == 1">
               <el-form-item label="姓名" prop="realName">
-                <el-input @keyup.enter.native="handleAuthForm" type="text" placeholder="请输入姓名" v-model="authFormData.realName"></el-input>
+                <el-input
+                  @keyup.enter.native="handleAuthForm"
+                  type="text"
+                  placeholder="请输入姓名"
+                  v-model="authFormData.realName"
+                ></el-input>
               </el-form-item>
               <el-form-item label="身份证" prop="idNumber">
-                <el-input @keyup.enter.native="handleAuthForm" type="text" placeholder="请输入身份证" v-model="authFormData.idNumber"></el-input>
+                <el-input
+                  @keyup.enter.native="handleAuthForm"
+                  type="text"
+                  placeholder="请输入身份证"
+                  v-model="authFormData.idNumber"
+                ></el-input>
               </el-form-item>
               <el-form-item label="身份证头像面" prop="idPortrait">
                 <IdUpload></IdUpload>
@@ -105,7 +190,6 @@
               <el-form-item label="身份证国徽面" prop="idEmblem">
                 <IdUpload></IdUpload>
               </el-form-item>
-
             </div>
           </el-form>
         </div>
@@ -116,6 +200,8 @@
 </template>
 
 <script>
+import {getProvince,getCity,getArea} from "@/api/did";
+import { getToken } from "@/utils/auth";
 export default {
   name: "authMaterail",
   // props: {
@@ -143,64 +229,82 @@ export default {
   //   },
   // },
   data() {
-
-
-    const validateOrgName=(rules,value,callback)=>{
+    const validateOrgName = (rules, value, callback) => {
       if (value === "") {
         callback(new Error("请输入机构名称"));
-        
-      } else if (1<value.lenght && value.lenght<20) {
+      } else if (1 < value.lenght && value.lenght < 20) {
         callback(new Error("请输入正确的机构名称，长度必须介于 1 和 20 之间"));
-      } else {
+      }else if( /\s+/g.test(value)){
+          this.authFormData.orgName=value.replace(/\s+/g,"")
+        }
+       else {
         callback();
       }
     };
-    const validateOrg=(rules,value,callback)=>{
+    const validateOrg = (rules, value, callback) => {
       if (value === "") {
         callback(new Error("请输入机构简称"));
-      } else if (!/^[a-zA-Z0-9_-]{1,10}$/.test(value)) {
+      }  else if (1 < value.lenght && value.lenght < 10) {
         callback(new Error("请输入正确的机构简称，长度必须介于 1 和 10 之间"));
-      } else {
+      }
+      else if( /\s+/g.test(value)){
+          this.authFormData.org=value.replace(/\s+/g,"")
+        } else {
         callback();
       }
     };
-    const validateCreditCode=(rules,value,callback)=>{
+    const validateCreditCode = (rules, value, callback) => {
       if (value === "") {
         callback(new Error("请输入统一社会信用代码"));
-        
-      } else if (!/^[0-9A-HJ-NPQRTUWXY]{2}\d{6}[0-9A-HJ-NPQRTUWXY]{10}$/.test(value)) {
+      } else if (
+        !/^[0-9A-HJ-NPQRTUWXY]{2}\d{6}[0-9A-HJ-NPQRTUWXY]{10}$/.test(value)
+      ) {
         callback(new Error("请输入正确的统一社会信用代码"));
-      } else {
+      } else if( /\s+/g.test(value)){
+          this.authFormData.creditCode=value.replace(/\s+/g,"")
+        } else {
         callback();
       }
     };
-    const validateBusinessLicense=(rules,value,callback)=>{
+    const validateBusinessLicense = (rules, value, callback) => {
       if (value === "") {
         callback(new Error("请上传营业执照"));
       } else {
         callback();
       }
     };
-    const validatorAddressDetail=(rules,value,callback)=>{
+    const validateAddress = (rules, value, callback) => {
+      if (value === ""||this.cityCode===''||this.areaCode==='') {
+        callback(new Error("请选择地址"));
+      } else {
+        callback();
+      }
+    };
+    const validatorAddressDetail = (rules, value, callback) => {
       if (value === "") {
         callback(new Error("请输入详细地址"));
-        
-      } else if (!/^[a-zA-Z0-9_-]{1,20}$/.test(value)) {
+      } else if (1 < value.lenght && value.lenght < 20) {
         callback(new Error("详细地址必须介于 1 和 20 之间"));
-      } else {
+      } else if( /\s+/g.test(value)){
+          this.authFormData.addressDetail=value.replace(/\s+/g,"")
+        }
+       else {
         callback();
       }
     };
-    const validateContactName=(rules,value,callback)=>{
+    const validateContactName = (rules, value, callback) => {
       if (value === "") {
         callback(new Error("请输入联系人姓名"));
-      } else if (!/^[a-zA-Z0-9_-]{1,20}$/.test(value)) {
+      } else if (1 < value.lenght && value.lenght < 20) {
         callback(new Error("联系人姓名长度必须介于 1 和 20 之间"));
-      } else {
+      } else if( /\s+/g.test(value)){
+          this.authFormData.contactName=value.replace(/\s+/g,"")
+        }
+       else {
         callback();
       }
     };
-    const validateContactPhone=(rule, value, callback)=>{
+    const validateContactPhone = (rule, value, callback) => {
       if (value === "") {
         callback(new Error("请输入联系人手机号"));
       } else if (
@@ -209,54 +313,72 @@ export default {
         )
       ) {
         callback(new Error("请输入正确的手机号"));
-      } else {
+      }else if( /\s+/g.test(value)){
+          this.authFormData.contactPhone=value.replace(/\s+/g,"")
+        }
+       else {
         callback();
       }
     };
-    const validateContactEmail=(rules,value,callback)=>{
+    const validateContactEmail = (rules, value, callback) => {
       if (value === "") {
         callback(new Error("请输入联系人邮箱"));
-
-      } else if (!/^[A-Za-z0-9\u4e00-\u9fa5]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/.test(value)) {
+      } else if (
+        !/^[A-Za-z0-9\u4e00-\u9fa5]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/.test(
+          value
+        )
+      ) {
         callback(new Error("请输入正确的邮箱"));
-      } else {
+      } else if( /\s+/g.test(value)){
+          this.authFormData.contactEmail=value.replace(/\s+/g,"")
+        }
+       else {
         callback();
       }
     };
-    const validateLa=(rules,value,callback)=>{
+    const validateLa = (rules, value, callback) => {
       if (value === "") {
         callback(new Error("请上传授权书"));
       } else {
         callback();
       }
     };
-    const validateRealName=(rules,value,callback)=>{
+    const validateRealName = (rules, value, callback) => {
       if (value === "") {
         callback(new Error("请输入真实姓名"));
-      } else if (!/^[a-zA-Z0-9_-]{1,20}$/.test(value)) {
+      } else if (1 < value.lenght && value.lenght < 20)  {
         callback(new Error("真实姓名长度必须介于 1 和 20 之间"));
-      } else {
+      }else if( /\s+/g.test(value)){
+          this.authFormData.realName=value.replace(/\s+/g,"")
+        }
+       else {
         callback();
       }
     };
-    const validateIdNumber=(rules,value,callback)=>{
+    const validateIdNumber = (rules, value, callback) => {
       if (value === "") {
         callback(new Error("请输入身份证号码"));
-
-      } else if (!/^[1-9]\d{5}(?:18|19|20)\d{2}(?:0[1-9]|10|11|12)(?:0[1-9]|[1-2]\d|30|31)\d{3}[\dXx]$/.test(value)) {
-        callback(new Error("机构名称长度必须介于 1 和 20 之间"));
-      } else {
+      } else if (
+        !/^[1-9]\d{5}(?:18|19|20)\d{2}(?:0[1-9]|10|11|12)(?:0[1-9]|[1-2]\d|30|31)\d{3}[\dXx]$/.test(
+          value
+        )
+      ) {
+        callback(new Error("请输入正确的身份证号码"));
+      } else if( /\s+/g.test(value)){
+          this.authFormData.idNumber=value.replace(/\s+/g,"")
+        }
+       else {
         callback();
       }
     };
-    const validateIdPortrait=(rules,value,callback)=>{
+    const validateIdPortrait = (rules, value, callback) => {
       if (value === "") {
         callback(new Error("请上传身份证人像面"));
       } else {
         callback();
       }
     };
-    const validateIdEmblem=(rules,value,callback)=>{
+    const validateIdEmblem = (rules, value, callback) => {
       if (value === "") {
         callback(new Error("请上传身份证国像面"));
       } else {
@@ -264,62 +386,107 @@ export default {
       }
     };
     return {
-      authFormData:{
-        authType:0,
-        orgName:'',
-        org:'',
-        creditCode:'',
+      authFormData: {
+        authType: 0,
+        orgName: "",
+        org: "",
+        creditCode: "",
         //营业执照图片路径
-        businessLicense:'',
-        address:'',
-        addressDetail:'',
-        contactName:'',
-        contactPhone:'',
-        contactEmail:'',
+        businessLicense: {},
+        //详细地址
+        address: "",
+        addressDetail: "",
+        contactName: "",
+        contactPhone: "",
+        contactEmail: "",
         //授权书上传路径
-        la:'',
+        la: "",
         //真实姓名
-        realName:'',
-        idNumber:'',
-        idPortrait:'',
-        idEmblem:'',
+        realName: "",
+        idNumber: "",
+        idPortrait: "",
+        idEmblem: "",
       },
-      authFormRules:{
-        authType:[{required: true}],
-          orgName:[{required: true,  validator:validateOrgName,trigger:'blur'}],
-          org:[{required: true, validator:validateOrg,trigger:'blur'}],
-          creditCode:[{required: true, validator:validateCreditCode,trigger:'blur'}],
-          businessLicense:[{required: true, validator:validateBusinessLicense,trigger:'blur'}],
-          addressDetail:[{required: true, validator:validatorAddressDetail,trigger:'blur'}],
-          contactName:[{required: true, validator:validateContactName,trigger:'blur'}] ,
-          contactPhone:[{required:true,validator:validateContactPhone,trigger:'blur'}],
-          contactEmail:[{required:true,validator:validateContactEmail,trigger:'blur'}],
-          la:[{required:true,validator:validateLa,trigger:'blur'}],
-          realName:[{required:true,validator:validateRealName,trigger:'blur'}],
-          idNumber:[{required:true,validator:validateIdNumber,trigger:'blur'}],
-          idPortrait:[{required:true,validator:validateIdPortrait,trigger:'blur'}],
-          idEmblem:[{required:true,validator:validateIdEmblem,trigger:'blur'}],
+      authFormRules: {
+        authType: [{ required: true }],
+        orgName: [
+          { required: true, validator: validateOrgName, trigger: "blur" },
+        ],
+        org: [{ required: true, validator: validateOrg, trigger: "blur" }],
+        creditCode: [
+          { required: true, validator: validateCreditCode, trigger: "blur" },
+        ],
+        businessLicense: [
+          {
+            required: true,
+            validator: validateBusinessLicense,
+            trigger: "blur",
+          },
+        ],
+        address: [
+          { required: true, validator: validateAddress, trigger: "blur" },
+        ],
+        addressDetail: [
+          {
+            required: true,
+            validator: validatorAddressDetail,
+            trigger: "blur",
+          },
+        ],
+        contactName: [
+          { required: true, validator: validateContactName, trigger: "blur" },
+        ],
+        contactPhone: [
+          { required: true, validator: validateContactPhone, trigger: "blur" },
+        ],
+        contactEmail: [
+          { required: true, validator: validateContactEmail, trigger: "blur" },
+        ],
+        la: [{ required: true, validator: validateLa, trigger: "blur" }],
+        realName: [
+          { required: true, validator: validateRealName, trigger: "blur" },
+        ],
+        idNumber: [
+          { required: true, validator: validateIdNumber, trigger: "blur" },
+        ],
+        idPortrait: [
+          { required: true, validator: validateIdPortrait, trigger: "blur" },
+        ],
+        idEmblem: [
+          { required: true, validator: validateIdEmblem, trigger: "blur" },
+        ],
       },
 
-
-      enterpriseClass:{
-        selectTypeClass:true,
+      enterpriseClass: {
+        selectTypeClass: true,
       },
-      personalClass:{
-        selectTypeClass:false,
+      personalClass: {
+        selectTypeClass: false,
       },
 
       fileUploader: true,
-      loadingForm:false,
+      loadingForm: false,
 
-     
+    //省份列表
+      options: [],
+      //地市列表
+      city:[],
+          //区县列表
+      area:[],
+      //省份
+      value: '',
+      //地市
+      cityCode:'',
+      //区县
+      areaCode:'',
     };
   },
 
-  mounted() {
-
-  },
  
+  mounted() {
+    this.getProvinceData();
+  },
+
   computed: {
     // 是否显示提示
     showTip() {
@@ -334,52 +501,108 @@ export default {
       };
     },
   },
-  methods: {      
-
-    //选择实名类型
-    selectType(val){
-      this.$refs.authForm.resetFields();
-      if(val==0){
-        this.authFormData.authType=val;
-        this.enterpriseClass.selectTypeClass=true
-        this.personalClass.selectTypeClass=false;
-
-      }else if(val==1){
-        this.authFormData.authType=val;
-        this.enterpriseClass.selectTypeClass=false;
-        this.personalClass.selectTypeClass=true;
+  watch:{
+    //监听地址第一层 省份
+    value:{
+      handler(val){
+      if(val){
+        this.optionsChangeData();
       }
+    }
     },
-    handleAuthForm() {
-      this.$refs.authForm.validate((valid)=>{
-        if(valid){
-          const {
-        authType,
-        orgName,
-        org,
-        creditCode,
-        addressDetail,
-        contactName,
-        contactPhone,
-        contactEmail,
-
-        //真实姓名
-        realName,
-        idNumber,
-          }=this.authForm;
-          this.loadingForm = true;
-         switch(authType){
-          case 0:
-          break;
-          case 1:
-          break;
-         } 
+    //监听地址第2层 地市
+    cityCode:{
+      handler(cityCode){
+      if(cityCode){
+        this.cityChangeData();
+      }
+    }
+    },
+  orgName:{
+      handler( orgName){
+        if( /\s+/g.test(orgName)){
+          console(orgName)
         }
+      }
+    }
+
+  },
+  methods: {
+    //获取省份
+    getProvinceData(){
+  
+      getProvince().then((res)=>{
+        console.log(res);
+        res.forEach(item=>{
+          this.options.push(item)
+        })
+      })
+    },
+    //选择了省份 显示地市数据
+    optionsChangeData(){
+      getCity({parentCode:this.value}).then((res)=>{
+        console.log(res)
+        res.forEach(item=>{
+          this.city.push(item)
+        })
+      })
+    },
+   //选择了地市 显示区县数据
+    cityChangeData(){
+      getArea({parentCode:this.cityCode}).then((res)=>{
+        console.log(res)
+        res.forEach(item=>{
+          this.area.push(item)
+        })
       })
     },
 
+    //图片地址参数
+    getFileName(event){
+      console.log(event,"?")
+    },
 
+    //选择实名类型
+    selectType(val) {
+      this.$refs.authForm.resetFields();
+      if (val == 0) {
+        this.authFormData.authType = val;
+        this.enterpriseClass.selectTypeClass = true;
+        this.personalClass.selectTypeClass = false;
+      } else if (val == 1) {
+        this.authFormData.authType = val;
+        this.enterpriseClass.selectTypeClass = false;
+        this.personalClass.selectTypeClass = true;
+      }
+    },
+    //提交及校验
+    handleAuthForm() {
+      this.$refs.authForm.validate((valid) => {
+        if (valid) {
+          const {
+            authType,
+            orgName,
+            org,
+            creditCode,
+            addressDetail,
+            contactName,
+            contactPhone,
+            contactEmail,
 
+            //真实姓名
+            realName,
+            idNumber,
+          } = this.authForm;
+          this.loadingForm = true;
+          switch (authType) {
+            case 0:
+              break;
+            case 1:
+              break;
+          }
+        }
+      });
+    },
   },
 };
 </script>
@@ -387,12 +610,10 @@ export default {
 <style lang="scss" scoped>
 @import "~@/assets/styles/public.scss";
 
-
 .authForm {
   width: 50rem;
 }
-.selectTypeClass{
-  
+.selectTypeClass {
   background-color: #1890ff;
   color: #ffff;
 }
@@ -410,10 +631,10 @@ export default {
       height: 12.5rem;
     }
   }
-  ::v-deep .el-upload--picture-card{
+  ::v-deep .el-upload--picture-card {
     width: 12.5rem;
     height: 12.5rem;
-    i{
+    i {
       line-height: 12.5rem;
     }
   }

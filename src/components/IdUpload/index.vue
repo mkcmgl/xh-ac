@@ -183,6 +183,7 @@ export default {
     // 上传成功回调
     handleUploadSuccess(res, file) {
         console.log(res,file)
+        this.$emit('fileName',res)
         // this.authFormData.businessLicense=res.fileName;
       if (res.code === 200) {
 
