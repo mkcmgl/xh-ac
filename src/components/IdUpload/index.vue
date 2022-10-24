@@ -16,6 +16,7 @@
                 :class="UploaderClass"
                 :on-remove="(e1)=>handleDelete(e1,'1')"
                 :file-list="fileList"
+                ref="fileUpload"
               >
                 <i class="el-icon-plus"></i>
               </el-upload>
@@ -88,7 +89,7 @@ export default {
       dialogImageUrl: "",
       number: 0,
       uploadList: [],
-      // baseUrl: process.env.VUE_APP_BASE_API,
+      baseUrl: process.env.VUE_APP_BASE_API,
       uploadFileUrl: process.env.VUE_APP_BASE_API + "/common/upload", // 上传的图片服务器地址
       headers: {
         Authorization: "Bearer " + getToken(),
@@ -102,33 +103,34 @@ export default {
         };
     },
     watch: {
-    value: {
-      handler(val) {
-        if (val) {
-          let temp = 1;
-          // 首先将值转为数组
-          console.log("// 首先将值转为数组");
-          const list = Array.isArray(val) ? val : this.value.split(",");
-          // 然后将数组转为对象数组
-          this.fileList = list.map((item) => {
-            if (typeof item === "string") {
-              item = { name: item, url: item };
-            }
-            item.uid = item.uid || new Date().getTime() + temp++;
-            return item;
-          });
-        } else {
-          this.fileList = [];
-          return [];
-        }
-      },
-      deep: true,
-      immediate: true,
-      loading:false,
-    },
-
-    
-    
+    // value: {
+    //   handler(val) {
+    //     if (val) {
+    //       let temp = 1;
+    //       // 首先将值转为数组
+    //       console.log("// 首先将值转为数组",val);
+    //       const list = Array.isArray(val) ? val : this.value.split(",");
+    //       // 然后将数组转为对象数组
+    //       console.log('list',list)
+    //       this.fileList = list.map((item) => {
+    //         console.log('item',item)
+    //         if (typeof item === "string") {
+    //           item = { name: item, url: item };
+    //           console.log('item2',item)
+    //         }
+    //         item.uid = item.uid || new Date().getTime() + temp++;
+    //         console.log('item23',item)
+    //         return item;
+    //       });
+    //     } else {
+    //       this.fileList = [];
+    //       return [];
+    //     }
+    //   },
+    //   deep: true,
+    //   immediate: true,
+    //   loading:false,
+    // },
   },
   created(){
 
@@ -200,19 +202,21 @@ export default {
         // this.$emit('fileName',res)
         // this.authFormData.businessLicense=res.fileName;
       if (res.code === 200) {
-        this.fileList.push(file)
-      //   // this.$emit('input',res.fileName)
+      
       //   // this.displayType = true;
       //   this.uploadList.push({ name: res.fileName, url: res.fileName });
       //   // console.log("uploadedSuccessfully成共1");
+      this.$emit("input", res.fileName);
+      
+      this.uploadList.push(file)
         this.uploadedSuccessfully();
       } else {
         console.log('上传文件返回code不为200')
-      //   this.number--;
-      //   this.$modal.closeLoading();
+        this.number--;
+        // this.$modal.closeLoading();
         this.$modal.msgError(res.msg);
-      //   this.$refs.fileUpload.handleRemove(file);
-      //   this.uploadedSuccessfully();
+        this.$refs.fileUpload.handleRemove(file);
+        this.uploadedSuccessfully();
       }
     },
 
@@ -227,14 +231,16 @@ export default {
     // 上传结束处理
     uploadedSuccessfully() {
   
-      // if (this.number > 0 && this.uploadList.length === this.number) {
-      //   // this.fileList = this.fileList.concat(this.uploadList);
+      if (this.number > 0 && this.uploadList.length === this.number) {
+        this.fileList = this.fileList.concat(this.uploadList);
         console.log(this.fileList)
-      //   // this.uploadList = [];
-      //   this.number = 0;
-      //   // this.$emit("input", this.listToString(this.fileList));
-      //   // this.$modal.closeLoading();
-      // }
+        this.uploadList = [];
+        this.number = 0;
+        // this.$emit("input", this.listToString( this.fileList));  
+
+        // this.$emit("input", this.listToString( this.fileList[0].response.fileName));
+        // this.$modal.closeLoading();
+      }
     },
     // 获取文件名称
     getFileName(name) {

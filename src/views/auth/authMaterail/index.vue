@@ -72,7 +72,7 @@
               </el-form-item>
               <el-form-item label="营业执照" prop="businessLicense">
                 <!-- " -->
-                <IdUpload   ref="businessImg" ></IdUpload>
+                <IdUpload v-model="authFormData.businessLicense"  ref="businessImg" ></IdUpload>
               </el-form-item>
               <el-form-item label="地址" prop="address">
                 <el-row>
@@ -118,6 +118,7 @@
                   @keyup.enter.native="handleAuthForm"
                   type="text"
                   placeholder="请输入地址"
+                  v-model="authFormData.addressDetail"
                 ></el-input>
               </el-form-item>
               <el-form-item label="联系人姓名" prop="contactName">
@@ -125,12 +126,16 @@
                   @keyup.enter.native="handleAuthForm"
                   type="text"
                   placeholder="请输入联系人姓名"
+                  v-model="authFormData.contactName"
+
                 ></el-input>
               </el-form-item>
               <el-form-item label="联系人手机号" prop="contactPhone">
                 <el-input
                   @keyup.enter.native="handleAuthForm"
                   type="text"
+                  v-model="authFormData.contactPhone"
+
                   placeholder="请输入联系人手机号"
                 ></el-input>
               </el-form-item>
@@ -139,6 +144,8 @@
                   @keyup.enter.native="handleAuthForm"
                   type="text"
                   placeholder="请输入联系人邮箱"
+                  v-model="authFormData.contactEmail"
+
                 ></el-input>
               </el-form-item>
 
@@ -147,6 +154,8 @@
                   listType="picture"
                   :fileType="['png', 'jpg', 'jpeg']"
                   :limit="1"
+                  ref="fileGrant"
+                  v-model="authFormData.la"
                 ></FileUpload>
 
                 <!-- <el-upload
@@ -187,11 +196,12 @@
               </el-form-item>
               <el-form-item label="身份证头像面" prop="idPortrait">
                 <!-- type="idPortrait" -->
-                <IdUpload  ref="idPortrait"></IdUpload>
+                  
+                  <IdUpload  ref="idPortrait" v-model="authFormData.idPortrait"  ></IdUpload>
               </el-form-item>
               <el-form-item label="身份证国徽面" prop="idEmblem">
                 <!-- type="idEmblem"  -->
-                <IdUpload   ref="idEmblem"></IdUpload>
+                <IdUpload   ref="idEmblem" v-model="authFormData.idEmblem"></IdUpload>
               </el-form-item>
             </div>
           </el-form>
@@ -395,7 +405,7 @@ export default {
         org: "",
         creditCode: "",
         //营业执照图片路径
-        businessLicense: "",
+        businessLicense: '',
         //详细地址
         address: "",
         addressDetail: "",
@@ -403,7 +413,7 @@ export default {
         contactPhone: "",
         contactEmail: "",
         //授权书上传路径
-        la: "",
+        la: [],
         //真实姓名
         realName: "",
         idNumber: "",
@@ -573,6 +583,7 @@ export default {
       this.$refs.businessImg.handleDelete()
       this.$refs.idPortrait.handleDelete()
       this.$refs.idEmblem.handleDelete()
+      this.$refs.fileGrant.handleDelete()
       
       if (val == 0) {
         this.authFormData.authType = val;

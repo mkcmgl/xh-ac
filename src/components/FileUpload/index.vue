@@ -89,32 +89,32 @@ export default {
     };
   },
   watch: {
-    value: {
-      handler(val) {
-        if (val) {
-          let temp = 1;
-          // 首先将值转为数组
-          const list = Array.isArray(val) ? val : this.value.split(',');
-          // 然后将数组转为对象数组
-          this.fileList = list.map(item => {
-            if (typeof item === "string") {
-              if (item.indexOf(this.baseUrl) === -1) {
-                  item = { name: this.baseUrl + item, url: this.baseUrl + item };
-              } else {
-                  item = { name: item, url: item };
-              }
-            }
-            item.uid = item.uid || new Date().getTime() + temp++;
-            return item;
-          });
-        } else {
-          this.fileList = [];
-          return [];
-        }
-      },
-      deep: true,
-      immediate: true
-    }
+    // value: {
+    //   handler(val) {
+    //     if (val) {
+    //       let temp = 1;
+    //       // 首先将值转为数组
+    //       const list = Array.isArray(val) ? val : this.value.split(',');
+    //       // 然后将数组转为对象数组
+    //       this.fileList = list.map(item => {
+    //         if (typeof item === "string") {
+    //           if (item.indexOf(this.baseUrl) === -1) {
+    //               item = { name: this.baseUrl + item, url: this.baseUrl + item };
+    //           } else {
+    //               item = { name: item, url: item };
+    //           }
+    //         }
+    //         item.uid = item.uid || new Date().getTime() + temp++;
+    //         return item;
+    //       });
+    //     } else {
+    //       this.fileList = [];
+    //       return [];
+    //     }
+    //   },
+    //   deep: true,
+    //   immediate: true
+    // }
   },
   computed: {
     // 是否显示提示
@@ -165,12 +165,15 @@ export default {
     // 上传成功回调
     handleUploadSuccess(res, file) {
       if (res.code === 200) {
+
         if(this.listType!=''){
-         
+          this.uploadList.push(file)
           this.$modal.closeLoading();
+        this.$emit("input", res.fileName);
+        // this.uploadList.push({ name: res.fileName, url: res.fileName });
+        this.uploadedSuccessfully();
         }else{
   
-        this.$modal.closeLoading();
         this.uploadList.push({ name: res.fileName, url: res.fileName });
         this.uploadedSuccessfully();
         }
@@ -198,10 +201,11 @@ export default {
     // 上传结束处理
     uploadedSuccessfully() {
       if (this.number > 0 && this.uploadList.length === this.number) {
+        console.log('11')
         this.fileList = this.fileList.concat(this.uploadList);
         this.uploadList = [];
         this.number = 0;
-        this.$emit("input", this.listToString(this.fileList));
+        // this.$emit("input", this.listToString(this.fileList));
         this.$modal.closeLoading();
       }
     },
