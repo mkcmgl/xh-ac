@@ -24,7 +24,7 @@
         </div>
       </div>
     </div>
-    
+
     <div class="centerMain">
       <div class="centerTitle">请确认并授权您的数字身份标识</div>
       <div class="centerDsc">
@@ -32,7 +32,7 @@
       </div>
       <div class="centerNum">
         <div class="centerDid">
-          {{userData.did}}
+          {{ userData.did }}
         </div>
       </div>
       <div class="centerNextDsc">
@@ -46,14 +46,26 @@
 </template>
 
 <script>
+import { getDidInfo } from "@/api/did";
+import store from "@/store";
 import { mapState } from "vuex";
 export default {
   name: "auth",
 
   data() {
-    return {};
+    return {
+      authStatus: 0,
+    };
   },
-
+  beforeRouteEnter(to, from, next) {
+    console.log(store.state.user.userData.authStatus);
+    console.log(to);
+    if (store.state.user.userData.authStatus != 0 && to.fullPath == "/auth") {
+      next("/auth/authResult");
+    } else {
+      next();
+    }
+  },
   mounted() {},
   computed: {
     ...mapState({
@@ -61,9 +73,10 @@ export default {
     }),
   },
   methods: {
-    toAuthMaterail(){
-      this.$router.push('/auth/authMaterail')
-    }
+    toAuthMaterail() {
+      this.$router.push("/auth/authMaterail");
+    },
+    idAuth() {},
   },
 };
 </script>

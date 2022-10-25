@@ -657,7 +657,6 @@ export default {
             idEmblem,
           } = this.authFormData;
           this.loadingForm = true;
-          console.log("??????????????");
 
           console.log(this.authFormData.authType);
           switch (authType) {
