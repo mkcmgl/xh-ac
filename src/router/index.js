@@ -118,6 +118,19 @@ export const constantRoutes = [{
         }]
     },
     {
+        path: '',
+        component: Layout,
+        hidden: true,
+
+        redirect: 'noredirect',
+        children: [{
+            path: 'auth/authResult',
+            component: () =>
+                import ('@/views/auth/authResult/index'),
+            name: 'authResult',
+        }]
+    },
+    {
         path: '/user',
         component: Layout,
         hidden: true,

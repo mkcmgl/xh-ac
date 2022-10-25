@@ -38,14 +38,14 @@
             class="authForm"
           >
             <el-form-item label="注册类型" prop="authType">
-              <el-button @click="selectType(0)" :class="enterpriseClass"
+              <el-button @click="selectType(102)" :class="enterpriseClass"
                 >企业</el-button
               >
-              <el-button @click="selectType(1)" :class="personalClass"
+              <el-button @click="selectType(101)" :class="personalClass"
                 >个人</el-button
               >
             </el-form-item>
-            <div v-if="authFormData.authType == 0">
+            <div v-if="authFormData.authType == 102">
               <el-form-item label="机构名称" prop="orgName">
                 <el-input
                   @keyup.enter.native="handleAuthForm"
@@ -194,7 +194,7 @@
                 </el-upload> -->
               </el-form-item>
             </div>
-            <div v-if="authFormData.authType == 1">
+            <div v-if="authFormData.authType == 101">
               <el-form-item label="姓名" prop="realName">
                 <el-input
                   @keyup.enter.native="handleAuthForm"
@@ -230,7 +230,8 @@
           </el-form>
         </div>
         <div :loading="loadingForm" class="next" @click="handleAuthForm">
-          提交认证
+          <span v-if="!loadingForm">提交认证</span>
+          <span v-else>正在提交</span>
         </div>
       </div>
     </div>
@@ -243,30 +244,7 @@ import { getToken } from "@/utils/auth";
 import { mapState } from "vuex";
 export default {
   name: "authMaterail",
-  // props: {
-  //   // 值
-  //   value: [String, Object, Array],
-  //   // 数量限制
-  //   limit: {
-  //     type: Number,
-  //     default: 1,
-  //   },
-  //   // 大小限制(MB)
-  //   fileSize: {
-  //     type: Number,
-  //     default: 5,
-  //   },
-  //   // 文件类型, 例如['png', 'jpg', 'jpeg']
-  //   fileType: {
-  //     type: Array,
-  //     default: () => ["jpg", "jpeg", "png"],
-  //   },
-  //   // 是否显示提示
-  //   isShowTip: {
-  //     type: Boolean,
-  //     default: true,
-  //   },
-  // },
+
   data() {
     const validateOrgName = (rules, value, callback) => {
       if (value === "") {
@@ -418,7 +396,7 @@ export default {
     };
     return {
       authFormData: {
-        authType: 0,
+        authType: 102,
         orgName: "",
         org: "",
         creditCode: "",
@@ -529,8 +507,8 @@ export default {
 
     //did
     ...mapState({
-      userData: (state) => state.user.userData,
-      userId: (state) => state.user.userId,
+      userDid: (state) => state.user.userData.did,
+      userId: (state) => state.user.userData.userId,
     }),
   },
   watch: {
@@ -597,7 +575,7 @@ export default {
     selectType(val) {
       this.$refs.authForm.resetFields();
 
-      if (val == 0) {
+      if (val == 102) {
         this.authFormData.authType = val;
         this.enterpriseClass.selectTypeClass = true;
         this.personalClass.selectTypeClass = false;
@@ -606,7 +584,7 @@ export default {
           this.$refs.businessImg.handleDelete();
           this.$refs.fileGrant.handleDelete();
         });
-      } else if (val == 1) {
+      } else if (val == 101) {
         this.authFormData.authType = val;
         this.enterpriseClass.selectTypeClass = false;
         this.personalClass.selectTypeClass = true;
@@ -652,8 +630,6 @@ export default {
     },
     //提交及校验
     handleAuthForm() {
-      console.log("0?");
-
       this.$refs.authForm.validate((valid) => {
         console.log("01");
         console.log(valid);
@@ -680,18 +656,16 @@ export default {
             idPortrait,
             idEmblem,
           } = this.authFormData;
-          // this.loadingForm = true;
+          this.loadingForm = true;
           console.log("??????????????");
-          console.log(authType);
-          console.log(address);
+
           console.log(this.authFormData.authType);
-          switch (this.authFormData.authType) {
-            case 0:
-              console.log("0");
+          switch (authType) {
+            case 102:
               uploadDocument({
                 userId: this.userId,
-                did: this.userData,
-                authType: 102,
+                did: this.userDid,
+                authType,
                 orgName,
                 org,
                 creditCode,
@@ -706,16 +680,27 @@ export default {
                 contactEmail,
                 //授权书上传路径
                 la,
+              }).then((res) => {
+                console.log(res, "res");
+                this.$router.push("/auth/authResult");
+              });
+              break;
+            case 101:
+              uploadDocument({
+                userId: this.userId,
+                did: this.userDid,
+                authType,
                 //真实姓名
                 realName,
                 idNumber,
                 idPortrait,
                 idEmblem,
               }).then((res) => {
-                console.log(res);
+                console.log(res, "res");
+                this.$router.push("/auth/authResult");
               });
               break;
-            case 1:
+            default:
               break;
           }
         }

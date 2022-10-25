@@ -186,7 +186,6 @@ export default {
     },
     // 上传成功回调
     handleUploadSuccess(res, file) {
-      console.log(res, file);
       // console.log(this.type,'type')
 
       // this.$emit('fileName',res)
@@ -213,8 +212,6 @@ export default {
     handleDelete(index, e3) {
       this.displayType = false;
       this.fileList = [];
-      console.log(this.fileList);
-      console.log("删除文件");
       // this.$emit("input", this.listToString(this.fileList));
     },
     // 上传结束处理

@@ -13,8 +13,7 @@
       :headers="headers"
       :list-type="listType"
       :file-list="fileList"
-      :show-file-list="listType==''?false:true"
-   
+      :show-file-list="listType == '' ? false : true"
       class="upload-file-uploader"
       ref="fileUpload"
     >
@@ -23,20 +22,39 @@
       <!-- 上传提示 -->
       <div class="el-upload__tip" slot="tip" v-if="showTip">
         请上传
-        <template v-if="fileSize"> 大小不超过 <b style="color: #f56c6c">{{ fileSize }}MB</b> </template>
-        <template v-if="fileType"> 格式为 <b style="color: #f56c6c">{{ fileType.join("/") }}</b> </template>
+        <template v-if="fileSize">
+          大小不超过 <b style="color: #f56c6c">{{ fileSize }}MB</b>
+        </template>
+        <template v-if="fileType">
+          格式为 <b style="color: #f56c6c">{{ fileType.join("/") }}</b>
+        </template>
         的文件
       </div>
     </el-upload>
 
     <!-- 文件列表 -->
-    <transition-group v-show="listType==''?true:false" class="upload-file-list el-upload-list el-upload-list--text" name="el-fade-in-linear" tag="ul">
-      <li :key="file.url" class="el-upload-list__item ele-upload-list__item-content" v-for="(file, index) in fileList">
-        <el-link :href="`${baseUrl}${file.url}`" :underline="false" target="_blank">
+    <transition-group
+      v-show="listType == '' ? true : false"
+      class="upload-file-list el-upload-list el-upload-list--text"
+      name="el-fade-in-linear"
+      tag="ul"
+    >
+      <li
+        :key="file.url"
+        class="el-upload-list__item ele-upload-list__item-content"
+        v-for="(file, index) in fileList"
+      >
+        <el-link
+          :href="`${baseUrl}${file.url}`"
+          :underline="false"
+          target="_blank"
+        >
           <span class="el-icon-document"> {{ getFileName(file.name) }} </span>
         </el-link>
         <div class="ele-upload-list__item-content-action">
-          <el-link :underline="false" @click="handleDelete(index)" type="danger">删除</el-link>
+          <el-link :underline="false" @click="handleDelete(index)" type="danger"
+            >删除</el-link
+          >
         </div>
       </li>
     </transition-group>
@@ -56,9 +74,9 @@ export default {
       type: Number,
       default: 5,
     },
-    listType:{
-      type:String,
-      default:'',
+    listType: {
+      type: String,
+      default: "",
     },
     // 大小限制(MB)
     fileSize: {
@@ -73,8 +91,8 @@ export default {
     // 是否显示提示
     isShowTip: {
       type: Boolean,
-      default: true
-    }
+      default: true,
+    },
   },
   data() {
     return {
@@ -137,7 +155,9 @@ export default {
           return false;
         });
         if (!isTypeOk) {
-          this.$modal.msgError(`文件格式不正确, 请上传${this.fileType.join("/")}格式文件!`);
+          this.$modal.msgError(
+            `文件格式不正确, 请上传${this.fileType.join("/")}格式文件!`
+          );
           return false;
         }
       }
@@ -160,24 +180,21 @@ export default {
     // 上传失败
     handleUploadError(err) {
       this.$modal.msgError("上传图片失败，请重试");
-      this.$modal.closeLoading()
+      this.$modal.closeLoading();
     },
     // 上传成功回调
     handleUploadSuccess(res, file) {
       if (res.code === 200) {
-
-        if(this.listType!=''){
-          this.uploadList.push(file)
+        if (this.listType != "") {
+          this.uploadList.push(file);
           this.$modal.closeLoading();
-        this.$emit("input", res.fileName);
-        // this.uploadList.push({ name: res.fileName, url: res.fileName });
-        this.uploadedSuccessfully();
-        }else{
-  
-        this.uploadList.push({ name: res.fileName, url: res.fileName });
-        this.uploadedSuccessfully();
+          this.$emit("input", res.fileName);
+          // this.uploadList.push({ name: res.fileName, url: res.fileName });
+          this.uploadedSuccessfully();
+        } else {
+          this.uploadList.push({ name: res.fileName, url: res.fileName });
+          this.uploadedSuccessfully();
         }
-        
       } else {
         this.number--;
         this.$modal.closeLoading();
@@ -201,7 +218,6 @@ export default {
     // 上传结束处理
     uploadedSuccessfully() {
       if (this.number > 0 && this.uploadList.length === this.number) {
-        console.log('11')
         this.fileList = this.fileList.concat(this.uploadList);
         this.uploadList = [];
         this.number = 0;
@@ -224,14 +240,14 @@ export default {
       for (let i in list) {
         strs += list[i].url + separator;
       }
-      return strs != '' ? strs.substr(0, strs.length - 1) : '';
+      return strs != "" ? strs.substr(0, strs.length - 1) : "";
     },
-     // 预览
+    // 预览
     handlePictureCardPreview(file) {
       this.dialogImageUrl = file.url;
       this.dialogVisible = true;
     },
-  }
+  },
 };
 </script>
 
