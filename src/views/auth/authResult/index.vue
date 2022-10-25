@@ -50,12 +50,12 @@
       <div class="data">
         <el-row>
           <el-col :span="2"><span class="dscTitle">数字身份主体</span></el-col>
-          <el-col :span="10"><span class="dscData">asdfsadfafd</span></el-col>
+          <el-col :span="10"
+            ><span class="dscData">{{ userData.userName }}</span></el-col
+          >
           <el-col :span="2"> <span class="dscTitle">数字身份标识</span></el-col>
           <el-col :span="10">
-            <span class="dscData"
-              >id:bid:jn01:efvbkdpYnLgGGEjMvR4qQJPqG9o8d2qv</span
-            ></el-col
+            <span class="dscData">{{ userData.did }}</span></el-col
           >
         </el-row>
       </div>
@@ -68,39 +68,155 @@
           <el-col :span="10"><span class="dscData">个人认证</span></el-col>
           <el-col :span="2"> <span class="dscTitle">申请时间</span></el-col>
           <el-col :span="10"
-            ><span class="dscData">2022-10-25 10:42:14</span></el-col
+            ><span class="dscData">{{ authData.applyDate }}</span></el-col
           >
         </el-row>
-        <el-row style="margin-top: 1rem">
-          <el-col :span="2"><span class="dscTitle">真实姓名</span></el-col>
-          <el-col :span="10"><span class="dscData">阿**</span></el-col>
-          <el-col :span="2"> <span class="dscTitle">身份证号</span></el-col>
-          <el-col :span="10"
-            ><span class="dscData">50**********142</span></el-col
-          >
-        </el-row>
-        <el-row style="margin-top: 1rem">
-          <el-col :span="2"><span class="dscTitle">身份证头像面</span></el-col>
-          <el-col :span="10"><span class="dscPoint">点击查看图片</span></el-col>
-          <el-col :span="2"> <span class="dscTitle">身份证国徽面</span></el-col>
-          <el-col :span="10"><span class="dscPoint">点击查看图片</span></el-col>
-        </el-row>
+        <div v-if="authData.authType == '101'">
+          <el-row style="margin-top: 1rem">
+            <el-col :span="2"><span class="dscTitle">真实姓名</span></el-col>
+            <el-col :span="10"
+              ><span class="dscData">{{ realName }}</span></el-col
+            >
+            <el-col :span="2"> <span class="dscTitle">身份证号</span></el-col>
+            <el-col :span="10"
+              ><span class="dscData">{{ idNumber }}</span></el-col
+            >
+          </el-row>
+          <el-row style="margin-top: 1rem">
+            <el-col :span="2"
+              ><span class="dscTitle">身份证头像面</span></el-col
+            >
+            <el-col :span="10"
+              ><span class="dscPoint" @click="showImg('idEmblem')"
+                >点击查看图片</span
+              ></el-col
+            >
+            <el-col :span="2">
+              <span class="dscTitle">身份证国徽面</span></el-col
+            >
+            <el-col :span="10"
+              ><span class="dscPoint" @click="showImg('idPortrait')"
+                >点击查看图片</span
+              ></el-col
+            >
+          </el-row>
+        </div>
+        <div v-if="authData.authType == '102'">
+          <el-row style="margin-top: 1rem">
+            <el-col :span="2"><span class="dscTitle">机构名称</span></el-col>
+            <el-col :span="10"><span class="dscData">aweadas**</span></el-col>
+            <el-col :span="2"> <span class="dscTitle">机构简称</span></el-col>
+            <el-col :span="10"><span class="dscData">wae</span></el-col>
+          </el-row>
+          <el-row style="margin-top: 1rem">
+            <el-col :span="2"
+              ><span class="dscTitle">统一社会信用代码</span></el-col
+            >
+            <el-col :span="10"
+              ><span class="dscData">1234567891234567dd</span></el-col
+            >
+            <el-col :span="2"> <span class="dscTitle">营业执照</span></el-col>
+            <el-col :span="10"
+              ><span class="dscPoint">点击查看图片</span></el-col
+            >
+          </el-row>
+          <el-row style="margin-top: 1rem">
+            <el-col :span="2"><span class="dscTitle">地址</span></el-col>
+            <el-col :span="10"
+              ><span class="dscData">**省**市**区</span></el-col
+            >
+            <el-col :span="2"> <span class="dscTitle">详细地址</span></el-col>
+            <el-col :span="10"><span class="dscData">*****</span></el-col>
+          </el-row>
+          <el-row style="margin-top: 1rem">
+            <el-col :span="2"><span class="dscTitle">联系人邮箱</span></el-col>
+            <el-col :span="10"><span class="dscData">22e****.com</span></el-col>
+            <el-col :span="2">
+              <span class="dscTitle">联系人手机号</span></el-col
+            >
+            <el-col :span="10"><span class="dscData">138****1026</span></el-col>
+          </el-row>
+          <el-row style="margin-top: 1rem">
+            <el-col :span="2"><span class="dscTitle">通过时间</span></el-col>
+            <el-col :span="10"
+              ><span class="dscData">2022-07-25 14:03:05</span></el-col
+            >
+            <el-col :span="2"> <span class="dscTitle">授权书</span></el-col>
+            <el-col :span="10"
+              ><span class="dscPoint">点击查看图片</span></el-col
+            >
+          </el-row>
+        </div>
       </div>
     </div>
+
+    <el-dialog :visible.sync="dialogVisible">
+      <img width="100%" :src="dialogImageUrl" alt="" />
+    </el-dialog>
   </div>
 </template>
 
 <script>
+import { decrypt } from "@/utils/jsencrypt";
+import { mapState } from "vuex";
+import { authGetInfo } from "@/api/did";
+import store from "@/store";
 export default {
   name: "authResult",
 
   data() {
-    return {};
+    return {
+      dialogVisible: false,
+      dialogImageUrl: "",
+      authData: {},
+      baseUrl: process.env.VUE_APP_BASE_API,
+    };
   },
-
-  mounted() {},
-
-  methods: {},
+  beforeRouteEnter(to, from, next) {
+    console.log(store.state.user.userData.authStatus);
+    console.log(to);
+    if (
+      store.state.user.userData.authStatus == 0 &&
+      to.fullPath == "/auth/authResult"
+    ) {
+      next("/auth");
+    } else {
+      next();
+    }
+  },
+  mounted() {
+    this.getInfoData();
+  },
+  computed: {
+    ...mapState({
+      userData: (state) => state.user.userData,
+    }),
+    realName() {
+      const realName = decrypt(this.authData.realName);
+      const len = realName.length;
+      return (
+        realName.substring(0, 3) + "***" + realName.substring(len - 2, len)
+      );
+    },
+    idNumber() {
+      const idNumber = decrypt(this.authData.idNumber);
+      const len = idNumber.length;
+      return (
+        idNumber.substring(0, 3) + "********" + idNumber.substring(len - 2, len)
+      );
+    },
+  },
+  methods: {
+    getInfoData() {
+      authGetInfo(this.userData.did).then((res) => {
+        this.authData = res.data;
+      });
+    },
+    showImg(value) {
+      this.dialogImageUrl = this.baseUrl + this.authData[value];
+      this.dialogVisible = true;
+    },
+  },
 };
 </script>
 

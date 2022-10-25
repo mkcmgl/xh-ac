@@ -46,7 +46,6 @@
 </template>
 
 <script>
-import { getDidInfo } from "@/api/did";
 import store from "@/store";
 import { mapState } from "vuex";
 export default {
@@ -76,7 +75,6 @@ export default {
     toAuthMaterail() {
       this.$router.push("/auth/authMaterail");
     },
-    idAuth() {},
   },
 };
 </script>

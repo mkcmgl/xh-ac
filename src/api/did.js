@@ -51,3 +51,12 @@ export function uploadDocument(data) {
         data
     })
 }
+
+export function authGetInfo(params) {
+
+    return request({
+        url: "/auth/getInfo",
+        method: 'get',
+        params
+    })
+}
