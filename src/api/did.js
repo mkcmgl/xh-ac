@@ -42,3 +42,12 @@ export function getArea(params) {
         params
     })
 }
+export function uploadDocument(data) {
+
+    return request({
+        url: "/auth/uploadDocument",
+
+        method: 'post',
+        data
+    })
+}

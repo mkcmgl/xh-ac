@@ -45,7 +45,7 @@
                 >个人</el-button
               >
             </el-form-item>
-            <div v-show="authFormData.authType == 0">
+            <div v-if="authFormData.authType == 0">
               <el-form-item label="机构名称" prop="orgName">
                 <el-input
                   @keyup.enter.native="handleAuthForm"
@@ -81,8 +81,9 @@
                 <el-row>
                   <el-col :span="8">
                     <el-select
-                      v-model="value"
+                      v-model="optionsV"
                       @change="changeValue"
+                      value-key="regionCode"
                       clearable
                       placeholder="请选择"
                     >
@@ -90,7 +91,7 @@
                         v-for="(item, index) in options"
                         :key="index"
                         :label="item.regionName"
-                        :value="item.regionCode"
+                        :value="item"
                       >
                       </el-option>
                     </el-select>
@@ -99,6 +100,7 @@
                   <el-col :span="8">
                     <el-select
                       v-model="cityCode"
+                      value-key="regionCode"
                       clearable
                       @change="changeCity"
                       placeholder="请选择"
@@ -107,13 +109,14 @@
                         v-for="(item, index) in city"
                         :key="index"
                         :label="item.regionName"
-                        :value="item.regionCode"
+                        :value="item"
                       >
                       </el-option>
                     </el-select>
                   </el-col>
                   <el-col :span="8">
                     <el-select
+                      value-key="regionCode"
                       v-model="areaCode"
                       clearable
                       @change="changeArea"
@@ -123,7 +126,7 @@
                         v-for="(item, index) in area"
                         :key="index"
                         :label="item.regionName"
-                        :value="item.regionCode"
+                        :value="item"
                       >
                       </el-option>
                     </el-select>
@@ -191,7 +194,7 @@
                 </el-upload> -->
               </el-form-item>
             </div>
-            <div v-show="authFormData.authType == 1">
+            <div v-if="authFormData.authType == 1">
               <el-form-item label="姓名" prop="realName">
                 <el-input
                   @keyup.enter.native="handleAuthForm"
@@ -212,14 +215,14 @@
                 <!-- type="idPortrait" -->
 
                 <IdUpload
-                  ref="idPortrait"
+                  ref="idPortraitRef"
                   v-model="authFormData.idPortrait"
                 ></IdUpload>
               </el-form-item>
               <el-form-item label="身份证国徽面" prop="idEmblem">
                 <!-- type="idEmblem"  -->
                 <IdUpload
-                  ref="idEmblem"
+                  ref="idEmblemRef"
                   v-model="authFormData.idEmblem"
                 ></IdUpload>
               </el-form-item>
@@ -235,8 +238,9 @@
 </template>
 
 <script>
-import { getProvince, getCity, getArea } from "@/api/did";
+import { getProvince, getCity, getArea, uploadDocument } from "@/api/did";
 import { getToken } from "@/utils/auth";
+import { mapState } from "vuex";
 export default {
   name: "authMaterail",
   // props: {
@@ -307,7 +311,7 @@ export default {
       }
     };
     const validateAddress = (rules, value, callback) => {
-      if (value === "" || this.cityCode === "" || this.areaCode === "") {
+      if (value === "") {
         callback(new Error("请选择地址"));
       } else {
         callback();
@@ -501,11 +505,11 @@ export default {
       //区县列表
       area: [],
       //省份
-      value: "",
+      optionsV: {},
       //地市
-      cityCode: "",
+      cityCode: {},
       //区县
-      areaCode: "",
+      areaCode: {},
       optionsName: "",
       cityName: "",
       areaName: "",
@@ -521,21 +525,20 @@ export default {
     showTip() {
       return this.isShowTip && (this.fileType || this.fileSize);
     },
-    UploaderClass() {
-      return {
-        fileUploader: this.fileUploader,
-        idPortraitType: this.idPortraitType,
-        idEmblemType: this.idEmblemType,
-        displayType: this.displayType,
-      };
-    },
+    //图片加号是否显示
+
+    //did
+    ...mapState({
+      userData: (state) => state.user.userData,
+      userId: (state) => state.user.userId,
+    }),
   },
   watch: {
     //监听地址第一层 省份
-    value: {
+    optionsV: {
       handler(val) {
         if (val) {
-          this.optionsChangeData();
+          this.optionsChangeData(val.regionCode);
         }
       },
     },
@@ -544,7 +547,7 @@ export default {
       handler(cityCode) {
         if (cityCode) {
           this.area = [];
-          this.cityChangeData();
+          this.cityChangeData(cityCode.regionCode);
         }
       },
     },
@@ -567,18 +570,18 @@ export default {
       });
     },
     //选择了省份 显示地市数据
-    optionsChangeData() {
-      getCity({ parentCode: this.value }).then((res) => {
-        console.log(res);
+    optionsChangeData(value) {
+      console.log(value);
+      getCity({ parentCode: value }).then((res) => {
         res.forEach((item) => {
           this.city.push(item);
         });
       });
     },
     //选择了地市 显示区县数据
-    cityChangeData() {
-      getArea({ parentCode: this.cityCode }).then((res) => {
-        console.log(res);
+    cityChangeData(value) {
+      console.log(value);
+      getArea({ parentCode: value }).then((res) => {
         res.forEach((item) => {
           this.area.push(item);
         });
@@ -594,19 +597,24 @@ export default {
     selectType(val) {
       this.$refs.authForm.resetFields();
 
-      this.$refs.businessImg.handleDelete();
-      this.$refs.idPortrait.handleDelete();
-      this.$refs.idEmblem.handleDelete();
-      this.$refs.fileGrant.handleDelete();
-
       if (val == 0) {
         this.authFormData.authType = val;
         this.enterpriseClass.selectTypeClass = true;
         this.personalClass.selectTypeClass = false;
+
+        this.$nextTick(() => {
+          this.$refs.businessImg.handleDelete();
+          this.$refs.fileGrant.handleDelete();
+        });
       } else if (val == 1) {
         this.authFormData.authType = val;
         this.enterpriseClass.selectTypeClass = false;
         this.personalClass.selectTypeClass = true;
+
+        this.$nextTick(() => {
+          this.$refs.idPortraitRef.handleDelete();
+          this.$refs.idEmblemRef.handleDelete();
+        });
       }
     },
     changeValue(event) {
@@ -618,82 +626,120 @@ export default {
       this.areaName = "";
       if (event == "") {
         return (this.optionsName = "");
+      } else {
+        return (this.optionsName = event.regionName);
       }
-      this.options.forEach((item) => {
-        if (item.regionCode == event) {
-          return (this.optionsName = item.regionName);
-        }
-      });
     },
     changeCity(event) {
       this.area = [];
       this.areaCode = "";
       this.areaName = "";
+
       if (event == "") {
         return (this.cityName = "");
+      } else {
+        this.cityName = event.regionName;
       }
-      this.city.forEach((item) => {
-        if (item.regionCode == event) {
-          return (this.cityName = item.regionName);
-        }
-      });
     },
     changeArea(event) {
       if (event == "") {
         return (this.areaName = "");
+      } else {
+        this.areaName = event.regionName;
+        this.authFormData.address =
+          this.optionsName + this.cityName + this.areaName;
       }
-      this.area.forEach((item) => {
-        if (item.regionCode == event) {
-          return (this.areaName = item.regionName);
-        }
-      });
     },
     //提交及校验
     handleAuthForm() {
-      // this.authFormData.address =
-      //   this.valueName + this.cityName + this.areaName;
-      // console.log(this.valueName, this.cityName, this.areaName);
-      console.log("aaaa", this.authFormData.address);
+      console.log("0?");
 
-      // this.$refs.authForm.validate((valid) => {
-      //   // const {
-      //   //   authType,
-      //   // orgName,
-      //   // org,
-      //   // creditCode,
-      //   // //营业执照图片路径
-      //   // businessLicense,
-      //   // //地址
-      //   // address,
-      //   // //详细地址
-      //   // addressDetail,
-      //   // contactName,
-      //   // contactPhone,
-      //   // contactEmail,
-      //   // //授权书上传路径
-      //   // la,
-      //   // //真实姓名
-      //   // realName,
-      //   // idNumber,
-      //   // idPortrait,
-      //   // idEmblem,
-      //   //   } = this.authFormData;
-
-      //   console.log("aaaa", address);
-      //   // if (valid) {
-
-      //   //   this.loadingForm = true;
-      //   //   switch (authType) {
-      //   //     case 0:
-      //   //       break;
-      //   //     case 1:
-      //   //       break;
-      //   //   }
-      //   // }
-      // });
+      this.$refs.authForm.validate((valid) => {
+        console.log("01");
+        console.log(valid);
+        if (valid) {
+          const {
+            authType,
+            orgName,
+            org,
+            creditCode,
+            //营业执照图片路径
+            businessLicense,
+            //地址
+            address,
+            //详细地址
+            addressDetail,
+            contactName,
+            contactPhone,
+            contactEmail,
+            //授权书上传路径
+            la,
+            //真实姓名
+            realName,
+            idNumber,
+            idPortrait,
+            idEmblem,
+          } = this.authFormData;
+          // this.loadingForm = true;
+          console.log("??????????????");
+          console.log(authType);
+          console.log(address);
+          console.log(this.authFormData.authType);
+          switch (this.authFormData.authType) {
+            case 0:
+              console.log("0");
+              uploadDocument({
+                userId: this.userId,
+                did: this.userData,
+                authType: 102,
+                orgName,
+                org,
+                creditCode,
+                //营业执照图片路径
+                businessLicense,
+                //地址
+                address,
+                //详细地址
+                addressDetail,
+                contactName,
+                contactPhone,
+                contactEmail,
+                //授权书上传路径
+                la,
+                //真实姓名
+                realName,
+                idNumber,
+                idPortrait,
+                idEmblem,
+              }).then((res) => {
+                console.log(res);
+              });
+              break;
+            case 1:
+              break;
+          }
+        }
+      });
     },
   },
 };
+// .fileUploader {
+//   margin-bottom: 0.3125rem;
+//   ::v-deep .el-upload-list--picture-card {
+//     display: grid;
+//     li {
+//       width: 12.5rem;
+//       height: 12.5rem;
+//     }
+//   }
+//   ::v-deep .el-upload--picture-card {
+//     width: 12.5rem;
+//     height: 12.5rem;
+//     i {
+//       line-height: 12.5rem;
+//     }
+//   }
+// }
 </script>
 
 <style lang="scss" scoped>
@@ -709,39 +755,6 @@ export default {
 .el-upload__tip {
   margin: 0;
   word-break: break-all;
-}
-
-.fileUploader {
-  margin-bottom: 0.3125rem;
-  ::v-deep .el-upload-list--picture-card {
-    display: grid;
-    li {
-      width: 12.5rem;
-      height: 12.5rem;
-    }
-  }
-  ::v-deep .el-upload--picture-card {
-    width: 12.5rem;
-    height: 12.5rem;
-    i {
-      line-height: 12.5rem;
-    }
-  }
-}
-.displayType {
-  ::v-deep .el-upload--picture-card {
-    display: none;
-  }
-}
-.idPortraitType {
-  ::v-deep .el-upload--picture-card {
-    display: none;
-  }
-}
-.idEmblemType {
-  ::v-deep .el-upload--picture-card {
-    display: none;
-  }
 }
 
 .upload-file-list .el-upload-list__item {

@@ -1,63 +1,61 @@
 <template>
-    <div>
-        <el-row :gutter="20">
-            <el-col :span="8">
-              <el-upload
-                multiple
-                :action="uploadFileUrl"
-                :before-upload="handleBeforeUpload"
-                list-type="picture-card"
-                :limit="limit"
-                :on-error="handleUploadError"
-                :on-exceed="handleExceed"
-                :on-success="(e1,e2)=>handleUploadSuccess(e1,e2,'1')"
-                :on-preview="handlePictureCardPreview"
-                :headers="headers"
-                :class="UploaderClass"
-                :on-remove="(e1)=>handleDelete(e1,'1')"
-                :file-list="fileList"
-                ref="fileUpload"
-              >
-                <i class="el-icon-plus"></i>
-              </el-upload>
-            </el-col>
-            <el-col :span="15">
-              <div class="el-upload__tip" v-if="showTip">
-                1、请上传
-                <template v-if="fileSize">
-                  大小不超过 <b style="color: #f56c6c">{{ fileSize }}MB</b>
-                </template>
-              </div>
-              <div class="el-upload__tip" v-if="showTip">
-                <template v-if="fileType">
-                  2、格式为
-                  <b style="color: #f56c6c">{{ fileType.join("/") }}</b>
-                </template>
-              </div>
-              <div class="el-upload__tip" v-if="showTip">
-                <template v-if="fileType">
-                  3、上传的图片需清晰完整
-                </template>
-              </div>
-            </el-col>
-          </el-row>
+  <div>
+    <el-row :gutter="20">
+      <el-col :span="8">
+        <el-upload
+          multiple
+          :action="uploadFileUrl"
+          :before-upload="handleBeforeUpload"
+          list-type="picture-card"
+          :limit="limit"
+          :on-error="handleUploadError"
+          :on-exceed="handleExceed"
+          :on-success="(e1, e2) => handleUploadSuccess(e1, e2, '1')"
+          :on-preview="handlePictureCardPreview"
+          :headers="headers"
+          :class="UploaderClass"
+          :on-remove="(e1) => handleDelete(e1, '1')"
+          :file-list="fileList"
+          ref="fileUpload"
+        >
+          <i class="el-icon-plus"></i>
+        </el-upload>
+      </el-col>
+      <el-col :span="15">
+        <div class="el-upload__tip" v-if="showTip">
+          1、请上传
+          <template v-if="fileSize">
+            大小不超过 <b style="color: #f56c6c">{{ fileSize }}MB</b>
+          </template>
+        </div>
+        <div class="el-upload__tip" v-if="showTip">
+          <template v-if="fileType">
+            2、格式为
+            <b style="color: #f56c6c">{{ fileType.join("/") }}</b>
+          </template>
+        </div>
+        <div class="el-upload__tip" v-if="showTip">
+          <template v-if="fileType"> 3、上传的图片需清晰完整 </template>
+        </div>
+      </el-col>
+    </el-row>
 
-          <el-dialog :visible.sync="dialogVisible">
-            <img width="100%" :src="dialogImageUrl" alt="" />
-          </el-dialog>
-    </div>
+    <el-dialog :visible.sync="dialogVisible">
+      <img width="100%" :src="dialogImageUrl" alt="" />
+    </el-dialog>
+  </div>
 </template>
 
 <script>
 import { getToken } from "@/utils/auth";
 export default {
-    name: 'IdUpload',
-    props: {
+  name: "IdUpload",
+  props: {
     // type:{
     //   type: String,
     //   default: '',
-    // },  
-    
+    // },
+
     // 值
     value: [String, Object, Array],
     // 数量限制
@@ -75,16 +73,15 @@ export default {
       type: Array,
       default: () => ["jpg", "jpeg", "png"],
     },
-    // 是否显示提示     
+    // 是否显示提示
     isShowTip: {
       type: Boolean,
-      default: true
-    }
+      default: true,
+    },
   },
 
-    data() {
-        return {
-           
+  data() {
+    return {
       dialogVisible: false,
       dialogImageUrl: "",
       number: 0,
@@ -96,13 +93,10 @@ export default {
       },
       fileList: [],
 
-      
       displayType: false,
-      idPortraitType:false,
-      idEmblemType:false,
-        };
-    },
-    watch: {
+    };
+  },
+  watch: {
     // value: {
     //   handler(val) {
     //     if (val) {
@@ -132,27 +126,23 @@ export default {
     //   loading:false,
     // },
   },
-  created(){
-
-  },
-    mounted() {
-
-    },
-    computed:{
-            // 是否显示提示
+  created() {},
+  mounted() {},
+  computed: {
+    // 是否显示提示
     showTip() {
       return this.isShowTip && (this.fileType || this.fileSize);
     },
     UploaderClass() {
       return {
-        fileUploader: this.fileUploader,
-   
+        // fileUploader: this.fileUploader,
+
         displayType: this.displayType,
       };
     },
-    },
-    methods: {
-          // 上传前校检格式和大小
+  },
+  methods: {
+    // 上传前校检格式和大小
     handleBeforeUpload(file) {
       // 校检文件类型
       if (this.fileType) {
@@ -196,22 +186,21 @@ export default {
     },
     // 上传成功回调
     handleUploadSuccess(res, file) {
-        console.log(res,file)
-        // console.log(this.type,'type')
-        
-        // this.$emit('fileName',res)
-        // this.authFormData.businessLicense=res.fileName;
+      console.log(res, file);
+      // console.log(this.type,'type')
+
+      // this.$emit('fileName',res)
+      // this.authFormData.businessLicense=res.fileName;
       if (res.code === 200) {
-      
-      //   // this.displayType = true;
-      //   this.uploadList.push({ name: res.fileName, url: res.fileName });
-      //   // console.log("uploadedSuccessfully成共1");
-      this.$emit("input", res.fileName);
-      
-      this.uploadList.push(file)
+        this.displayType = true;
+        //   this.uploadList.push({ name: res.fileName, url: res.fileName });
+        //   // console.log("uploadedSuccessfully成共1");
+        this.$emit("input", res.fileName);
+        // this.$emit("displayType",true)
+        this.uploadList.push(file);
         this.uploadedSuccessfully();
       } else {
-        console.log('上传文件返回code不为200')
+        console.log("上传文件返回code不为200");
         this.number--;
         // this.$modal.closeLoading();
         this.$modal.msgError(res.msg);
@@ -221,22 +210,21 @@ export default {
     },
 
     // 删除文件
-    handleDelete(index,e3) {
-      // this.displayType = false;
-      this.fileList=[]
-      console.log(this.fileList)
+    handleDelete(index, e3) {
+      this.displayType = false;
+      this.fileList = [];
+      console.log(this.fileList);
       console.log("删除文件");
       // this.$emit("input", this.listToString(this.fileList));
     },
     // 上传结束处理
     uploadedSuccessfully() {
-  
       if (this.number > 0 && this.uploadList.length === this.number) {
         this.fileList = this.fileList.concat(this.uploadList);
-        console.log(this.fileList)
+        console.log(this.fileList);
         this.uploadList = [];
         this.number = 0;
-        // this.$emit("input", this.listToString( this.fileList));  
+        // this.$emit("input", this.listToString( this.fileList));
 
         // this.$emit("input", this.listToString( this.fileList[0].response.fileName));
         // this.$modal.closeLoading();
@@ -263,32 +251,31 @@ export default {
       this.dialogImageUrl = file.url;
       this.dialogVisible = true;
     },
-    },
+  },
 };
 </script>
 
 <style lang="scss" scoped>
-
 .fileUploader {
-    margin-bottom: 0.3125rem;
-    ::v-deep .el-upload-list--picture-card {
-      display: grid;
-      li {
-        width: 12.5rem;
-        height: 12.5rem;
-      }
-    }
-    ::v-deep .el-upload--picture-card{
+  margin-bottom: 0.3125rem;
+  ::v-deep .el-upload-list--picture-card {
+    display: grid;
+    li {
       width: 12.5rem;
       height: 12.5rem;
-      i{
-        line-height: 12.5rem;
-      }
     }
   }
-  .displayType {
-    ::v-deep .el-upload--picture-card {
-      display: none;
+  ::v-deep .el-upload--picture-card {
+    width: 12.5rem;
+    height: 12.5rem;
+    i {
+      line-height: 12.5rem;
     }
   }
+}
+.displayType {
+  ::v-deep .el-upload--picture-card {
+    display: none;
+  }
+}
 </style>
