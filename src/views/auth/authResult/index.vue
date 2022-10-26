@@ -63,23 +63,23 @@
     <div class="idData">
       <div class="centerTitle">认证信息</div>
       <div class="authData">
-        <el-row>
-          <el-col :span="2"><span class="dscTitle">认证类型</span></el-col>
-          <el-col :span="10"><span class="dscData">个人认证</span></el-col>
-          <el-col :span="2"> <span class="dscTitle">申请时间</span></el-col>
-          <el-col :span="10"
-            ><span class="dscData">{{ authData.applyDate }}</span></el-col
-          >
-        </el-row>
         <div v-if="authData.authType == '101'">
+          <el-row>
+            <el-col :span="2"><span class="dscTitle">认证类型</span></el-col>
+            <el-col :span="10"><span class="dscData">个人认证</span></el-col>
+            <el-col :span="2"> <span class="dscTitle">申请时间</span></el-col>
+            <el-col :span="10"
+              ><span class="dscData">{{ authData.applyDate }}</span></el-col
+            >
+          </el-row>
           <el-row style="margin-top: 1rem">
             <el-col :span="2"><span class="dscTitle">真实姓名</span></el-col>
             <el-col :span="10"
-              ><span class="dscData">{{ realName }}</span></el-col
+              ><span class="dscData">{{ authData.realName }}</span></el-col
             >
             <el-col :span="2"> <span class="dscTitle">身份证号</span></el-col>
             <el-col :span="10"
-              ><span class="dscData">{{ idNumber }}</span></el-col
+              ><span class="dscData">{{ authData.idNumber }}</span></el-col
             >
           </el-row>
           <el-row style="margin-top: 1rem">
@@ -102,22 +102,36 @@
           </el-row>
         </div>
         <div v-if="authData.authType == '102'">
+          <el-row>
+            <el-col :span="2"><span class="dscTitle">认证类型</span></el-col>
+            <el-col :span="10"><span class="dscData">企业认证</span></el-col>
+            <el-col :span="2"> <span class="dscTitle">申请时间</span></el-col>
+            <el-col :span="10"
+              ><span class="dscData">{{ authData.applyDate }}</span></el-col
+            >
+          </el-row>
           <el-row style="margin-top: 1rem">
             <el-col :span="2"><span class="dscTitle">机构名称</span></el-col>
-            <el-col :span="10"><span class="dscData">aweadas**</span></el-col>
+            <el-col :span="10"
+              ><span class="dscData">{{ authData.orgName }}</span></el-col
+            >
             <el-col :span="2"> <span class="dscTitle">机构简称</span></el-col>
-            <el-col :span="10"><span class="dscData">wae</span></el-col>
+            <el-col :span="10"
+              ><span class="dscData">{{ authData.org }}</span></el-col
+            >
           </el-row>
           <el-row style="margin-top: 1rem">
             <el-col :span="2"
               ><span class="dscTitle">统一社会信用代码</span></el-col
             >
             <el-col :span="10"
-              ><span class="dscData">1234567891234567dd</span></el-col
+              ><span class="dscData">{{ authData.creditCode }}</span></el-col
             >
             <el-col :span="2"> <span class="dscTitle">营业执照</span></el-col>
             <el-col :span="10"
-              ><span class="dscPoint">点击查看图片</span></el-col
+              ><span class="dscPoint" @click="showImg('businessLicense')"
+                >点击查看图片</span
+              ></el-col
             >
           </el-row>
           <el-row style="margin-top: 1rem">
@@ -130,20 +144,26 @@
           </el-row>
           <el-row style="margin-top: 1rem">
             <el-col :span="2"><span class="dscTitle">联系人邮箱</span></el-col>
-            <el-col :span="10"><span class="dscData">22e****.com</span></el-col>
+            <el-col :span="10"
+              ><span class="dscData">{{ authData.contactEmail }}</span></el-col
+            >
             <el-col :span="2">
               <span class="dscTitle">联系人手机号</span></el-col
             >
-            <el-col :span="10"><span class="dscData">138****1026</span></el-col>
+            <el-col :span="10"
+              ><span class="dscData">{{ authData.contactPhone }}</span></el-col
+            >
           </el-row>
           <el-row style="margin-top: 1rem">
             <el-col :span="2"><span class="dscTitle">通过时间</span></el-col>
             <el-col :span="10"
-              ><span class="dscData">2022-07-25 14:03:05</span></el-col
+              ><span class="dscData">{{ authData.reviewDate }}</span></el-col
             >
             <el-col :span="2"> <span class="dscTitle">授权书</span></el-col>
             <el-col :span="10"
-              ><span class="dscPoint">点击查看图片</span></el-col
+              ><span class="dscPoint" @click="showImg('la')"
+                >点击查看图片</span
+              ></el-col
             >
           </el-row>
         </div>
@@ -161,6 +181,7 @@ import { decrypt } from "@/utils/jsencrypt";
 import { mapState } from "vuex";
 import { authGetInfo } from "@/api/did";
 import store from "@/store";
+import { deepClone } from "@/utils";
 export default {
   name: "authResult",
 
@@ -169,12 +190,11 @@ export default {
       dialogVisible: false,
       dialogImageUrl: "",
       authData: {},
+      authDscData: {},
       baseUrl: process.env.VUE_APP_BASE_API,
     };
   },
   beforeRouteEnter(to, from, next) {
-    console.log(store.state.user.userData.authStatus);
-    console.log(to);
     if (
       store.state.user.userData.authStatus == 0 &&
       to.fullPath == "/auth/authResult"
@@ -191,27 +211,84 @@ export default {
     ...mapState({
       userData: (state) => state.user.userData,
     }),
-    realName() {
-      const realName = decrypt(this.authData.realName);
-      const len = realName.length;
-      return (
-        realName.substring(0, 3) + "***" + realName.substring(len - 2, len)
-      );
-    },
-    idNumber() {
-      const idNumber = decrypt(this.authData.idNumber);
-      const len = idNumber.length;
-      return (
-        idNumber.substring(0, 3) + "********" + idNumber.substring(len - 2, len)
-      );
-    },
   },
+  watch: {},
   methods: {
+    selectData(dsc, value) {
+      const slctDsc = decrypt(dsc);
+      const len = slctDsc.length;
+      switch (value) {
+        case "realName":
+          this.authData[value] = slctDsc;
+          slctDsc.toString().substring(0, 3) +
+            "***" +
+            slctDsc.toString().substring(len - 2, len);
+
+        case "idNumber":
+          this.authData[value] =
+            slctDsc.toString().substring(0, 3) +
+            "***" +
+            slctDsc.toString().substring(len - 2, len);
+          break;
+        case "email":
+          this.authData[value] =
+            slctDsc.toString().substring(0, 3) +
+            "***" +
+            slctDsc.toString().substring(len - 7, len);
+          break;
+        case "phone":
+          this.authData[value] =
+            slctDsc.toString().substring(0, 3) +
+            "***" +
+            slctDsc.toString().substring(len - 3, len);
+          break;
+        default:
+          break;
+      }
+    },
+
     getInfoData() {
       authGetInfo(this.userData.did).then((res) => {
-        this.authData = res.data;
+        const resData = res.data;
+
+        if (resData.realName) {
+          const name = decrypt(resData.realName);
+          if (name) {
+            const len = name.length;
+            resData.realName =
+              name.substring(0, 3) + "***" + name.substring(len - 2, len);
+          }
+        }
+        if (resData.contactEmail) {
+          const email = decrypt(resData.contactEmail);
+          if (email) {
+            const len = email.length;
+            resData.contactEmail =
+              email.substring(0, 3) + "****" + email.substring(len - 7, len);
+          }
+        }
+        if (resData.idNumber) {
+          const number = decrypt(resData.idNumber);
+          if (number) {
+            const len = number.length;
+            resData.idNumber =
+              number.substring(0, 3) +
+              "********" +
+              number.substring(len - 2, len);
+          }
+        }
+        if (resData.contactPhone) {
+          const phone = decrypt(resData.contactPhone);
+          if (phone) {
+            const len = phone.length;
+            resData.contactPhone =
+              phone.substring(0, 3) + "****" + phone.substring(len - 3, len);
+          }
+        }
+        this.authData = resData;
       });
     },
+
     showImg(value) {
       this.dialogImageUrl = this.baseUrl + this.authData[value];
       this.dialogVisible = true;

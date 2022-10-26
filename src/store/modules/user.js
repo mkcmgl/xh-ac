@@ -72,7 +72,7 @@ const user = {
             return new Promise((resolve, reject) => {
                 getInfo().then(res => {
 
-                    console.log('!!!!!!!!!!!!!!!!!!!!', res)
+                    console.log('// 获取用户信息!!!', res)
                     const user = res.user
                     const avatar = (user.avatar == "" || user.avatar == null) ? require("@/assets/images/profile.jpg") : process.env.VUE_APP_BASE_API + user.avatar;
                     if (res.roles && res.roles.length > 0) { // 验证返回的roles是否是一个非空数组
