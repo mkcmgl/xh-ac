@@ -82,27 +82,25 @@
             v-if="captchaEnabled"
             style="width: 100%"
           >
-
             <el-row>
               <el-col :span="15">
                 <el-input
-                v-model="registerForm.smsCode"
-                auto-complete="off"
-                placeholder="请输入短信验证码"
-                
-              >
-              </el-input>
+                  v-model="registerForm.smsCode"
+                  auto-complete="off"
+                  placeholder="请输入短信验证码"
+                >
+                </el-input>
               </el-col>
               <el-col :span="9">
                 <el-button
-                class="button"
-                @click="sendCode('phone')"
-                v-show="!isDisabled"
-                >发送短信验证码</el-button
-              >
-              <el-button class="button" disabled v-show="isDisabled">{{
-                text
-              }}</el-button>
+                  class="button"
+                  @click="sendCode('phone')"
+                  v-show="!isDisabled"
+                  >发送短信验证码</el-button
+                >
+                <el-button class="button" disabled v-show="isDisabled">{{
+                  text
+                }}</el-button>
               </el-col>
             </el-row>
           </el-form-item>
@@ -167,24 +165,28 @@
             v-if="captchaEnabled"
             style="width: 100%"
           >
-          <el-row>
-            <el-col :span="15">  <el-input
-              v-model="registerForm.emailCode"
-              auto-complete="off"
-              placeholder="请输入邮箱验证码"
-              style="width: 100%"
-            >
-            </el-input></el-col>
-            <el-col :span="9"><el-button
-              class="button"
-              @click="sendCode('email')"
-              v-show="!isDisabled"
-              >发送邮箱验证码</el-button
-            >
-            <el-button class="button" disabled v-show="isDisabled">{{
-              text
-            }}</el-button></el-col>
-          </el-row>
+            <el-row>
+              <el-col :span="15">
+                <el-input
+                  v-model="registerForm.emailCode"
+                  auto-complete="off"
+                  placeholder="请输入邮箱验证码"
+                  style="width: 100%"
+                >
+                </el-input
+              ></el-col>
+              <el-col :span="9"
+                ><el-button
+                  class="button"
+                  @click="sendCode('email')"
+                  v-show="!isDisabled"
+                  >发送邮箱验证码</el-button
+                >
+                <el-button class="button" disabled v-show="isDisabled">{{
+                  text
+                }}</el-button></el-col
+              >
+            </el-row>
           </el-form-item>
         </div>
         <div v-if="activeNume == 3">
@@ -237,10 +239,12 @@
             </div>
           </el-form-item>
         </div>
+
         <p class="footer">
           点击"注册"按钮，即代表您已阅读并同意 <a href="#">《**服务协议》</a>和
           <a href="#">《**隐私服务》</a>
         </p>
+
         <el-form-item style="width: 100%" class="register-footer">
           <el-button
             :loading="loading"
@@ -268,7 +272,12 @@
             </div>
             <div>
               私钥：{{ privateKey }}
-              <i class="el-icon-document-copy"></i>
+              <i
+                class="el-icon-document-copy"
+                v-clipboard:copy="privateKey"
+                v-clipboard:success="copySuccess"
+              >
+              </i>
             </div>
             <span slot="footer" class="dialog-footer">
               <el-button
@@ -369,7 +378,7 @@ export default {
       }
     };
     return {
-      privateKey: "",
+      privateKey: "123",
       dialogVisible: false,
       activeNume: 1,
       activeName: "first",
@@ -414,6 +423,14 @@ export default {
     this.getCode();
   },
   methods: {
+    //复制成功
+    copySuccess() {
+      this.$message({
+        message: "复制成功",
+        type: "success",
+      });
+    },
+    //获取验证码图片
     getCode() {
       getCodeImg().then((res) => {
         this.captchaEnabled =
@@ -424,6 +441,7 @@ export default {
         }
       });
     },
+    //切换注册方式 表单的控制
     handleClick(tab, event) {
       this.$refs["registerForm"].resetFields();
       if (tab.name == "second") {
@@ -436,6 +454,7 @@ export default {
         this.activeNume = 1;
       }
     },
+    //发送短信和邮箱验证码
     sendCode(type) {
       const vm = this;
       console.log(type);
@@ -619,6 +638,7 @@ export default {
         }
       });
     },
+    //私钥弹窗关闭
     handleClose() {
       this.dialogVisible = false;
       this.$router.push("login");
