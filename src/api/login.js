@@ -1,7 +1,7 @@
 import request from '@/utils/request'
 
 
-// 登录方法
+// 登录方法  密码登录
 export function login(username, password, code, uuid) {
     const data = {
         username,
@@ -18,7 +18,40 @@ export function login(username, password, code, uuid) {
         data: data
     })
 }
+// 登录方法  私钥登录
+export function privateKey(privateKey, code, uuid) {
+    const data = {
+        privateKey,
+        code,
+        uuid
+    }
+    return request({
+        url: '/login/privateKey',
+        headers: {
+            isToken: false
+        },
+        method: 'post',
+        data: data
+    })
+}
 
+// 登录方法  手机号登录
+export function phone(phoneNumber, code, uuid, receiveCode) {
+    const data = {
+        phoneNumber,
+        code,
+        uuid,
+        receiveCode
+    }
+    return request({
+        url: '/login/phone',
+        headers: {
+            isToken: false
+        },
+        method: 'post',
+        data: data
+    })
+}
 // 注册方法
 export function register(data) {
     return request({

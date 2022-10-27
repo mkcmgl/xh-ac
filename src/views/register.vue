@@ -318,7 +318,7 @@ export default {
     const validateUserName = (rule, value, callback) => {
       if (value === "") {
         callback(new Error("请输入您的账号"));
-      } else if (!/^[a-zA-Z0-9_-]{5,20}$/.test(value)) {
+      } else if (value.length < 5 && value.length > 20) {
         callback(new Error("用户账号长度必须介于 5 和 20 之间"));
       } else {
         callback();
@@ -378,7 +378,7 @@ export default {
       }
     };
     return {
-      privateKey: "123",
+      privateKey: "",
       dialogVisible: false,
       activeNume: 1,
       activeName: "first",

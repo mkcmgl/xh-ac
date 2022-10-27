@@ -15,61 +15,109 @@
           class="login-form"
         >
           <h3 class="login-title">用户登录</h3>
-          <el-tabs
-            v-model="activeName"
-            @tab-click="handleClick"
-            :stretch="true"
-            class="tabs"
-          >
-            <el-tab-pane label="密码登录" name="first"></el-tab-pane>
-            <el-tab-pane label="验证码登录" name="second"></el-tab-pane>
-          </el-tabs>
-          <div v-if="activeFirst">
-            <el-form-item prop="username" class="input-form">
-              <el-input
-                v-model="loginForm.username"
-                type="text"
-                auto-complete="off"
-                placeholder="请输入账号/手机号/邮箱"
-              >
-              </el-input>
-            </el-form-item>
-            <el-form-item prop="password">
-              <el-input
-                v-model="loginForm.password"
-                type="password"
-                auto-complete="off"
-                placeholder="请输入登录密码"
-                @keyup.enter.native="handleLogin"
-              >
-              </el-input>
-            </el-form-item>
-            <el-form-item prop="code" v-if="captchaEnabled">
-              <el-input
-                v-model="loginForm.code"
-                auto-complete="off"
-                placeholder="请输入验证码"
-                style="width: 63%"
-                @keyup.enter.native="handleLogin"
-              >
-              </el-input>
-              <div class="login-code">
-                <img :src="codeUrl" @click="getCode" class="login-code-img" />
-              </div>
-            </el-form-item>
-          </div>
-          <div v-else>
-            <el-form-item prop="phone">
-              <el-input
-                v-model="loginForm.phone"
-                type="text"
-                auto-complete="off"
-                placeholder="请输入手机号"
-                style="width: 31.25rem"
-              >
-              </el-input>
-            </el-form-item>
+          <div v-if="!bidLogin">
+            <el-tabs
+              v-model="loginForm.activeName"
+              @tab-click="handleClick"
+              :stretch="true"
+              class="tabs"
+            >
+              <el-tab-pane label="密码登录" name="first"></el-tab-pane>
+              <el-tab-pane label="验证码登录" name="second"></el-tab-pane>
+            </el-tabs>
+            <div v-if="activeFirst">
+              <el-form-item prop="username" class="input-form">
+                <el-input
+                  v-model="loginForm.username"
+                  type="text"
+                  auto-complete="off"
+                  placeholder="请输入账号/手机号/邮箱"
+                >
+                </el-input>
+              </el-form-item>
+              <el-form-item prop="password">
+                <el-input
+                  v-model="loginForm.password"
+                  type="password"
+                  auto-complete="off"
+                  placeholder="请输入登录密码"
+                  @keyup.enter.native="handleLogin"
+                >
+                </el-input>
+              </el-form-item>
+              <el-form-item prop="code" v-if="captchaEnabled">
+                <el-input
+                  v-model="loginForm.code"
+                  auto-complete="off"
+                  placeholder="请输入验证码"
+                  style="width: 63%"
+                  @keyup.enter.native="handleLogin"
+                >
+                </el-input>
+                <div class="login-code">
+                  <img :src="codeUrl" @click="getCode" class="login-code-img" />
+                </div>
+              </el-form-item>
+            </div>
+            <div v-else>
+              <el-form-item prop="phone">
+                <el-input
+                  v-model="loginForm.phone"
+                  type="text"
+                  auto-complete="off"
+                  placeholder="请输入手机号"
+                  style="width: 31.25rem"
+                >
+                </el-input>
+              </el-form-item>
 
+              <el-form-item prop="code" v-if="captchaEnabled">
+                <el-input
+                  v-model="loginForm.code"
+                  auto-complete="off"
+                  placeholder="请输入验证码"
+                  style="width: 63%"
+                  @keyup.enter.native="handleLogin"
+                >
+                </el-input>
+                <div class="login-code">
+                  <img :src="codeUrl" @click="getCode" class="login-code-img" />
+                </div>
+              </el-form-item>
+              <el-form-item prop="smsCde" v-if="captchaEnabled">
+                <el-input
+                  v-model="loginForm.smsCde"
+                  auto-complete="off"
+                  placeholder="请输入短信验证码"
+                  style="width: 63%"
+                  @keyup.enter.native="handleLogin"
+                >
+                </el-input>
+                <el-button
+                  class="phoneCode"
+                  @click="sendSms"
+                  v-show="!isDisabled"
+                  >获取短信验证码</el-button
+                >
+                <el-button
+                  class="phoneCode"
+                  v-show="isDisabled"
+                  :disabled="true"
+                  >{{ text }}</el-button
+                >
+              </el-form-item>
+            </div>
+          </div>
+          <div v-if="bidLogin">
+            <el-form-item prop="privateKey" class="input-form">
+              <el-input
+                v-model="loginForm.privateKey"
+                type="text"
+                auto-complete="off"
+                placeholder="请输入私钥"
+              >
+              </el-input>
+            </el-form-item>
             <el-form-item prop="code" v-if="captchaEnabled">
               <el-input
                 v-model="loginForm.code"
@@ -82,25 +130,6 @@
               <div class="login-code">
                 <img :src="codeUrl" @click="getCode" class="login-code-img" />
               </div>
-            </el-form-item>
-            <el-form-item prop="smsCde" v-if="captchaEnabled">
-              <el-input
-                v-model="loginForm.smsCde"
-                auto-complete="off"
-                placeholder="请输入短信验证码"
-                style="width: 63%"
-                @keyup.enter.native="handleLogin"
-              >
-              </el-input>
-              <el-button class="phoneCode" @click="sendSms" v-show="!isDisabled"
-                >获取短信验证码</el-button
-              >
-              <el-button
-                class="phoneCode"
-                v-show="isDisabled"
-                :disabled="true"
-                >{{ text }}</el-button
-              >
             </el-form-item>
           </div>
           <!-- <el-checkbox v-model="loginForm.rememberMe" style="margin:0px 0px 25px 0px;">记住密码</el-checkbox> -->
@@ -118,7 +147,8 @@
             </el-button>
           </el-form-item>
           <div class="footer">
-            <a href="">BID登录</a>
+            <a v-if="!bidLogin" @click="handleClick">BID登录</a>
+            <a v-if="bidLogin" @click="handleClick">切换其他登录方法</a>
             <router-link to="/register">没有账号?去注册</router-link>
           </div>
         </el-form>
@@ -132,43 +162,26 @@
 import { getCodeImg, getCodeSms } from "@/api/login";
 import Cookies from "js-cookie";
 import { encrypt, decrypt } from "@/utils/jsencrypt";
-
+import {
+  validPassword,
+  validName,
+  validPhone,
+  validSpace,
+} from "@/utils/validate";
 export default {
   name: "Login",
   data() {
-    var validatePhone = (rule, value, callback) => {
-      console.log(rule, value, callback);
-      if (value === "") {
-        callback(new Error("请输入手机号"));
-      } else if (
-        !/^(?:(?:\+|00)86)?1(?:(?:3[\d])|(?:4[5-79])|(?:5[0-35-9])|(?:6[5-7])|(?:7[0-8])|(?:8[\d])|(?:9[189]))\d{8}$/.test(
-          value
-        )
-      ) {
-        callback(new Error("请输入正确的手机号"));
-      } else {
-        callback();
-      }
-    };
-    var validateUserName = (rule, value, callback) => {
-  
-      if (value === "") {
-        callback(new Error("请输入您的账号"));
-      } else if (!/^[a-zA-Z0-9_-]{5,20}$/.test(value)) {
-        callback(new Error("用户账号长度必须介于 5 和 20 之间"));
-      } else {
-        callback();
-      }
-    };
     return {
+      bidLogin: false,
       isDisabled: false,
       activeFirst: true,
-      activeName: "first",
+
       text: "",
       time: "",
       codeUrl: "",
       count: "",
       loginForm: {
+        activeName: "first",
         username: "",
         password: "",
         rememberMe: false,
@@ -176,16 +189,67 @@ export default {
         code: "",
         smsCde: "",
         uuid: "",
+        privateKey: "",
       },
       loginRules: {
-        phone: [{ validator: validatePhone, trigger: "blur" }],
-        username: [{ validator: validateUserName, trigger: "blur" }],
-        password: [
-          { required: true, trigger: "blur", message: "请输入您的密码" },
+        phone: [
+          {
+            required: true,
+            trigger: "blur",
+            message: "请输入手机号",
+          },
+          {
+            required: true,
+            validator: validPhone,
+            trigger: "blur",
+          },
+          { required: true, validator: validSpace, trigger: "blur" },
         ],
-        code: [{ required: true, trigger: "blur", message: "请输入验证码" }],
+        username: [
+          {
+            required: true,
+            trigger: "blur",
+            message: "请输入您的账号",
+          },
+          { required: true, validator: validName, trigger: "blur" },
+          { required: true, validator: validSpace, trigger: "blur" },
+        ],
+        password: [
+          {
+            required: true,
+            trigger: "blur",
+            message: "请输入图片验证码",
+          },
+          { required: true, validator: validPassword, trigger: "blur" },
+          { required: true, validator: validSpace, trigger: "blur" },
+        ],
+        code: [
+          {
+            required: true,
+            trigger: "blur",
+            message: "请输入图片验证码",
+          },
+          {
+            required: true,
+            validator: validSpace,
+            trigger: "blur",
+          },
+        ],
         smsCde: [
-          { required: true, trigger: "blur", message: "请输入短信验证码" },
+          {
+            required: true,
+            trigger: "blur",
+            message: "请输入验证码",
+          },
+          { required: true, validator: validSpace, trigger: "blur" },
+        ],
+        privateKey: [
+          {
+            required: true,
+            trigger: "blur",
+            message: "请输入私钥",
+          },
+          { required: true, validator: validSpace, trigger: "blur" },
         ],
       },
       loading: false,
@@ -209,6 +273,7 @@ export default {
     // this.getCookie();
   },
   methods: {
+    //获取图片验证码
     getCode() {
       getCodeImg().then((res) => {
         this.captchaEnabled =
@@ -219,6 +284,7 @@ export default {
         }
       });
     },
+    //发送手机和邮箱验证码
     sendSms() {
       if (this.loginForm.phone == "") {
         this.$message.error("请输入手机号");
@@ -228,10 +294,15 @@ export default {
         )
       ) {
         // this.$message.error("请输入正确的手机号");
-      }else if(this.loginForm.code==''){return}
-      
-      else {
-        getCodeSms(this.loginForm.code,this.loginForm.phone, "login",this.loginForm.uuid).then((res) => {
+      } else if (this.loginForm.code == "") {
+        return;
+      } else {
+        getCodeSms(
+          this.loginForm.code,
+          this.loginForm.phone,
+          "login",
+          this.loginForm.uuid
+        ).then((res) => {
           console.log(res);
           if (res.code == 200) {
             this.isDisabled = false;
@@ -255,7 +326,7 @@ export default {
         }, 1000);
       }
     },
-
+    //处理cookie
     getCookie() {
       const username = Cookies.get("username");
       const password = Cookies.get("password");
@@ -266,6 +337,7 @@ export default {
           password === undefined ? this.loginForm.password : decrypt(password),
         rememberMe: rememberMe === undefined ? false : Boolean(rememberMe),
       };
+      console.log(this.loginForm);
     },
     //登录校验及发送登录接口
     handleLogin() {
@@ -285,33 +357,42 @@ export default {
             Cookies.remove("password");
             Cookies.remove("rememberMe");
           }
-          this.$store.dispatch("Login", this.loginForm).then(() => {
-
-            // this.$store.dispatch('GetDidInfo').then(()=>{
+          this.$store
+            .dispatch("Login", this.loginForm)
+            .then(() => {
+              // this.$store.dispatch('GetDidInfo').then(()=>{
               this.$router.push({ path: this.redirect || "/" }).catch(() => {});
-            // })
-         
-       
-          }).catch(() => {
-          this.loading = false;
-          if (this.captchaEnabled) {
-            this.getCode();
-          }
-          });
+              // })
+            })
+            .catch(() => {
+              this.loading = false;
+              if (this.captchaEnabled) {
+                this.getCode();
+              }
+            });
         }
       });
     },
+    //切换BID登录
+
+    // checkBidLogin() {
+    //
+    //   this.$refs["loginForm"].resetFields();
+    // },
     //切换登录方式
     handleClick(tab, event) {
-      console.log(tab.name, event);
-
       this.$refs["loginForm"].resetFields();
 
       if (tab.name == "second") {
+        //手机
         this.activeFirst = false;
-      }
-      if (tab.name == "first") {
+      } else if (tab.name == "first") {
+        //电话
         this.activeFirst = true;
+      } else {
+        //  BID登录
+        this.bidLogin = !this.bidLogin;
+        this.loginForm.activeName = this.bidLogin ? "three" : "first";
       }
     },
   },
@@ -321,7 +402,6 @@ export default {
 
 
 <style rel="stylesheet/scss" lang="scss" scoped>
-
 .login-code img {
   width: 100%;
   height: 3.375rem;
