@@ -9,8 +9,7 @@
           <div class="user" v-if="userData.did != null">
             <span class="numDataTitle">你好！{{ userData.userName }}</span>
             <span class="numData">{{ userData.did }}</span>
-            <span class="userType">{{switchRoles}}</span>
-            
+            <span class="userType">{{ switchRoles }}</span>
           </div>
           <div class="user" v-else>
             <span class="numDatatitle"
@@ -40,133 +39,152 @@
       <div class="userIdData">
         <!-- <el-row :gutter="30">
           <el-col :span="12"> -->
-            <div class="userDataAndLogin">
-              <span class="userDataTitle">基本信息</span>
-              <ul class="userDataList">
-                <li>
-                  <span class="name">账号</span>
-                  <span class="nameData">{{ userData.userName }}</span>
-                </li>
-                <li>
-                  <span class="name">账号ID</span>
-                  <span class="nameData">{{ userData.userId }}</span>
-                </li>
-                <li>
-                  <span class="name">手机号</span>
-                  <span class="nameData">{{ phoneNumber }}</span>
-                </li>
-                <li>
-                  <span class="name">注册时间</span>
-                  <span class="nameData">{{ userData.createTime }}</span>
-                </li>
-                <li>
-                  <span class="name">认证状态</span>
-                  <div
-                    v-if="userData.authStatus == 1 || userData.authStatus == 2"
-                    style="display: inline"
-                  >
-                    <span class="nameData nameTrueBack">{{
-                      authStatusDsc
-                    }}</span>
-                  </div>
-                  <div v-else style="display: inline">
-                    <span class="nameData nameFaleBack">{{
-                      authStatusDsc
-                    }}</span>
-                    <span
-                      class="edit"
-                      v-if="userData.authStatus"
-                      @click="toAuth"
-                      >立刻认证</span
-                    >
-                  </div>
-                </li>
-              </ul>
-            </div>
-          <!-- </el-col>
+        <div class="userDataAndLogin">
+          <span class="userDataTitle">基本信息</span>
+          <ul class="userDataList">
+            <li>
+              <span class="name">账号</span>
+              <span class="nameData">{{ userData.userName }}</span>
+            </li>
+            <li>
+              <span class="name">账号ID</span>
+              <span class="nameData">{{ userData.userId }}</span>
+            </li>
+            <li>
+              <span class="name">手机号</span>
+              <span class="nameData">{{ phoneNumber }}</span>
+            </li>
+            <li>
+              <span class="name">注册时间</span>
+              <span class="nameData">{{ userData.createTime }}</span>
+            </li>
+            <li>
+              <span class="name">认证状态</span>
+              <div
+                v-if="userData.authStatus == 1 || userData.authStatus == 2"
+                style="display: inline"
+              >
+                <span class="nameData nameTrueBack">{{ authStatusDsc }}</span>
+              </div>
+              <div v-else style="display: inline">
+                <span class="nameData nameFaleBack">{{ authStatusDsc }}</span>
+                <span class="edit" v-if="userData.authStatus" @click="toAuth"
+                  >立刻认证</span
+                >
+              </div>
+            </li>
+          </ul>
+        </div>
+        <!-- </el-col>
           <el-col :span="12"> -->
-            <div class="userDataAndLogin">
-              <span class="userDataTitle">登录方式</span>
-              <ul class="userDataList">
-                <li>
-                  <span class="name">登录密码</span>
-                  <div
-                  v-if="userData.password==''"
-                  style="display: inline"
-                  >
-                  <span class="nameData">无</span>
-                  <span class="edit" @click="showDialog('psw', 1)">设置</span>
-                </div>
-                <div v-else  style="display: inline">
-                  <span class="nameData">******</span>
-                  <span class="edit" @click="showDialog('psw', 11)">修改</span>
-                </div>
-                  
-                </li>
-                <li>
-                  <span class="name">手机号</span>
-                  <div
-                  v-if="userData.phonenumber==''"
-                  style="display: inline"
-                  >
-                  <span class="nameData">无</span>
-                  <span class="edit" @click="showDialog('phone', 3)">绑定</span>
-                </div>
-                <div v-else  style="display: inline">
-                  <span class="nameData">{{phoneNumber}}</span>
-                  <span class="edit" @click="showDialog('phone', 33)">修改</span>
-                </div>
-
-                </li>
-                <li>
-                  <span class="name">邮箱</span>
-                  <div
-                  v-if="userData.email==''"
-                  style="display: inline"
-                  >
-                  <span class="nameData">无</span>
-                  <span class="edit" @click="showDialog('email', 4)">绑定</span>
-                </div>
-                <div v-else  style="display: inline">
-                  <span class="nameData">{{emaillNumber}}</span>
-                  <span class="edit" @click="showDialog('email', 44)">修改</span>
-                </div>
-
-                </li>
-              </ul>
-            </div>
-          <!-- </el-col>
+        <div class="userDataAndLogin">
+          <span class="userDataTitle">登录方式</span>
+          <ul class="userDataList">
+            <li>
+              <span class="name">登录密码</span>
+              <div v-if="userData.password == ''" style="display: inline">
+                <span class="nameData">无</span>
+                <span class="edit" @click="showDialog('psw', 1)">设置</span>
+              </div>
+              <div v-else style="display: inline">
+                <span class="nameData">******</span>
+                <span class="edit" @click="showDialog('psw', 11)">修改</span>
+              </div>
+            </li>
+            <li>
+              <span class="name">手机号</span>
+              <div v-if="userData.phonenumber == ''" style="display: inline">
+                <span class="nameData">无</span>
+                <span class="edit" @click="showDialog('phone', 3)">绑定</span>
+              </div>
+              <div v-else style="display: inline">
+                <span class="nameData">{{ phoneNumber }}</span>
+                <span class="edit" @click="showDialog('phone', 33)">修改</span>
+              </div>
+            </li>
+            <li>
+              <span class="name">邮箱</span>
+              <div v-if="userData.email == ''" style="display: inline">
+                <span class="nameData">无</span>
+                <span class="edit" @click="showDialog('email', 4)">绑定</span>
+              </div>
+              <div v-else style="display: inline">
+                <span class="nameData">{{ emaillNumber }}</span>
+                <span class="edit" @click="showDialog('email', 44)">修改</span>
+              </div>
+            </li>
+          </ul>
+        </div>
+        <!-- </el-col>
         </el-row> -->
       </div>
     </div>
+    <!-- 导出私钥 -->
     <el-dialog
       v-if="showType == 'key'"
       title="导出私钥"
       :visible.sync="dialogVisible"
       width="30%"
-      :before-close="handleClose"
       class="keyTitle"
+      :before-close="handleSyClose"
     >
-      <el-form label-position="left" label-width="10rem" class="export-key">
-        <el-form-item
-          label="安全密码"
-          :rules="[
-            { required: true, message: '年龄不能为空' },
-            { type: 'number', message: '年龄必须为数字值' },
-          ]"
-          class="test"
-        >
-          <el-input placeholder="请输入安全密码"></el-input>
+      <el-form
+        ref="didForm"
+        :model="didForm"
+        :rules="didRules"
+        label-position="left"
+        label-width="10rem"
+        class="export-key"
+      >
+        <el-form-item label="安全密码" class="test" prop="securePassword">
+          <el-input
+            type="password"
+            v-model="didForm.securePassword"
+            placeholder="请输入安全密码"
+            @keyup.enter.native="handleSy"
+          ></el-input>
         </el-form-item>
       </el-form>
 
       <span slot="footer" class="dialog-footer">
         <el-button @click="dialogVisible = false">取 消</el-button>
-        <el-button type="primary" @click="dialogVisible = false"
+        <el-button type="primary" @click="handleSy">确 定</el-button>
+      </span>
+    </el-dialog>
+    <!-- 导出私钥成功 -->
+    <el-dialog
+      v-if="showType == 'keySuccess'"
+      title="导出私钥"
+      :visible.sync="dialogVisible"
+      width="30%"
+    >
+      <div class="privatetop">
+        <div>
+          私钥导出后请在安全的环境中妥善保管，切勿保存至邮箱、网盘、微信收藏等;
+        </div>
+        <div>请勿分享私钥，请勿使用网络工具传输私钥;</div>
+        <div>请勿丢失私钥，丢失后无法找回;</div>
+      </div>
+      <div>
+        私钥：{{ privateKey }}
+        <i
+          class="el-icon-document-copy"
+          v-clipboard:copy="privateKey"
+          v-clipboard:success="copySuccess"
+        >
+        </i>
+      </div>
+      <span slot="footer" class="dialog-footer">
+        <el-button
+          type="primary"
+          @click="dialogVisible = false"
+          class="privateButton"
           >确 定</el-button
         >
       </span>
     </el-dialog>
+
+    <!-- 修改私钥安全密码 -->
     <el-dialog
       v-if="showType == 'psw'"
       title="修改安全密码"
@@ -175,7 +193,14 @@
       :before-close="handleClose"
       class="keyTitle"
     >
-      <el-form label-position="left" label-width="10rem" class="export-key">
+      <el-form
+        label-position="left"
+        ref="didForm"
+        :model="didForm"
+        :rules="didRules"
+        label-width="10rem"
+        class="export-key"
+      >
         <el-form-item
           label="当前密码"
           :rules="[{ required: true, message: '当前密码' }]"
@@ -300,7 +325,14 @@
 
 <script>
 import { mapState } from "vuex";
-import { encrypt,decrypt } from "@/utils/jsencrypt";
+import { encrypt, decrypt } from "@/utils/jsencrypt";
+import { exportPrivateKey } from "@/api/login";
+import {
+  validPassword,
+  validName,
+  validPhone,
+  validSpace,
+} from "@/utils/validate";
 export default {
   name: "Did",
 
@@ -309,6 +341,25 @@ export default {
       dialogVisible: false,
       showType: "",
       type: -1,
+      privateKey: "",
+      didForm: {
+        securePassword: "",
+      },
+      didRules: {
+        securePassword: [
+          {
+            required: true,
+            trigger: "blur",
+            message: "请输入安全密码",
+          },
+          {
+            required: true,
+            validator: validPassword,
+            trigger: "blur",
+          },
+          { required: true, validator: validSpace, trigger: "blur" },
+        ],
+      },
     };
   },
 
@@ -316,17 +367,26 @@ export default {
   computed: {
     ...mapState({
       userData: (state) => state.user.userData,
-      roles:(state)=>state.user.roles,
+      roles: (state) => state.user.roles,
     }),
     phoneNumber() {
-      const phone =decrypt(this.userData.phonenumber)
-      const phoneX= phone.substring(0,3) + "****" + phone.substring(8);
-      return phoneX;
+      const phone = decrypt(this.userData.phonenumber);
+      if (phone) {
+        const phoneX = phone.substring(0, 3) + "****" + phone.substring(8);
+        return phoneX;
+      } else {
+        return "无";
+      }
     },
-    emaillNumber(){
-      const email =decrypt(this.userData.email)
-      const emailX= email.substring(0,3) + "****" + email.substring(email.lenght-10);
-      return emailX; 
+    emaillNumber() {
+      const email = decrypt(this.userData.email);
+      if (email) {
+        const emailX =
+          email.substring(0, 3) + "****" + email.substring(email.lenght - 10);
+        return emailX;
+      } else {
+        return "无";
+      }
     },
     authStatusDsc() {
       if (this.userData.authStatus == 1) {
@@ -339,31 +399,52 @@ export default {
         return "未认证";
       }
     },
-    switchRoles(){
-      const roleName =this.roles[0]
- 
+    switchRoles() {
+      const roleName = this.roles[0];
+
       switch (roleName) {
-        case 'organization':
-          return '企业用户';
-        case 'admin':
-          return '管理员';
-          case 'common':
-          return '普通角色';
-          case 'manager':
-          return '超级管理员';
-          case 'person':
-          return '个人用户';
-          case 'backbone':
-          return '骨干链管理员';
-          case 'subchain':
-          return '子链管理员';
-      
+        case "organization":
+          return "企业用户";
+        case "admin":
+          return "管理员";
+        case "common":
+          return "普通角色";
+        case "manager":
+          return "超级管理员";
+        case "person":
+          return "个人用户";
+        case "backbone":
+          return "骨干链管理员";
+        case "subchain":
+          return "子链管理员";
+
         default:
           break;
       }
-    }
+    },
   },
   methods: {
+    //复制成功
+    copySuccess() {
+      this.$message({
+        message: "复制成功",
+        type: "success",
+      });
+    },
+    // 导出私钥校验 及接口发送
+    handleSy() {
+      this.$refs.didForm.validate((valid) => {
+        if (valid) {
+          const password = encrypt(this.didForm.securePassword);
+          const did = encrypt(this.userData.did);
+          exportPrivateKey(password, did).then((res) => {
+            this.privateKey = res.privateKey;
+            this.handleSyClose();
+            this.showDialog("keySuccess");
+          });
+        }
+      });
+    },
     showDialog(value, type) {
       this.dialogVisible = true;
       this.showType = value;
@@ -378,6 +459,13 @@ export default {
         })
         .catch((_) => {});
     },
+    handleSyClose() {
+      // this.didForm.securePassword = "";
+      this.$nextTick(() => {
+        this.$refs.didForm.resetFields();
+      });
+      this.dialogVisible = false;
+    },
     toAuth() {
       this.$router.push("/auth");
     },
@@ -387,7 +475,22 @@ export default {
 
 <style lang="scss" scoped>
 @import "~@/assets/styles/public.scss";
-
+.el-icon-document-copy {
+  color: #2f88ff;
+  cursor: pointer;
+}
+.privatetop {
+  background-color: rgb(255, 251, 230);
+  border: 0.0625rem solid rgb(255, 229, 143);
+  padding-left: 0.625rem;
+  margin-bottom: 1.125rem;
+  div {
+    font-size: 0.5rem;
+    font-weight: 400;
+    color: #e6a23c;
+    line-height: 1.125rem;
+  }
+}
 .leftIcon {
   float: right;
   margin-top: 2.6rem;

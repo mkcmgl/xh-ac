@@ -34,7 +34,19 @@ export function privateKey(privateKey, code, uuid) {
         data: data
     })
 }
+//导出私钥
+export function exportPrivateKey(securePassword, did) {
+    const data = {
+        securePassword,
+        did
+    }
+    return request({
+        url: '/did/exportPrivateKey',
 
+        method: 'post',
+        data: data
+    })
+}
 // 登录方法  手机号登录
 export function phone(phoneNumber, code, uuid, receiveCode) {
     const data = {
