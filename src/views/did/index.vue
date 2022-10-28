@@ -88,7 +88,7 @@
               </div>
               <div v-else style="display: inline">
                 <span class="nameData">******</span>
-                <span class="edit" @click="showDialog('psw', 11)">修改</span>
+                <span class="edit" @click="showDialog('pswupd', 11)">修改</span>
               </div>
             </li>
             <li>
@@ -99,7 +99,6 @@
               </div>
               <div v-else style="display: inline">
                 <span class="nameData">{{ phoneNumber }}</span>
-                <span class="edit" @click="showDialog('phone', 33)">修改</span>
               </div>
             </li>
             <li>
@@ -110,7 +109,6 @@
               </div>
               <div v-else style="display: inline">
                 <span class="nameData">{{ emaillNumber }}</span>
-                <span class="edit" @click="showDialog('email', 44)">修改</span>
               </div>
             </li>
           </ul>
@@ -200,7 +198,6 @@
         :rules="didRules"
         label-width="10rem"
         class="export-key"
-        :before-close="handleSyClose"
       >
         <el-form-item label="当前密码" class="test" prop="passwordOld">
           <el-input
@@ -233,7 +230,54 @@
         <el-button type="primary" @click="handleSyUpdate">确 定</el-button>
       </span>
     </el-dialog>
+    <!-- 修改登录密码 -->
+    <el-dialog
+      v-if="showType == 'pswupd'"
+      title="修改登录密码"
+      :visible.sync="dialogVisible"
+      width="30%"
+      :before-close="handleSyClose"
+      class="keyTitle"
+    >
+      <el-form
+        label-position="left"
+        ref="didForm"
+        :model="didForm"
+        :rules="didRules"
+        label-width="10rem"
+        class="export-key"
+      >
+        <el-form-item label="当前密码" class="test" prop="passwordOld">
+          <el-input
+            type="password"
+            v-model="didForm.passwordOld"
+            placeholder="请输入当前密码"
+            @keyup.enter.native="handleUpdatePsw"
+          ></el-input>
+        </el-form-item>
+        <el-form-item label="新密码" class="test" prop="passwordNew">
+          <el-input
+            type="password"
+            v-model="didForm.passwordNew"
+            placeholder="请输入新密码"
+            @keyup.enter.native="handleUpdatePsw"
+          ></el-input>
+        </el-form-item>
+        <el-form-item label="确认密码" class="test" prop="passwordConfirm">
+          <el-input
+            type="password"
+            v-model="didForm.passwordConfirm"
+            placeholder="请输入确认密码"
+            @keyup.enter.native="handleUpdatePsw"
+          ></el-input>
+        </el-form-item>
+      </el-form>
 
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="dialogVisible = false">取 消</el-button>
+        <el-button type="primary" @click="handleSyUpdate">确 定</el-button>
+      </span>
+    </el-dialog>
     <!-- 绑定手机号 -->
     <el-dialog
       v-if="showType == 'phone'"
@@ -245,7 +289,7 @@
     >
       <el-form
         :model="didForm"
-        :before-close="handleSyClose"
+        ref="didForm"
         :rules="didRules"
         label-position="left"
         label-width="10rem"
@@ -272,37 +316,45 @@
         <el-button type="primary" @click="handlePhone">确 定</el-button>
       </span>
     </el-dialog>
+    <!-- 绑定邮箱号-->
     <el-dialog
       v-if="showType == 'email'"
       title="绑定邮箱"
       :visible.sync="dialogVisible"
       width="30%"
-      :before-close="handleClose"
+      :before-close="handleSyClose"
       class="keyTitle"
     >
-      <el-form label-position="left" label-width="10rem" class="export-key">
-        <el-form-item
-          label="邮箱号"
-          :rules="[{ required: true, message: '邮箱号' }]"
-        >
-          <el-input placeholder="请输入邮箱号"></el-input>
+      <el-form
+        :model="didForm"
+        :rules="didRules"
+        ref="didForm"
+        label-position="left"
+        label-width="10rem"
+        class="export-key"
+      >
+        <el-form-item label="邮箱号" prop="email">
+          <el-input
+            v-model="didForm.email"
+            placeholder="请输入邮箱号"
+          ></el-input>
         </el-form-item>
-        <el-form-item
-          label="邮箱验证码"
-          :rules="[{ required: true, message: '邮箱验证码' }]"
-        >
-          <el-input placeholder="请输入邮箱验证码" class="phoneCode"></el-input>
+        <el-form-item label="邮箱验证码" prop="ecode">
+          <el-input
+            v-model="didForm.phoneCode"
+            placeholder="请输入邮箱验证码"
+            class="phoneCode"
+          ></el-input>
           <el-button class="getPhoneCode">邮箱验证码</el-button>
         </el-form-item>
       </el-form>
 
       <span slot="footer" class="dialog-footer">
         <el-button @click="dialogVisible = false">取 消</el-button>
-        <el-button type="primary" @click="dialogVisible = false"
-          >确 定</el-button
-        >
+        <el-button type="primary" @click="handleEmail">确 定</el-button>
       </span>
     </el-dialog>
+
     <el-dialog
       v-if="showType == 'choiseMackId'"
       title="选择方式"
@@ -336,12 +388,18 @@
 <script>
 import { mapState } from "vuex";
 import { encrypt, decrypt } from "@/utils/jsencrypt";
-import { exportPrivateKey, updatePasswordKey, bindPhone } from "@/api/login";
+import {
+  exportPrivateKey,
+  updatePasswordKey,
+  bindPhone,
+  bindEmail,
+  logout,
+} from "@/api/login";
 import {
   validPassword,
-  validName,
   validPhone,
   validSpace,
+  validEmail,
 } from "@/utils/validate";
 export default {
   name: "Did",
@@ -366,6 +424,9 @@ export default {
         passwordConfirm: "",
         phone: "",
         code: "",
+        email: "",
+        ecode: "",
+        type: "",
       },
       didRules: {
         securePassword: [
@@ -385,7 +446,7 @@ export default {
           {
             required: true,
             trigger: "blur",
-            message: "请输入安全密码",
+            message: "请输入当前密码",
           },
           {
             required: true,
@@ -398,7 +459,7 @@ export default {
           {
             required: true,
             trigger: "blur",
-            message: "请输入安全密码",
+            message: "请输入新密码",
           },
           {
             required: true,
@@ -411,7 +472,7 @@ export default {
           {
             required: true,
             trigger: "blur",
-            message: "请输入安全密码",
+            message: "请输入确认密码",
           },
           {
             required: true,
@@ -425,7 +486,7 @@ export default {
           {
             required: true,
             trigger: "blur",
-            message: "请输入安全密码",
+            message: "请输入手机号",
           },
           {
             required: true,
@@ -438,7 +499,28 @@ export default {
           {
             required: true,
             trigger: "blur",
-            message: "请输入安全密码",
+            message: "请输入手机验证码",
+          },
+          { required: true, validator: validSpace, trigger: "blur" },
+        ],
+        email: [
+          {
+            required: true,
+            trigger: "blur",
+            message: "请输入邮箱号",
+          },
+          {
+            required: true,
+            validator: validEmail,
+            trigger: "blur",
+          },
+          { required: true, validator: validSpace, trigger: "blur" },
+        ],
+        ecode: [
+          {
+            required: true,
+            trigger: "blur",
+            message: "请输入邮箱验证码",
           },
           { required: true, validator: validSpace, trigger: "blur" },
         ],
@@ -514,6 +596,22 @@ export default {
         type: "success",
       });
     },
+    //绑定邮箱号
+    handleEmail() {
+      this.$refs.didForm.validate((valid) => {
+        if (valid) {
+          const email = encrypt(this.didForm.email);
+          const receiveCode = encrypt(this.didForm.ecode);
+          bindEmail(email, receiveCode).then((res) => {
+            this.handleSyClose();
+            this.$message({
+              message: "绑定邮箱号成功",
+              type: "success",
+            });
+          });
+        }
+      });
+    },
     //绑定手机号
     handlePhone() {
       this.$refs.didForm.validate((valid) => {
@@ -523,30 +621,42 @@ export default {
           bindPhone(phoneNumber, receiveCode).then((res) => {
             this.handleSyClose();
             this.$message({
-              message: "修改手机号成功",
+              message: "绑定手机号成功",
               type: "success",
             });
           });
         }
       });
     },
-    //修改私钥密码
+    //修改密码
     handleSyUpdate() {
       this.$refs.didForm.validate((valid) => {
         if (valid) {
           const currentPassword = encrypt(this.didForm.passwordOld);
           const password = encrypt(this.didForm.passwordNew);
-          const type = "secure";
+          if (this.showType == "pswupd") {
+            this.didForm.type = "normal";
+          } else {
+            this.didForm.type = "secure";
+          }
           const did = encrypt(this.userData.did);
-          updatePasswordKey(password, currentPassword, type, did).then(
-            (res) => {
-              this.handleSyClose();
-              this.$message({
-                message: "修改安全密码成功",
-                type: "success",
+          updatePasswordKey(
+            password,
+            currentPassword,
+            this.didForm.type,
+            did
+          ).then((res) => {
+            this.handleSyClose();
+            if (this.showType == "pswupd") {
+              this.$store.dispatch("LogOut").then(() => {
+                location.href = "/index";
               });
             }
-          );
+            this.$message({
+              message: "修改密码成功",
+              type: "success",
+            });
+          });
         }
       });
     },

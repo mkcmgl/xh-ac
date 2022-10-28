@@ -1,6 +1,5 @@
 import request from '@/utils/request'
 
-
 // 登录方法  密码登录
 export function login(username, password, code, uuid) {
     const data = {
@@ -34,51 +33,6 @@ export function privateKey(privateKey, code, uuid) {
         data: data
     })
 }
-//导出私钥
-export function exportPrivateKey(securePassword, did) {
-    const data = {
-        securePassword,
-        did
-    }
-    return request({
-        url: '/did/exportPrivateKey',
-
-        method: 'post',
-        data: data
-    })
-}
-//修改私钥安全密码 
-
-export function updatePasswordKey(password, currentPassword, type, did) {
-    const data = {
-        password,
-        currentPassword,
-        type,
-        did
-    }
-    return request({
-        url: '/did/updatePassword',
-
-        method: 'post',
-        data: data
-    })
-}
-
-//绑定手机号
-
-export function bindPhone(phoneNumber, receiveCode) {
-    const data = {
-        phoneNumber,
-        receiveCode
-    }
-    return request({
-        url: '/did/updatePassword',
-
-        method: 'post',
-        data: data
-    })
-}
-
 
 // 登录方法  手机号登录
 export function phone(phoneNumber, code, uuid, receiveCode) {
@@ -176,5 +130,69 @@ export function getCodeEmail(code, email, type, uuid) {
         method: 'post',
         timeout: 20000,
         data: { code, email, type, uuid }
+    })
+}
+
+
+
+
+
+//导出私钥
+export function exportPrivateKey(securePassword, did) {
+    const data = {
+        securePassword,
+        did
+    }
+    return request({
+        url: '/login/exportPrivateKey',
+
+        method: 'post',
+        data: data
+    })
+}
+//修改私钥安全密码 
+
+export function updatePasswordKey(password, currentPassword, type, did) {
+    const data = {
+        password,
+        currentPassword,
+        type,
+        did
+    }
+    return request({
+        url: '/did/updatePassword',
+
+        method: 'post',
+        data: data
+    })
+}
+
+//绑定手机号
+
+export function bindPhone(phoneNumber, receiveCode) {
+    const data = {
+        phoneNumber,
+        receiveCode
+    }
+    return request({
+        url: '/did/bindPhone',
+
+        method: 'post',
+        data: data
+    })
+}
+
+//绑定邮箱
+
+export function bindEmail(email, receiveCode) {
+    const data = {
+        email,
+        receiveCode
+    }
+    return request({
+        url: '/did/bindEmail',
+
+        method: 'post',
+        data: data
     })
 }

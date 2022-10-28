@@ -51,14 +51,14 @@ export function validAlphabets(str) {
     return reg.test(str)
 }
 
-/**
- * @param {string} email
- * @returns {Boolean}
- */
-export function validEmail(email) {
-    const reg = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-    return reg.test(email)
-}
+// /**
+//  * @param {string} email
+//  * @returns {Boolean}
+//  */
+// export function validEmail(email) {
+//     const reg = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+//     return reg.test(email)
+// }
 
 /**
  * @param {string} str
@@ -94,6 +94,25 @@ export function validPhone(rule, value, callback) {
     }
 
 }
+
+/**
+ * @param {string} email
+ * @returns {Boolean}
+ */
+export function validEmail(rule, value, callback) {
+    if (!/^[A-Za-z0-9\u4e00-\u9fa5]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/.test(
+            value
+        )) {
+        callback(new Error("请输入正确的邮箱"));
+    } else {
+        callback();
+    }
+}
+
+
+
+
+
 /**
  * @param {string} name 5-10
  * @returns {Boolean}
