@@ -56,11 +56,11 @@ export default {
       device: (state) => state.app.device,
       needTagsView: (state) => state.settings.tagsView,
       fixedHeader: (state) => state.settings.fixedHeader,
-      // userData:state=>state.user.userData
+      // userData: (state) => state.user.userData,
     }),
     classObj() {
       return {
-        // hideSidebar: !this.sidebar.opened,
+        hideSidebar: false,
         openSidebar: true,
         withoutAnimation: this.sidebar.withoutAnimation,
         mobile: this.device === "mobile",
@@ -80,8 +80,8 @@ export default {
           this.$store.dispatch("app/toggleSideBarHide", false);
         }
       },
-      deep:true,
-      immediate:true
+      deep: true,
+      immediate: true,
     },
   },
   methods: {

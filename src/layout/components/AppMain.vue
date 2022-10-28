@@ -2,7 +2,7 @@
   <section class="app-main">
     <transition name="fade-transform" mode="out-in">
       <keep-alive :include="cachedViews">
-        <router-view v-if="!$route.meta.link" :key="key" />
+        <router-view v-if="!$route.meta.link" :key="key" :class="isIndex" />
       </keep-alive>
     </transition>
     <iframe-toggle />
@@ -10,20 +10,25 @@
 </template>
 
 <script>
-import iframeToggle from "./IframeToggle/index"
+import iframeToggle from "./IframeToggle/index";
 
 export default {
-  name: 'AppMain',
+  name: "AppMain",
   components: { iframeToggle },
   computed: {
     cachedViews() {
-      return this.$store.state.tagsView.cachedViews
+      return this.$store.state.tagsView.cachedViews;
     },
     key() {
-      return this.$route.path
-    }
-  }
-}
+      return this.$route.path;
+    },
+    isIndex() {
+      if (this.$route.path != "/index") {
+        return { athere: this.$route.path == "/index" ? false : true };
+      }
+    },
+  },
+};
 </script>
 
 <style lang="scss" scoped>
@@ -57,5 +62,10 @@ export default {
   .fixed-header {
     padding-right: 17px;
   }
+}
+.athere {
+  margin-left: 20rem;
+  margin-top: 3.75rem;
+  padding: 1.25rem 1.875rem;
 }
 </style>
