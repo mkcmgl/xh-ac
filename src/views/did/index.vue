@@ -233,35 +233,43 @@
         <el-button type="primary" @click="handleSyUpdate">确 定</el-button>
       </span>
     </el-dialog>
+
+    <!-- 绑定手机号 -->
     <el-dialog
       v-if="showType == 'phone'"
       title="绑定手机号"
       :visible.sync="dialogVisible"
       width="30%"
-      :before-close="handleClose"
+      :before-close="handleSyClose"
       class="keyTitle"
     >
-      <el-form label-position="left" label-width="10rem" class="export-key">
-        <el-form-item
-          label="手机号"
-          :rules="[{ required: true, message: '手机号' }]"
-        >
-          <el-input placeholder="请输入手机号"></el-input>
+      <el-form
+        :model="didForm"
+        :before-close="handleSyClose"
+        :rules="didRules"
+        label-position="left"
+        label-width="10rem"
+        class="export-key"
+      >
+        <el-form-item label="手机号" prop="phone">
+          <el-input
+            v-model="didForm.phone"
+            placeholder="请输入手机号"
+          ></el-input>
         </el-form-item>
-        <el-form-item
-          label="短信验证码"
-          :rules="[{ required: true, message: '短信验证码' }]"
-        >
-          <el-input placeholder="请输入短信验证码" class="phoneCode"></el-input>
+        <el-form-item label="短信验证码" prop="code">
+          <el-input
+            v-model="didForm.code"
+            placeholder="请输入短信验证码"
+            class="phoneCode"
+          ></el-input>
           <el-button class="getPhoneCode">短信验证码</el-button>
         </el-form-item>
       </el-form>
 
       <span slot="footer" class="dialog-footer">
         <el-button @click="dialogVisible = false">取 消</el-button>
-        <el-button type="primary" @click="dialogVisible = false"
-          >确 定</el-button
-        >
+        <el-button type="primary" @click="handlePhone">确 定</el-button>
       </span>
     </el-dialog>
     <el-dialog
@@ -328,7 +336,7 @@
 <script>
 import { mapState } from "vuex";
 import { encrypt, decrypt } from "@/utils/jsencrypt";
-import { exportPrivateKey, updatePasswordKey } from "@/api/login";
+import { exportPrivateKey, updatePasswordKey, bindPhone } from "@/api/login";
 import {
   validPassword,
   validName,
@@ -356,6 +364,8 @@ export default {
         passwordOld: "",
         passwordNew: "",
         passwordConfirm: "",
+        phone: "",
+        code: "",
       },
       didRules: {
         securePassword: [
@@ -410,6 +420,27 @@ export default {
           },
           { required: true, validator: validSpace, trigger: "blur" },
           { required: true, validator: validPasswordConfirm, trigger: "blur" },
+        ],
+        phone: [
+          {
+            required: true,
+            trigger: "blur",
+            message: "请输入安全密码",
+          },
+          {
+            required: true,
+            validator: validPhone,
+            trigger: "blur",
+          },
+          { required: true, validator: validSpace, trigger: "blur" },
+        ],
+        code: [
+          {
+            required: true,
+            trigger: "blur",
+            message: "请输入安全密码",
+          },
+          { required: true, validator: validSpace, trigger: "blur" },
         ],
       },
     };
@@ -481,6 +512,22 @@ export default {
       this.$message({
         message: "复制成功",
         type: "success",
+      });
+    },
+    //绑定手机号
+    handlePhone() {
+      this.$refs.didForm.validate((valid) => {
+        if (valid) {
+          const phoneNumber = encrypt(this.didForm.phone);
+          const receiveCode = encrypt(this.didForm.passwordNew);
+          bindPhone(phoneNumber, receiveCode).then((res) => {
+            this.handleSyClose();
+            this.$message({
+              message: "修改手机号成功",
+              type: "success",
+            });
+          });
+        }
       });
     },
     //修改私钥密码

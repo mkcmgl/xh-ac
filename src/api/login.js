@@ -63,6 +63,23 @@ export function updatePasswordKey(password, currentPassword, type, did) {
         data: data
     })
 }
+
+//绑定手机号
+
+export function bindPhone(phoneNumber, receiveCode) {
+    const data = {
+        phoneNumber,
+        receiveCode
+    }
+    return request({
+        url: '/did/updatePassword',
+
+        method: 'post',
+        data: data
+    })
+}
+
+
 // 登录方法  手机号登录
 export function phone(phoneNumber, code, uuid, receiveCode) {
     const data = {
