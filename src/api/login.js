@@ -47,6 +47,22 @@ export function exportPrivateKey(securePassword, did) {
         data: data
     })
 }
+//修改私钥安全密码 
+
+export function updatePasswordKey(password, currentPassword, type, did) {
+    const data = {
+        password,
+        currentPassword,
+        type,
+        did
+    }
+    return request({
+        url: '/did/updatePassword',
+
+        method: 'post',
+        data: data
+    })
+}
 // 登录方法  手机号登录
 export function phone(phoneNumber, code, uuid, receiveCode) {
     const data = {

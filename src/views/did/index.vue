@@ -190,7 +190,7 @@
       title="修改安全密码"
       :visible.sync="dialogVisible"
       width="30%"
-      :before-close="handleClose"
+      :before-close="handleSyClose"
       class="keyTitle"
     >
       <el-form
@@ -200,35 +200,37 @@
         :rules="didRules"
         label-width="10rem"
         class="export-key"
+        :before-close="handleSyClose"
       >
-        <el-form-item
-          label="当前密码"
-          :rules="[{ required: true, message: '当前密码' }]"
-          class="test"
-        >
-          <el-input placeholder="请输入当前密码"></el-input>
+        <el-form-item label="当前密码" class="test" prop="passwordOld">
+          <el-input
+            type="password"
+            v-model="didForm.passwordOld"
+            placeholder="请输入当前密码"
+            @keyup.enter.native="handleUpdatePsw"
+          ></el-input>
         </el-form-item>
-        <el-form-item
-          label="新密码"
-          :rules="[{ required: true, message: '新密码' }]"
-          class="test"
-        >
-          <el-input placeholder="请输入新密码"></el-input>
+        <el-form-item label="新密码" class="test" prop="passwordNew">
+          <el-input
+            type="password"
+            v-model="didForm.passwordNew"
+            placeholder="请输入新密码"
+            @keyup.enter.native="handleUpdatePsw"
+          ></el-input>
         </el-form-item>
-        <el-form-item
-          label="确认密码"
-          :rules="[{ required: true, message: '确认密码' }]"
-          class="test"
-        >
-          <el-input placeholder="请输入确认密码"></el-input>
+        <el-form-item label="确认密码" class="test" prop="passwordConfirm">
+          <el-input
+            type="password"
+            v-model="didForm.passwordConfirm"
+            placeholder="请输入确认密码"
+            @keyup.enter.native="handleUpdatePsw"
+          ></el-input>
         </el-form-item>
       </el-form>
 
       <span slot="footer" class="dialog-footer">
         <el-button @click="dialogVisible = false">取 消</el-button>
-        <el-button type="primary" @click="dialogVisible = false"
-          >确 定</el-button
-        >
+        <el-button type="primary" @click="handleSyUpdate">确 定</el-button>
       </span>
     </el-dialog>
     <el-dialog
@@ -326,7 +328,7 @@
 <script>
 import { mapState } from "vuex";
 import { encrypt, decrypt } from "@/utils/jsencrypt";
-import { exportPrivateKey } from "@/api/login";
+import { exportPrivateKey, updatePasswordKey } from "@/api/login";
 import {
   validPassword,
   validName,
@@ -337,6 +339,13 @@ export default {
   name: "Did",
 
   data() {
+    const validPasswordConfirm = (rule, value, callback) => {
+      if (value !== this.didForm.passwordNew) {
+        callback(new Error("两次输入密码不一致!"));
+      } else {
+        callback();
+      }
+    };
     return {
       dialogVisible: false,
       showType: "",
@@ -344,6 +353,9 @@ export default {
       privateKey: "",
       didForm: {
         securePassword: "",
+        passwordOld: "",
+        passwordNew: "",
+        passwordConfirm: "",
       },
       didRules: {
         securePassword: [
@@ -358,6 +370,46 @@ export default {
             trigger: "blur",
           },
           { required: true, validator: validSpace, trigger: "blur" },
+        ],
+        passwordOld: [
+          {
+            required: true,
+            trigger: "blur",
+            message: "请输入安全密码",
+          },
+          {
+            required: true,
+            validator: validPassword,
+            trigger: "blur",
+          },
+          { required: true, validator: validSpace, trigger: "blur" },
+        ],
+        passwordNew: [
+          {
+            required: true,
+            trigger: "blur",
+            message: "请输入安全密码",
+          },
+          {
+            required: true,
+            validator: validPassword,
+            trigger: "blur",
+          },
+          { required: true, validator: validSpace, trigger: "blur" },
+        ],
+        passwordConfirm: [
+          {
+            required: true,
+            trigger: "blur",
+            message: "请输入安全密码",
+          },
+          {
+            required: true,
+            validator: validPassword,
+            trigger: "blur",
+          },
+          { required: true, validator: validSpace, trigger: "blur" },
+          { required: true, validator: validPasswordConfirm, trigger: "blur" },
         ],
       },
     };
@@ -429,6 +481,26 @@ export default {
       this.$message({
         message: "复制成功",
         type: "success",
+      });
+    },
+    //修改私钥密码
+    handleSyUpdate() {
+      this.$refs.didForm.validate((valid) => {
+        if (valid) {
+          const currentPassword = encrypt(this.didForm.passwordOld);
+          const password = encrypt(this.didForm.passwordNew);
+          const type = "secure";
+          const did = encrypt(this.userData.did);
+          updatePasswordKey(password, currentPassword, type, did).then(
+            (res) => {
+              this.handleSyClose();
+              this.$message({
+                message: "修改安全密码成功",
+                type: "success",
+              });
+            }
+          );
+        }
       });
     },
     // 导出私钥校验 及接口发送
