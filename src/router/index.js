@@ -66,6 +66,7 @@ export const constantRoutes = [{
     {
         path: '',
         component: Layout,
+        hidden: true,
         redirect: 'index',
         children: [{
             path: 'index',
@@ -101,6 +102,21 @@ export const constantRoutes = [{
                 import ('@/views/auth/index'),
             name: 'auth',
             meta: { title: '实名认证', icon: 'user' },
+
+        }]
+    },
+    {
+        path: '',
+        component: Layout,
+        hidden: false,
+
+        redirect: 'noredirect',
+        children: [{
+            path: 'authReview',
+            component: () =>
+                import ('@/views/authReview/index'),
+            name: 'authReview',
+            meta: { title: '实名认证审核', icon: 'user' },
 
         }]
     },

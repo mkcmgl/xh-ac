@@ -12,9 +12,9 @@
             <el-col :span="8">
               <div class="cernter-left">
                 <span class="text1">子链接入数</span>
-                <span class="num">{{data.childLinkNum}}</span>
+                <span class="num">{{ data.childLinkNum }}</span>
                 <span class="text2">公共服务接入数</span>
-                <span class="num">{{data.publicServiceLinkNum}}</span>
+                <span class="num">{{ data.publicServiceLinkNum }}</span>
               </div>
             </el-col>
             <el-col :span="16">
@@ -30,7 +30,9 @@
             </el-col>
           </el-row>
         </div>
-        <el-button class="button-center" type="primary">立刻进入</el-button>
+        <el-button class="button-center" type="primary" @click="toSso"
+          >立刻进入</el-button
+        >
       </div>
       <div class="leftWap">
         <div class="wapTop">
@@ -44,9 +46,9 @@
             <el-col :span="8">
               <div class="cernter-left">
                 <span class="text1">标识注册量</span>
-                <span class="num">{{data.registerTotalNum}}</span>
+                <span class="num">{{ data.registerTotalNum }}</span>
                 <span class="text2">标识解析量</span>
-                <span class="num">{{data.resolveTotalNum}}</span>
+                <span class="num">{{ data.resolveTotalNum }}</span>
               </div>
             </el-col>
             <el-col :span="16">
@@ -182,7 +184,9 @@
           <span class="userInfoData false" v-show="!authColor">{{
             getauthData
           }}</span>
-          <span class="userGoAuth" v-show="!authColor" @click="toAuth">立刻认证</span>
+          <span class="userGoAuth" v-show="!authColor" @click="toAuth"
+            >立刻认证</span
+          >
         </li>
         <li>
           <span class="userInfoTitle">最近登录</span>
@@ -206,7 +210,7 @@ export default {
   data() {
     return {
       authColor: false,
-      data:{},
+      data: {},
     };
   },
   created() {
@@ -236,22 +240,21 @@ export default {
   methods: {
     getNumeData() {
       getData().then((res) => {
-              this.data=res.data
-              console.log(this.data)
+        this.data = res.data;
+        console.log(this.data);
       });
     },
-    toAuth(){
+    toAuth() {
       this.$router.push("/auth");
-    }
+    },
+    toSso() {},
   },
 };
 </script>
 
 <style scoped lang="scss">
-
-.back{
-
-    padding-top: 3.75rem;
+.back {
+  padding-top: 3.75rem;
 }
 
 span.userInfoData.true {

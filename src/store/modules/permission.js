@@ -15,17 +15,17 @@ const permission = {
     },
     mutations: {
         SET_ROUTES: (state, routes) => {
-            // state.addRoutes = routes
-            state.routes = constantRoutes
+            state.addRoutes = routes
+            state.routes = constantRoutes.concat(routes)
         },
         SET_DEFAULT_ROUTES: (state, routes) => {
-            state.defaultRoutes = constantRoutes
+            state.defaultRoutes = constantRoutes.concat(routes)
         },
         SET_TOPBAR_ROUTES: (state, routes) => {
             state.topbarRouters = routes
         },
         SET_SIDEBAR_ROUTERS: (state, routes) => {
-            state.sidebarRouters = constantRoutes
+            state.sidebarRouters = routes
         },
     },
     actions: {
@@ -42,7 +42,8 @@ const permission = {
                     rewriteRoutes.push({ path: '*', redirect: '/404', hidden: true })
                     router.addRoutes(asyncRoutes);
                     commit('SET_ROUTES', rewriteRoutes)
-                    commit('SET_SIDEBAR_ROUTERS', constantRoutes)
+                    console.log(sidebarRoutes);
+                    commit('SET_SIDEBAR_ROUTERS', constantRoutes.concat(sidebarRoutes))
                     commit('SET_DEFAULT_ROUTES', sidebarRoutes)
                     commit('SET_TOPBAR_ROUTES', sidebarRoutes)
                     resolve(rewriteRoutes)
@@ -107,9 +108,7 @@ function filterChildren(childrenMap, lastRouter = false) {
 // 动态路由遍历，验证是否具备权限
 export function filterDynamicRoutes(routes) {
     const res = []
-        // console.log(route)
     routes.forEach(route => {
-        // console.log(route)
         if (route.permissions) {
             if (auth.hasPermiOr(route.permissions)) {
                 res.push(route)

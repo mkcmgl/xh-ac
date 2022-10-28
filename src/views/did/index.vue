@@ -647,15 +647,15 @@ export default {
             did
           ).then((res) => {
             this.handleSyClose();
+            this.$message({
+              message: "修改密码成功",
+              type: "success",
+            });
             if (this.showType == "pswupd") {
               this.$store.dispatch("LogOut").then(() => {
                 location.href = "/index";
               });
             }
-            this.$message({
-              message: "修改密码成功",
-              type: "success",
-            });
           });
         }
       });
