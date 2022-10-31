@@ -87,7 +87,6 @@ export const constantRoutes = [{
             component: () =>
                 import ('@/views/did/index'),
             name: 'did',
-            meta: { title: '账户中心', icon: 'user' }
         }]
     },
     {
@@ -101,7 +100,7 @@ export const constantRoutes = [{
             component: () =>
                 import ('@/views/auth/index'),
             name: 'auth',
-            meta: { title: '实名认证', icon: 'user' },
+
 
         }]
     },
@@ -116,7 +115,6 @@ export const constantRoutes = [{
             component: () =>
                 import ('@/views/authReview/index'),
             name: 'authReview',
-            meta: { title: '实名认证审核', icon: 'user' },
 
         }]
     },
