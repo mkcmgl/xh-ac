@@ -78,10 +78,10 @@
 
     <!-- 显示列表 -->
     <div class="centerMain">
-      <el-table :data="searchData">
+      <el-table :data="searchData" class="searchClass">
         <el-table-column label="编号" prop="number" width="12rem">
         </el-table-column>
-        <el-table-column label="申请方BIDBID" prop="applyUserBid" width="12rem">
+        <el-table-column label="申请方BID" prop="applyUserBid" width="12rem">
         </el-table-column>
         <el-table-column label="认证类型" prop="applyType" width="12rem">
         </el-table-column>
@@ -94,6 +94,16 @@
         <el-table-column label="操作" prop="handle" width="12rem">
         </el-table-column>
       </el-table>
+      <el-pagination
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
+        :current-page="currentPage4"
+        :page-sizes="[100, 200, 300, 400]"
+        :page-size="100"
+        layout="total, sizes, prev, pager, next, jumper"
+        :total="400"
+      >
+      </el-pagination>
     </div>
   </div>
 </template>
@@ -137,7 +147,14 @@ export default {
 
   mounted() {},
 
-  methods: {},
+  methods: {
+    handleSizeChange(val) {
+      console.log(`每页 ${val} 条`);
+    },
+    handleCurrentChange(val) {
+      console.log(`当前页: ${val}`);
+    },
+  },
 };
 </script>
 
@@ -152,5 +169,14 @@ export default {
   background-color: #ffff;
   margin-top: 2rem;
   padding: 2rem 2rem;
+  .searchClass {
+    ::v-deep .el-table__header {
+      width: 100% !important;
+    }
+  }
+
+  .el-pagination {
+    text-align: right;
+  }
 }
 </style>
