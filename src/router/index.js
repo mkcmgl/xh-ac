@@ -118,6 +118,24 @@ export const constantRoutes = [{
 
         }]
     },
+
+    {
+        path: '',
+        component: Layout,
+        hidden: false,
+
+        redirect: 'noredirect',
+        children: [{
+            path: 'authReview/authDetail',
+            component: () =>
+                import ('@/views/authReview/authDetail/index'),
+            name: 'authDetail',
+
+        }]
+    },
+
+
+
     {
         path: '',
         component: Layout,
@@ -144,19 +162,19 @@ export const constantRoutes = [{
             name: 'authResult',
         }]
     },
-    {
-        path: '/user',
-        component: Layout,
-        hidden: true,
-        redirect: 'noredirect',
-        children: [{
-            path: 'profile',
-            component: () =>
-                import ('@/views/system/user/profile/index'),
-            name: 'Profile',
-            meta: { title: '个人中心', icon: 'user' }
-        }]
-    }
+    // {
+    //     path: '/user',
+    //     component: Layout,
+    //     hidden: true,
+    //     redirect: 'noredirect',
+    //     children: [{
+    //         path: 'profile',
+    //         component: () =>
+    //             import ('@/views/system/user/profile/index'),
+    //         name: 'Profile',
+    //         meta: { title: '个人中心', icon: 'user' }
+    //     }]
+    // }
 ]
 
 // 动态路由，基于用户权限动态去加载

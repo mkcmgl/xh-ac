@@ -221,27 +221,28 @@ export default {
 
           this.searchData.push(item);
         });
-        console.log(this.searchData);
         this.total = res.total;
       });
     },
     handleClick(row) {
-      console.log(row);
+      this.$router.push({ path: "authReview/authDetail", query: { row } });
     },
-
+    //改变一页显示数量
     handleSizeChange(val) {
       this.pageSize = val;
       this.getSearchData();
     },
+    //改变页码
     handleCurrentChange(val) {
       this.pageNum = val;
       this.getSearchData();
     },
-
+    //搜索
     toSearch() {
       const { number, applyUser, authType, status } = this.searchForm;
       this.getSearchData(number, applyUser, authType, status);
     },
+    //重置
     toClear() {
       // this.$refs.searchRef.resetFields();
       Object.assign(this._data.searchForm, this.$options.data().searchForm);
