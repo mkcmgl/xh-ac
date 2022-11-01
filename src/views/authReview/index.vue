@@ -6,7 +6,7 @@
       <el-form
         :rules="searchRules"
         label-position="right"
-        label-width="5.375rem"
+        label-width="9rem"
         class="authForm"
         ref="searchRef"
         :model="searchForm"
@@ -35,39 +35,39 @@
           <el-col :span="6">
             <el-form-item label="认证类型">
               <el-select
-                v-model="searchForm.applyType"
+                v-model="searchForm.authType"
                 clearable
                 placeholder="请选择"
                 style="width: 100%"
               >
                 <el-option
-                  v-for="(state, index) in searchForm.applyTypeData"
+                  v-for="(state, index) in searchForm.authTypeData"
                   :key="index"
-                  :label="state"
-                  :value="state"
+                  :label="state.name"
+                  :value="state.type"
                 ></el-option>
               </el-select>
             </el-form-item>
           </el-col>
           <el-col :span="6">
             <el-form-item>
-              <el-button type="primary">搜索</el-button>
-              <el-button type="none">重置</el-button>
+              <el-button type="primary" @click="toSearch">搜索</el-button>
+              <el-button type="none" @click="toClear">重置</el-button>
             </el-form-item>
           </el-col>
           <el-col :span="6">
             <el-form-item label="审核状态">
               <el-select
-                v-model="searchForm.applyState"
+                v-model="searchForm.status"
                 clearable
                 placeholder="请选择"
                 style="width: 100%"
               >
                 <el-option
-                  v-for="(state, index) in searchForm.applyStateData"
+                  v-for="(state, index) in searchForm.statusData"
                   :key="index"
-                  :label="state"
-                  :value="state"
+                  :label="state.name"
+                  :value="state.type"
                 ></el-option>
               </el-select>
             </el-form-item>
@@ -78,7 +78,12 @@
 
     <!-- 显示列表 -->
     <div class="centerMain">
-      <el-table :data="searchData" class="searchClass" style="width: 100%">
+      <el-table
+        :data="searchData"
+        class="searchClass"
+        style="width: 100%"
+        height="40rem"
+      >
         <el-table-column label="编号" prop="authId" width="12rem">
           <template slot-scope="scope">
             <el-button
@@ -165,17 +170,23 @@ export default {
       searchForm: {
         number: "",
         applyUser: "",
-        applyType: "",
-        applyTypeData: ["个人认证", "企业认证"],
-        applyState: "",
-        applyStateData: ["待审核", "审核通过", "审核驳回"],
+        authType: "",
+        authTypeData: [
+          { name: "个人认证", type: "101" },
+          { name: "企业认证", type: "102" },
+        ],
+        status: "",
+        statusData: [
+          { name: "待审核", type: "0" },
+          { name: "审核通过", type: "1" },
+          { name: "审核驳回", type: "2" },
+        ],
       },
       searchRules: {
         number: "",
         applyUser: "",
-        applyType: "",
-        applyTypeData: {},
-        applyState: "",
+        authType: "",
+        status: "",
       },
     };
   },
@@ -185,9 +196,17 @@ export default {
   mounted() {},
 
   methods: {
-    getSearchData() {
+    //获取审核列表
+    getSearchData(authId, did, authType, status) {
       const { pageNum, pageSize } = this;
-      reviewList({ pageNum, pageSize }).then((res) => {
+      reviewList({
+        authId,
+        did,
+        authType,
+        status,
+        pageNum,
+        pageSize,
+      }).then((res) => {
         console.log(res, "res");
         this.searchData = [];
         res.rows.forEach((item) => {
@@ -218,14 +237,33 @@ export default {
       this.pageNum = val;
       this.getSearchData();
     },
+
+    toSearch() {
+      const { number, applyUser, authType, status } = this.searchForm;
+      this.getSearchData(number, applyUser, authType, status);
+    },
+    toClear() {
+      // this.$refs.searchRef.resetFields();
+      Object.assign(this._data.searchForm, this.$options.data().searchForm);
+      this.getSearchData();
+    },
   },
 };
 </script>
 
 <style lang="scss" scoped>
 @import "~@/assets/styles/public.scss";
+::v-deep .cell {
+  white-space: nowrap;
+}
+::v-deep .el-table__empty-block {
+  text-align: center;
+  width: 100% !important;
+  height: 10% !important;
+  font-size: 1.2rem;
+}
 .top {
-  padding: 2rem 0;
+  padding-top: 2rem;
   margin-top: 2rem;
   background-color: #ffff;
 }
