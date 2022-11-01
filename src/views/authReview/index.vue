@@ -78,30 +78,43 @@
 
     <!-- 显示列表 -->
     <div class="centerMain">
-      <el-table :data="searchData" class="searchClass">
-        <el-table-column label="编号" prop="number" width="12rem">
+      <el-table :data="searchData" class="searchClass" style="width: 100%">
+        <el-table-column label="编号" prop="authId" width="12rem">
+          <template slot-scope="scope">
+            <el-button
+              @click="handleClick(scope.row)"
+              type="text"
+              size="small"
+              >{{ scope.row.authId }}</el-button
+            >
+          </template>
         </el-table-column>
-        <el-table-column label="申请方BID" prop="applyUserBid" width="12rem">
+        <el-table-column label="申请方BID" prop="did" width="12rem">
         </el-table-column>
-        <el-table-column label="认证类型" prop="applyType" width="12rem">
+        <el-table-column label="认证类型" prop="authType" width="12rem">
         </el-table-column>
-        <el-table-column label="申请时间" prop="applyState" width="12rem">
+        <el-table-column label="申请时间" prop="applyDate" width="12rem">
         </el-table-column>
-        <el-table-column label="审核状态" prop="applyTime" width="12rem">
+        <el-table-column label="审核状态" prop="status" width="12rem">
         </el-table-column>
-        <el-table-column label="审核时间" prop="statetype" width="12rem">
+        <el-table-column label="审核时间" prop="reviewDate" width="12rem">
         </el-table-column>
-        <el-table-column label="操作" prop="handle" width="12rem">
+        <el-table-column label="操作" width="12rem">
+          <template slot-scope="scope">
+            <el-button @click="handleClick(scope.row)" type="text" size="small"
+              >查看</el-button
+            >
+          </template>
         </el-table-column>
       </el-table>
       <el-pagination
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
         :current-page="currentPage4"
-        :page-sizes="[100, 200, 300, 400]"
+        :page-sizes="[10, 20, 30, 50]"
         :page-size="100"
         layout="total, sizes, prev, pager, next, jumper"
-        :total="400"
+        :total="total"
       >
       </el-pagination>
     </div>
@@ -109,30 +122,53 @@
 </template>
 
 <script>
+import { reviewList } from "@/api/did";
 export default {
   name: "authReview",
 
   data() {
     return {
+      currentPage1: 5,
+      currentPage2: 5,
+      currentPage3: 5,
+      currentPage4: 4,
+      total: 0,
+      pageSize: 10,
+      pageNum: 1,
       searchData: [
-        {
-          number: "",
-          applyUserBid: "",
-          applyType: "",
-          applyState: "",
-          applyTime: "",
-          statetype: "",
-          handle: "",
-        },
+        // {
+        //   address: "",
+        //   addressDetail: "",
+        //   applyDate: "",
+        //   authId: "",
+        //   authType: "",
+        //   businessLicense: "",
+        //   contactEmail: "",
+        //   contactName: "",
+        //   contactPhone: "",
+        //   creditCode: "",
+        //   did: "",
+        //   idEmblem: "",
+        //   idNumber: "",
+        //   idPortrait: "",
+        //   la: "",
+        //   org: "",
+        //   orgName: "",
+        //   realName: "",
+        //   reviewDate: "",
+        //   reviewOpinion: "",
+        //   status: "",
+        //   userId: "",
+        // },
       ],
 
       searchForm: {
         number: "",
         applyUser: "",
         applyType: "",
-        applyTypeData: {},
+        applyTypeData: ["个人认证", "企业认证"],
         applyState: "",
-        applyStateData: {},
+        applyStateData: ["待审核", "审核通过", "审核驳回"],
       },
       searchRules: {
         number: "",
@@ -140,19 +176,45 @@ export default {
         applyType: "",
         applyTypeData: {},
         applyState: "",
-        applyStateData: {},
       },
     };
   },
-
+  created() {
+    this.getSearchData();
+  },
   mounted() {},
 
   methods: {
+    getSearchData() {
+      const { pageNum, pageSize } = this;
+      reviewList({ pageNum, pageSize }).then((res) => {
+        console.log(res, "res");
+        res.rows.forEach((item) => {
+          item.authType = item.authType == 101 ? "个人认证" : "企业认证";
+          if (item.status == 0) {
+            item.status = "待审核";
+          } else if (item.status == 0) {
+            item.status = "审核通过";
+          } else {
+            item.status = "审核驳回";
+          }
+          this.searchData.push(item);
+        });
+        console.log(this.searchData);
+        this.total = res.total;
+      });
+    },
+    handleClick(row) {
+      console.log(row);
+    },
+
     handleSizeChange(val) {
-      console.log(`每页 ${val} 条`);
+      this.pageSize = val;
+      this.getSearchData();
     },
     handleCurrentChange(val) {
-      console.log(`当前页: ${val}`);
+      this.pageNum = val;
+      this.getSearchData();
     },
   },
 };
@@ -171,6 +233,9 @@ export default {
   padding: 2rem 2rem;
   .searchClass {
     ::v-deep .el-table__header {
+      width: 100% !important;
+    }
+    ::v-deep .el-table__body {
       width: 100% !important;
     }
   }

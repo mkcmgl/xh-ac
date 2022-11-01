@@ -60,3 +60,12 @@ export function authGetInfo(params) {
         params
     })
 }
+
+export function reviewList(params) {
+
+    return request({
+        url: "auth/reviewList",
+        method: 'get',
+        params
+    })
+}
