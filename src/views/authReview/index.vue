@@ -189,6 +189,7 @@ export default {
       const { pageNum, pageSize } = this;
       reviewList({ pageNum, pageSize }).then((res) => {
         console.log(res, "res");
+        this.searchData = [];
         res.rows.forEach((item) => {
           item.authType = item.authType == 101 ? "个人认证" : "企业认证";
           if (item.status == 0) {
@@ -198,6 +199,7 @@ export default {
           } else {
             item.status = "审核驳回";
           }
+
           this.searchData.push(item);
         });
         console.log(this.searchData);
