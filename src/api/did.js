@@ -78,3 +78,11 @@ export function review(data) {
         data
     })
 }
+export function redirect(params) {
+
+    return request({
+        url: `redirect/${params.clientId}`,
+        method: 'get',
+        params
+    })
+}

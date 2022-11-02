@@ -204,7 +204,7 @@
 
 <script>
 import { mapState } from "vuex";
-import { getData } from "@/api/did";
+import { getData, redirect } from "@/api/did";
 export default {
   name: "index",
   data() {
@@ -247,7 +247,16 @@ export default {
     toAuth() {
       this.$router.push("/auth");
     },
-    toSso() {},
+    toSso() {
+      const clientId = "op";
+      redirect({ clientId: clientId }).then((res) => {
+        console.log(res.redirectUri);
+        // this.$router.push({
+        //   path: res.redirectUri,
+        //   query: { data: res.code },
+        // });
+      });
+    },
   },
 };
 </script>
