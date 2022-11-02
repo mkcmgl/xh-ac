@@ -156,3 +156,15 @@ export function validSpace(rule, value, callback) {
         callback()
     }
 };
+/**
+ * @param {string} 255 
+ * @returns {Boolean}
+ */
+export function validLength(rule, value, callback) {
+
+    if (value.length > 255) {
+        callback(new Error("内容长度最大255"));
+    } else {
+        callback()
+    }
+};

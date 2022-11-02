@@ -179,7 +179,13 @@
     </el-dialog>
 
     <!-- 审核意见 -->
-    <el-dialog :visible.sync="reviewVisible" title="审核" center width="30%">
+    <el-dialog
+      :visible.sync="reviewVisible"
+      title="审核"
+      center
+      width="26%"
+      :before-close="clearReviewData"
+    >
       <!-- class="reviewClass" -->
       <!-- <span
         style="
@@ -193,24 +199,50 @@
         "
         >审核意见</span
       > -->
+      <i
+        style="
+          width: 100%;
+          border-bottom: 0.0625rem solid #f4f3f7;
+          position: relative;
+          top: -1.5rem;
+          display: block;
+        "
+      ></i>
 
-      <el-form :model="reviewData" label-width="6.875rem" class="reviewClass">
-        <el-form-item label="审核意见">
-          <el-radio v-model="reviewData.radio" label="1">通过</el-radio>
-          <el-radio v-model="reviewData.radio" label="2">驳回</el-radio>
+      <el-form
+        :model="reviewData"
+        label-width="6.875rem"
+        class="reviewClass"
+        :rules="reviewRules"
+        ref="reviewRef"
+      >
+        <el-form-item label="审核意见" prop="radio">
+          <el-radio-group v-model="reviewData.radio" @change="radioChange">
+            <el-radio :label="1">通过</el-radio>
+            <el-radio :label="2">驳回</el-radio>
+          </el-radio-group>
         </el-form-item>
-        <el-form-item label="驳回原因">
+        <el-form-item label="驳回原因" v-if="reviewData.radio == 2" prop="why">
           <el-input
             v-model="reviewData.why"
+            type="textarea"
             placeholder="请输入驳回原因"
+            @keyup.enter.native="handleRadio"
           ></el-input>
         </el-form-item>
       </el-form>
+      <i
+        style="
+          width: 100%;
+          border-bottom: 0.0625rem solid #f4f3f7;
+          position: relative;
+          top: 1.6rem;
+          display: block;
+        "
+      ></i>
       <span slot="footer" class="dialog-footer">
         <el-button @click="reviewVisible = false">取 消</el-button>
-        <el-button type="primary" @click="centerDialogVisible = false"
-          >确 定</el-button
-        >
+        <el-button type="primary" @click="handleRadio">确 定</el-button>
       </span>
     </el-dialog>
   </div>
@@ -218,6 +250,7 @@
 
 <script>
 import { review } from "@/api/did";
+import { validSpace, validLength } from "@/utils/validate";
 export default {
   name: "authDetail",
 
@@ -228,10 +261,16 @@ export default {
       dialogImageUrl: "",
       dialogVisible: false,
       reviewVisible: false,
-      radio: "1",
       reviewData: {
-        radio: "1",
+        radio: 1,
         why: "",
+      },
+      reviewRules: {
+        why: [
+          { required: true, trigger: "blur", message: "请输入驳回原因" },
+          { required: true, validator: validSpace, trigger: "blur" },
+          { required: true, validator: validLength, trigger: "blur" },
+        ],
       },
     };
   },
@@ -251,12 +290,37 @@ export default {
       this.dialogImageUrl = this.baseUrl + this.row[value];
       this.dialogVisible = true;
     },
-
+    //清除数据
+    clearReviewData() {
+      // this.$nextTick(() => {
+      this.$refs.reviewRef.resetFields();
+      // });
+      // Object.assign(this._data.reviewData, this.$options.data().reviewData);
+      this.reviewVisible = false;
+    },
+    radioChange(value) {
+      if (value == 1) {
+        this.reviewData.why = "";
+        // Object.assign(this._data.reviewData, this.$options.data().reviewData);
+      }
+    },
     //审核
-    toReview() {
+    handleRadio() {
       const { did, authId, authType, status, reviewOpinion } = this.row;
-      console.log(did, authId, authType, status, reviewOpinion);
-      // review()
+      const authTypeNum = authType == "个人认证" ? "101" : "102";
+
+      const statusNum =
+        status == "待审核" ? "0" : status == "审核通过" ? "1" : "2";
+      console.log(did, authId, authTypeNum, statusNum, reviewOpinion);
+      review({
+        did,
+        authId,
+        authType: authTypeNum,
+        status: statusNum,
+        reviewOpinion,
+      }).then((res) => {
+        this.reviewVisible = false;
+      });
     },
   },
 };
@@ -264,7 +328,9 @@ export default {
 
 <style lang="scss" scoped>
 @import "~@/assets/styles/public.scss";
-
+::v-deep .el-form-item__label {
+  text-align: left;
+}
 .dsc {
   margin-left: 0.833333rem;
   font-weight: 400;
