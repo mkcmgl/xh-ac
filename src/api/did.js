@@ -69,3 +69,12 @@ export function reviewList(params) {
         params
     })
 }
+
+export function review(data) {
+
+    return request({
+        url: "auth/review",
+        method: 'post',
+        data
+    })
+}

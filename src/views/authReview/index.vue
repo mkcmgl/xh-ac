@@ -225,7 +225,57 @@ export default {
       });
     },
     handleClick(row) {
-      this.$router.push({ path: "authReview/authDetail", query: { row } });
+      const {
+        address,
+        addressDetail,
+        applyDate,
+        authId,
+        authType,
+        businessLicense,
+        contactEmail,
+        contactName,
+        contactPhone,
+        creditCode,
+        did,
+        idEmblem,
+        idNumber,
+        idPortrait,
+        la,
+        org,
+        orgName,
+        realName,
+        reviewDate,
+        reviewOpinion,
+        status,
+        userId,
+      } = row;
+      this.$router.push({
+        path: "authReview/authDetail",
+        query: {
+          address,
+          addressDetail,
+          applyDate,
+          authId,
+          authType,
+          businessLicense,
+          contactEmail,
+          contactName,
+          contactPhone,
+          creditCode,
+          did,
+          idEmblem,
+          idNumber,
+          idPortrait,
+          la,
+          org,
+          orgName,
+          realName,
+          reviewDate,
+          reviewOpinion,
+          status,
+          userId,
+        },
+      });
     },
     //改变一页显示数量
     handleSizeChange(val) {
