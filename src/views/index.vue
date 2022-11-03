@@ -250,11 +250,15 @@ export default {
     toSso() {
       const clientId = "op";
       redirect({ clientId: clientId }).then((res) => {
-        console.log(res.redirectUri);
-        // this.$router.push({
-        //   path: res.redirectUri,
-        //   query: { data: res.code },
-        // });
+        console.log(res);
+        let test = "";
+        test = res.data.redirectUri;
+        const index = res.data.redirectUri.indexOf("scbp/");
+        const toAdress = test.substring(index + 5);
+        this.$router.push({
+          path: toAdress,
+          query: { data: res.data.code },
+        });
       });
     },
   },

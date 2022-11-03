@@ -162,6 +162,23 @@ export const constantRoutes = [{
             name: 'authResult',
         }]
     },
+    {
+        path: '',
+        component: Layout,
+        hidden: true,
+
+        redirect: 'noredirect',
+        children: [{
+            path: 'operation-platform/login',
+            component: () =>
+                import ('@/views/op/login/index'),
+            name: 'login',
+        }]
+    },
+
+
+
+
     // {
     //     path: '/user',
     //     component: Layout,
