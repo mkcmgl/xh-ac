@@ -45,6 +45,12 @@ export const constantRoutes = [{
             import ('@/views/login'),
         hidden: true
     },
+        {
+        path: '/screen',
+        component: () =>
+            import ('@/views/screen'),
+        hidden: true
+    },
     {
         path: '/register',
         component: () =>
