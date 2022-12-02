@@ -1,6 +1,7 @@
 import request from '@/utils/request'
 
-
+import requestOp from '@/utils/requestOp'
+import requestSpv from '@/utils/requestSpv'
 export function getDidInfo() {
 
     return request({
@@ -84,5 +85,14 @@ export function redirect(params) {
         url: `redirect/${params.clientId}`,
         method: 'get',
         params
+    })
+}
+
+export function getTop() {
+
+    return requestSpv({
+        url: 'publicService/v1/getTop3',
+        method: 'get',
+     
     })
 }

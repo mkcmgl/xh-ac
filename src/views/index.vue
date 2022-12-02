@@ -133,7 +133,7 @@
         <div class="wapCenter">
           <el-row :gutter="20">
             <el-col :span="12">
-              <div class="grid-content bg-purple footer">
+              <div class="grid-content bg-purple footer" @click="goScreen">
                 <div class="rightImg">
                   <img src="@/assets/images/551.png" class="img" />
                 </div>
@@ -144,7 +144,8 @@
               </div>
             </el-col>
             <el-col :span="12"
-              ><div class="grid-content bg-purple footer">
+              >
+              <div class="grid-content bg-purple footer" >
                 <div class="rightImg">
                   <img src="@/assets/images/552.png" class="img" />
                 </div>
@@ -204,7 +205,7 @@
 
 <script>
 import { mapState } from "vuex";
-import { getData, redirect } from "@/api/did";
+import { getData, redirect,getTop } from "@/api/did";
 export default {
   name: "index",
   data() {
@@ -261,6 +262,17 @@ export default {
         });
       });
     },
+    goScreen(){
+      console.log('goScreen')
+      const clientId = "ps";
+      redirect({clientId}).then(res=>{
+        console.log(res);
+
+      })
+      getTop().then(res=>{
+        console.log(res)
+      })
+    }
   },
 };
 </script>
