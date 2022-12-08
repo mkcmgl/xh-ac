@@ -88,11 +88,19 @@ export function redirect(params) {
     })
 }
 
-export function getTop() {
+export function getOpToken(params) {
+
+    return requestOp({
+        url: '/sso',
+        method: 'get',
+        params
+    })
+}
+export function getTop(params) {
 
     return requestSpv({
-        url: 'publicService/v1/getTop3',
+        url: '/sso',
         method: 'get',
-     
+        params
     })
 }

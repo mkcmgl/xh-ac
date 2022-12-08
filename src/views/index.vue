@@ -143,9 +143,8 @@
                 <span class="spanTitle">BaaS服务</span>
               </div>
             </el-col>
-            <el-col :span="12"
-              >
-              <div class="grid-content bg-purple footer" >
+            <el-col :span="12">
+              <div class="grid-content bg-purple footer">
                 <div class="rightImg">
                   <img src="@/assets/images/552.png" class="img" />
                 </div>
@@ -205,7 +204,7 @@
 
 <script>
 import { mapState } from "vuex";
-import { getData, redirect,getTop } from "@/api/did";
+import { getData, redirect, getTop ,getOpToken,redirectSpv} from "@/api/did";
 export default {
   name: "index",
   data() {
@@ -252,27 +251,31 @@ export default {
       const clientId = "op";
       redirect({ clientId: clientId }).then((res) => {
         console.log(res);
-        let test = "";
-        test = res.data.redirectUri;
-        const index = res.data.redirectUri.indexOf("scbp/");
-        const toAdress = test.substring(index + 5);
-        this.$router.push({
-          path: toAdress,
-          query: { data: res.data.code },
+        getOpToken({code:res.data.code}).then((ress)=>{
+          console.log(ress)
+        })
+
+
+        // let test = "";
+        // test = res.data.redirectUri;
+        // const index = res.data.redirectUri.indexOf("scbp/");
+        // const toAdress = test.substring(index + 5);
+        // this.$router.push({
+        //   path: toAdress,
+        //   query: { data: res.data.code },
+        // });
+      });
+    },
+    goScreen() {
+      console.log("goScreen");
+      const clientId = "spv";
+      redirectSpv({ clientId }).then((res) => {
+        console.log(res);
+        getTop({ code: res.data.code }).then((ress) => {
+          console.log(ress);
         });
       });
     },
-    goScreen(){
-      console.log('goScreen')
-      const clientId = "ps";
-      redirect({clientId}).then(res=>{
-        console.log(res);
-
-      })
-      getTop().then(res=>{
-        console.log(res)
-      })
-    }
   },
 };
 </script>
