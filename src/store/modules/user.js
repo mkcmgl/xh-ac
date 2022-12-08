@@ -1,5 +1,5 @@
 import { login, phone, privateKey, logout, getInfo } from '@/api/login'
-import { getToken, setToken, removeToken } from '@/utils/auth'
+import { getToken, setToken,setTokenOp, removeToken } from '@/utils/auth'
 import { encrypt } from '@/utils/jsencrypt';
 import { getDidInfo } from '@/api/did'
 
@@ -38,6 +38,11 @@ const user = {
 
     actions: {
         // 登录
+        OpSetToken({commit},opToken){
+            console.log('??')
+            setTokenOp(opToken)
+            commit('SET_TOKEN', opToken)
+        },
         Login({ commit }, userInfo) {
             console.log(userInfo)
             const username = encrypt(userInfo.username.trim())

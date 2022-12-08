@@ -205,6 +205,7 @@
 <script>
 import { mapState } from "vuex";
 import { getData, redirect, getTop ,getOpToken,redirectSpv} from "@/api/did";
+import {  setToken } from '@/utils/auth'
 export default {
   name: "index",
   data() {
@@ -253,17 +254,18 @@ export default {
         console.log(res);
         getOpToken({code:res.data.code}).then((ress)=>{
           console.log(ress)
+          this.$store.dispatch('OpSetToken', ress.msg)
         })
 
 
-        // let test = "";
-        // test = res.data.redirectUri;
-        // const index = res.data.redirectUri.indexOf("scbp/");
-        // const toAdress = test.substring(index + 5);
-        // this.$router.push({
-        //   path: toAdress,
-        //   query: { data: res.data.code },
-        // });
+        let test = "";
+        test = res.data.redirectUri;
+        const index = res.data.redirectUri.indexOf("scbp/");
+        const toAdress = test.substring(index + 5);
+        this.$router.push({
+          path: toAdress,
+          query: { data: res.data.code },
+        });
       });
     },
     goScreen() {

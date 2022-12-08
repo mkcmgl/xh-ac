@@ -87,12 +87,21 @@ export function redirect(params) {
         params
     })
 }
+export function redirectSpv(params) {
 
+    return request({
+        url: `redirect/${params.clientId}`,
+        method: 'get',
+    })
+}
 export function getOpToken(params) {
 
     return requestOp({
         url: '/sso',
-        method: 'get',
+        method: 'get', 
+        headers: {
+            isToken: false
+        },
         params
     })
 }
@@ -101,6 +110,7 @@ export function getTop(params) {
     return requestSpv({
         url: '/sso',
         method: 'get',
+        
         params
     })
 }
