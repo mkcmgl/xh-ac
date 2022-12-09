@@ -205,7 +205,6 @@
 <script>
 import { mapState } from "vuex";
 import { getData, redirect, getTop ,getOpToken,redirectSpv} from "@/api/did";
-import {  setToken } from '@/utils/auth'
 export default {
   name: "index",
   data() {

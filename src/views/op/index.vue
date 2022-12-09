@@ -4,7 +4,7 @@
 
 <script>
 export default {
-  name: "XhAcIndex",
+  name: "op",
 
   data() {
     return {};
