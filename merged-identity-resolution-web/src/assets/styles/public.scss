@@ -1,0 +1,140 @@
+.title {
+  height: 30px;
+  font-size: 22px;
+  font-family: PingFang SC-Bold, PingFang SC;
+  font-weight: bold;
+  color: #333333;
+  line-height: 30px;
+  margin-left: 30px;
+  text-align: left;
+  position: relative;
+}
+
+.creatWarp {
+  width: 500px;
+  height: 100px;
+  background: #F0F6FF;
+  border-radius: 4px 4px 4px 4px;
+  opacity: 1;
+  display: flex;
+
+  .logo {
+    width: 65px;
+    height: 100%;
+
+    img {
+      width: 45px;
+      height: 45px;
+      margin: 27px 0 0 20px;
+    }
+  }
+
+  .content {
+    flex: 1;
+    height: 100%;
+
+    .name {
+      height: 22px;
+      font-size: 16px;
+      font-family: PingFang SC-Bold, PingFang SC;
+      font-weight: bold;
+      color: #333333;
+      line-height: 22px;
+      margin: 25px 0 6px 22px;
+    }
+
+    .describe {
+      width: 374px;
+      height: 20px;
+      font-size: 14px;
+      font-family: PingFang SC-常规体, PingFang SC;
+      font-weight: normal;
+      color: #666666;
+      // line-height: 20px;
+      margin: 0 0 0 25px;
+    }
+
+  }
+
+  .right {
+    width: 33px;
+    height: 100%;
+    padding-top: 43px;
+
+    .el-icon-arrow-right {
+      cursor: pointer;
+    }
+  }
+}
+.creatWarp:hover{
+    background-color: #2F88FF;
+    
+    .name{
+      color: white;
+    }
+    .describe{
+      color: white;
+    }
+}
+.line {
+  width: 100%;
+  height: 1px;
+  background: #F4F3F7;
+  opacity: 1;
+  position: relative;
+  top: -30px;
+}
+
+.buttonline {
+  width: 100%;
+  height: 1px;
+  background: #F4F3F7;
+  opacity: 1;
+  margin-top: 30px;
+}
+
+.btnWarp {
+  margin-top: 15px;
+  display: flex;
+  justify-content: space-around;
+}
+
+.searchWarp {
+  width: 1610px;
+  height: 182px;
+  background: #FFFFFF;
+  border-radius: 4px 4px 4px 4px;
+  opacity: 1;
+  margin: 20px auto;
+  padding-top: 40px;
+}
+
+.dataWarp {
+  width: 1610px;
+  min-height: 675px;
+  background: #FFFFFF;
+  border-radius: 4px 4px 4px 4px;
+  opacity: 1;
+  margin: 0px auto;
+  padding: 20px 30px;
+}
+
+.lastRouter {
+  cursor: pointer;
+}
+
+.currentRouter {
+  margin-left: 10px;
+  font-weight: normal;
+  color: #666666;
+}
+
+.viewDetail {
+  height: 20px;
+  font-size: 14px;
+  font-family: PingFang SC-常规体, PingFang SC;
+  font-weight: normal;
+  color: #2F88FF;
+  line-height: 20px;
+  cursor: pointer;
+}
