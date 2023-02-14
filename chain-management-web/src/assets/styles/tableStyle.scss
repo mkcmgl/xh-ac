@@ -1,0 +1,164 @@
+.btnWarp {
+    display: flex;
+    justify-content: right;
+    padding-right: 30px;
+}
+
+.searchCondition {
+    width: 100%;
+    height: 169px;
+    background: #ffffff;
+    padding-top: 40px;
+}
+
+.searchConditionBycontent {
+    width: 100%;
+    background: #ffffff;
+    padding-top: 40px;
+}
+
+.tableBg {
+    margin-top: 20px;
+    width: 100%;
+    min-height: 60vh;
+    background: #ffffff;
+}
+
+.pagination {
+    height: 40px;
+    background: #ffffff;
+}
+
+.detailContent {
+    font-size: 15px;
+}
+
+.formTitle {
+    font-size: 14px;
+    font-family: PingFang SC-Regular, PingFang SC;
+    font-weight: 400;
+    color: #999999;
+    line-height: 28px;
+}
+
+.formContent {
+    font-size: 14px;
+    font-family: PingFang SC-Bold, PingFang SC;
+    font-weight: 500;
+    color: #333333;
+    line-height: 28px;
+}
+
+.resultContent {
+    width: 95%;
+    height: 180px;
+    background: #FFFFFF;
+    border-radius: 4px 4px 4px 4px;
+    opacity: 1;
+    margin: 10px auto;
+    padding: 15px 0 0 25px;
+}
+
+.auditDetail {
+    background: #FFFFFF;
+    border-radius: 4px 4px 4px 4px;
+    opacity: 1;
+    margin: 10px auto;
+    padding: 15px 0 30px 25px;
+}
+
+.auditDetail1 {
+    height: 330px;
+    width: 98%;
+    background: #FFFFFF;
+    border-radius: 4px 4px 4px 4px;
+    opacity: 1;
+    padding: 15px 0 30px 25px;
+}
+
+.resultContent1 {
+    background: #FFFFFF;
+    border-radius: 4px 4px 4px 4px;
+    opacity: 1;
+    margin: 10px 0px;
+    padding: 15px 0 15px 25px;
+}
+
+.contentTitle {
+    height: 22px;
+    font-size: 16px;
+    font-family: PingFang SC-Heavy, PingFang SC;
+    font-weight: 800;
+    color: #333333;
+    line-height: 22px;
+    margin: 0 0;
+}
+
+.lastRouter {
+    cursor: pointer;
+}
+
+.currentRouter {
+    margin-left: 10px;
+    font-weight: normal;
+    color: #666666;
+}
+
+.title {
+    height: 30px;
+    font-size: 22px;
+    font-family: PingFang SC-Bold, PingFang SC;
+    font-weight: bold;
+    color: #333333;
+    line-height: 0px;
+    text-align: left;
+    margin-top: 20px;
+}
+
+.line {
+    width: 100%;
+    height: 1px;
+    background: #F4F3F7;
+    opacity: 1;
+    position: relative;
+}
+
+.lw {
+    color: #2F88FF;
+    cursor: pointer;
+}
+
+.lw:hover {
+    color: #559EFF;
+}
+
+.showTow {
+    overflow: hidden;
+    /*超出隐藏*/
+    text-overflow: ellipsis;
+    /*隐藏后添加省略号*/
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2; //想显示几行
+}
+
+.autoWarp {
+    word-break: break-all;
+}
+
+.showOne {
+    overflow: hidden;
+    /*超出隐藏*/
+    text-overflow: ellipsis;
+    /*隐藏后添加省略号*/
+    white-space: nowrap;
+    /*强制不换行*/
+}
+
+.withdrawcontent {
+    font-size: 16px;
+    font-family: Source Han Sans CN-Regular, Source Han Sans CN;
+    font-weight: 400;
+    color: #333333;
+    margin: 40px 0 0 0;
+}
+

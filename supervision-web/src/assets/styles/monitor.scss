@@ -1,0 +1,182 @@
+#index {
+    color: #d3d6dd;
+    width: 1920Px;
+    height: 1080Px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    transform-origin: left top;
+    overflow: hidden;
+
+    .bg {
+        width: 100%;
+        height: 100%;
+        background-image: url("../../assets/images/pageBg.png");
+        background-size: cover;
+        background-position: center center;
+    }
+
+    .hearder {
+        width: 100%;
+        height: 88Px;
+        background-image: url("../../assets/images/hearder.png");
+        background-size: cover;
+        background-position: center center;
+
+        .timeMin {
+            width: 102Px;
+            font-size: 24Px;
+            font-family: Microsoft YaHei;
+            font-weight: 400;
+            color: #84CAFA;
+            display: inline-block;
+            height: 88Px;
+            line-height: 88Px;
+            float: right;
+            margin-right: 17Px;
+        }
+
+        .timeWeek {
+            display: inline-block;
+            width: 39Px;
+            height: 88Px;
+            line-height: 88Px;
+            font-size: 13Px;
+            font-family: Microsoft YaHei;
+            font-weight: 400;
+            color: #588EBD;
+            float: right;
+            margin-right: 12Px;
+        }
+
+        .timeDay {
+            display: inline-block;
+            height: 88Px;
+            line-height: 88Px;
+            font-size: 13Px;
+            font-family: Microsoft YaHei;
+            font-weight: 400;
+            color: #588EBD;
+            float: right;
+            margin-right: 33Px;
+        }
+    }
+
+    .main {
+        margin-top: 19Px;
+        width: 100%;
+        display: flex;
+        flex-direction: row;
+        padding: 0 30Px 28Px 30Px;
+        justify-content: space-between;
+    }
+
+    .left {
+        width: 480Px;
+        display: flex;
+        flex-direction: column;
+
+        .left-top {
+            width: 100%;
+            height: 280Px;
+            background-image: url("../../assets/images/leftTop.png");
+            background-size: cover;
+            background-position: center center;
+        }
+
+        .left-center {
+            width: 100%;
+            height: 330Px;
+            background-image: url("../../assets/images/leftCenter.png");
+            background-size: cover;
+            background-position: center center;
+            margin-top: 21Px;
+        }
+
+        .left-bottom {
+            width: 100%;
+            height: 294Px;
+            background-image: url("../../assets/images/leftBottom.png");
+            background-size: cover;
+            background-position: center center;
+            margin-top: 20Px;
+        }
+    }
+
+    .center {
+        width: 864Px;
+        display: flex;
+        flex-direction: column;
+
+        .center-top {
+            width: 100%;
+            height: 630Px;
+        }
+
+        .center-bottom {
+            width: 100%;
+            height: 294Px;
+            background-image: url("../../assets/images/centerBottom.png");
+            background-size: cover;
+            background-position: center center;
+            margin-top: 21Px;
+        }
+    }
+
+    .right {
+        width: 480Px;
+        display: flex;
+        flex-direction: column;
+
+        .right-top {
+            width: 100%;
+            height: 280Px;
+            background-image: url("../../assets/images/leftTop.png");
+            background-size: cover;
+            background-position: center center;
+        }
+
+        .right-center {
+            width: 100%;
+            height: 330Px;
+            background-image: url("../../assets/images/leftCenter.png");
+            background-size: cover;
+            background-position: center center;
+            margin-top: 21Px;
+        }
+
+        .right-bottom {
+            width: 100%;
+            height: 294Px;
+            background-image: url("../../assets/images/leftBottom.png");
+            background-size: cover;
+            background-position: center center;
+            margin-top: 20Px;
+        }
+    }
+
+}
+
+h3 {
+    margin: 0;
+    padding: 0;
+    height: 42Px;
+    width: 100%;
+    line-height: 42Px;
+    font-size: 16Px;
+    font-family: Microsoft YaHei;
+    font-weight: 400;
+    color: #D3F4FF;
+    line-height: 42Px;
+    padding-left: 42Px;
+
+    span {
+        font-size: 14Px;
+        font-family: Microsoft YaHei;
+        font-weight: 400;
+        color: #5873A8;
+        line-height: 42Px;
+        margin-left: 16Px;
+    }
+}
